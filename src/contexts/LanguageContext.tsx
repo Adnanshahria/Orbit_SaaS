@@ -15,14 +15,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const toggleLang = () => setLang(l => (l === 'en' ? 'bn' : 'en'));
 
   // Try to use dynamic content from API, fallback to i18n.ts
-  let t: any;
-  try {
-    const { content } = useContent();
-    t = content[lang] || translations[lang];
-  } catch {
-    // ContentProvider not available (e.g., during admin-only routes)
-    t = translations[lang];
-  }
+  const { content } = useContent();
+
+  // Use dynamic content from API, fallback to i18n.ts
+  const t = content[lang] || translations[lang];
 
   return (
     <LanguageContext.Provider value={{ lang, t, toggleLang }}>
