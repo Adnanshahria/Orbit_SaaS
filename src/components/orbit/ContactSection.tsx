@@ -12,7 +12,7 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="py-12 sm:py-20 px-4 sm:px-6 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(108,92,231,0.12),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(108,92,231,0.12),transparent_60%)] rounded-2xl" />
       <div className="max-w-3xl mx-auto text-center relative" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
