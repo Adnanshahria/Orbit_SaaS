@@ -1,6 +1,88 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SectionHeader, LangToggle, SaveButton, TextField, ErrorAlert, ItemListEditor, useSectionEditor } from '@/components/admin/EditorComponents';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Upload, Trash2 } from 'lucide-react';
+
+function compressImage(file: File, maxWidth = 800, quality = 0.8): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let w = img.width;
+                let h = img.height;
+                if (w > maxWidth) {
+                    h = (h * maxWidth) / w;
+                    w = maxWidth;
+                }
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d')!;
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(canvas.toDataURL('image/webp', quality));
+            };
+            img.onerror = reject;
+            img.src = e.target?.result as string;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+function ImageUpload({ image, onChange, title }: { image: string; onChange: (v: string) => void; title: string }) {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [uploading, setUploading] = useState(false);
+
+    const handleFile = async (file: File) => {
+        if (!file.type.startsWith('image/')) return;
+        setUploading(true);
+        try {
+            const dataUri = await compressImage(file);
+            onChange(dataUri);
+        } catch {
+            console.error('Failed to process image');
+        }
+        setUploading(false);
+    };
+
+    return (
+        <div>
+            <label className="text-sm font-medium text-foreground mb-1.5 block">Project Image</label>
+            {image ? (
+                <div className="relative max-w-xs rounded-lg overflow-hidden border border-border group">
+                    <img src={image} alt={title || 'Preview'} className="w-full h-auto object-cover" />
+                    <button
+                        onClick={() => onChange('')}
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-red-500/90 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                    >
+                        <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            ) : (
+                <button
+                    onClick={() => inputRef.current?.click()}
+                    disabled={uploading}
+                    className="w-full max-w-xs h-32 rounded-lg border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                >
+                    <Upload className="w-6 h-6" />
+                    <span className="text-sm">{uploading ? 'Processing...' : 'Click to upload image'}</span>
+                    <span className="text-xs">PNG, JPG, WebP</span>
+                </button>
+            )}
+            <input
+                ref={inputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                className="hidden"
+                onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFile(file);
+                    e.target.value = '';
+                }}
+            />
+        </div>
+    );
+}
 
 function TagsInput({ tags, onChange }: { tags: string[]; onChange: (t: string[]) => void }) {
     const [input, setInput] = useState('');
@@ -77,12 +159,7 @@ export default function AdminProjects() {
                             <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} />
                             <TextField label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline />
                             <TextField label="Live Link" value={item.link || ''} onChange={v => update({ ...item, link: v })} />
-                            <TextField label="Image URL" value={item.image || ''} onChange={v => update({ ...item, image: v })} />
-                            {item.image && (
-                                <div className="mt-2 rounded-lg overflow-hidden border border-border max-w-xs">
-                                    <img src={item.image} alt={item.title || 'Preview'} className="w-full h-auto object-cover" />
-                                </div>
-                            )}
+                            <ImageUpload image={item.image || ''} onChange={v => update({ ...item, image: v })} title={item.title} />
                             <TagsInput tags={item.tags || []} onChange={t => update({ ...item, tags: t })} />
                         </>
                     )}
@@ -92,3 +169,4 @@ export default function AdminProjects() {
         </div>
     );
 }
+
