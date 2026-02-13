@@ -82,7 +82,7 @@ export function HeroSection() {
   const { t } = useLang();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-0">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-16 sm:pt-0 sm:pb-0">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(108,92,231,0.15),transparent_60%)]" />
@@ -100,15 +100,15 @@ export function HeroSection() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full glass-effect text-xs sm:text-sm font-medium text-neon-cyan mb-6 sm:mb-8"
+            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full glass-effect text-xs sm:text-sm font-medium text-neon-cyan mb-6 sm:mb-8"
           >
             <span className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse" />
             Full-Stack SaaS Agency
           </motion.div>
 
-          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight mb-4 sm:mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] mb-4 sm:mb-6">
             <span className="block">ORBIT SaaS</span>
-            <span className="block mt-1 sm:mt-2 text-2xl sm:text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink bg-clip-text text-transparent">
+            <span className="block mt-2 sm:mt-3 text-2xl sm:text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink bg-clip-text text-transparent">
               {t.hero.title}
             </span>
           </h1>
@@ -117,14 +117,14 @@ export function HeroSection() {
             {t.hero.subtitle}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 sm:px-0">
             <motion.a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-semibold text-primary-foreground bg-primary neon-glow gentle-animation cursor-pointer w-full sm:w-auto justify-center"
+              className="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-2xl font-semibold text-primary-foreground bg-gradient-to-r from-primary to-neon-blue neon-glow gentle-animation cursor-pointer w-full sm:w-auto justify-center text-base"
             >
               {t.hero.cta}
               <ArrowRight className="w-5 h-5" />
@@ -133,7 +133,7 @@ export function HeroSection() {
               href="#services"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-semibold glass-effect text-foreground cursor-pointer w-full sm:w-auto justify-center"
+              className="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-2xl font-semibold glass-effect text-foreground cursor-pointer w-full sm:w-auto justify-center text-base"
             >
               {t.hero.learnMore}
             </motion.a>
@@ -146,7 +146,7 @@ export function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-20 sm:bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2 }}>
           <ChevronDown className="w-6 h-6 text-muted-foreground" />
