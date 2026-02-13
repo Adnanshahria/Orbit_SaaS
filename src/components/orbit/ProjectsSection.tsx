@@ -1,7 +1,8 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useLang } from '@/contexts/LanguageContext';
+import { Link } from 'react-router-dom';
 
 const cardVariants = {
   hidden: (i: number) => ({
@@ -23,6 +24,15 @@ const cardVariants = {
     },
   }),
 };
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+}
+
+function truncate(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text;
+  return text.slice(0, maxLen).trimEnd() + '…';
+}
 
 export function ProjectsSection() {
   const { t } = useLang();
@@ -50,62 +60,74 @@ export function ProjectsSection() {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8" style={{ perspective: '1200px' }}>
-          {items.map((item: any, i: number) => (
-            <motion.a
-              key={i}
-              href={item.link || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              custom={i}
-              variants={cardVariants}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-              whileHover={{
-                y: -8,
-                scale: 1.02,
-                boxShadow: '0 25px 50px rgba(108, 92, 231, 0.15)',
-                transition: { type: 'spring', stiffness: 300, damping: 20 },
-              }}
-              className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 backdrop-blur-sm cursor-pointer"
-            >
-              <div className="aspect-video overflow-hidden">
-                <motion.img
-                  src={item.image || ''}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.06, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }}
-                />
-              </div>
-              <div className="p-5 sm:p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-display font-bold text-foreground text-lg sm:text-xl mb-1.5">
+          {items.map((item: any, i: number) => {
+            const plainDesc = stripHtml(item.desc || '');
+            const shortDesc = truncate(plainDesc, 120);
+
+            return (
+              <motion.div
+                key={i}
+                custom={i}
+                variants={cardVariants}
+                initial="hidden"
+                animate={inView ? 'visible' : 'hidden'}
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                  boxShadow: '0 25px 50px rgba(108, 92, 231, 0.15)',
+                  transition: { type: 'spring', stiffness: 300, damping: 20 },
+                }}
+                className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 backdrop-blur-sm"
+              >
+                {/* Image */}
+                {item.image && (
+                  <Link to={`/project/${i}`} className="block">
+                    <div className="aspect-video overflow-hidden">
+                      <motion.img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.06, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }}
+                      />
+                    </div>
+                  </Link>
+                )}
+
+                {/* Content */}
+                <div className="p-5 sm:p-6">
+                  <Link to={`/project/${i}`} className="block group/title">
+                    <h3 className="font-display font-bold text-foreground text-lg sm:text-xl mb-2 group-hover/title:text-primary transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0, x: -5 }}
-                    whileHover={{ opacity: 1, x: 0 }}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+                  </Link>
+
+                  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-4">
+                    {shortDesc}
+                  </p>
+
+                  {/* Tags */}
+                  {item.tags && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {item.tags.map((tag: string, j: number) => (
+                        <span key={j} className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* See More */}
+                  <Link
+                    to={`/project/${i}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors group/link"
                   >
-                    <ExternalLink className="w-5 h-5 text-muted-foreground shrink-0" />
-                  </motion.div>
+                    See More
+                    <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
-                {item.tags && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {item.tags.map((tag: string, j: number) => (
-                      <span key={j} className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </motion.a>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

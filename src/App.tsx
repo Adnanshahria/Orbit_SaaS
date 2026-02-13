@@ -29,6 +29,7 @@ const AdminFooter = lazy(() => import('./pages/admin/AdminFooter'));
 const AdminChatbot = lazy(() => import('./pages/admin/AdminChatbot'));
 const AdminNavbar = lazy(() => import('./pages/admin/AdminNavbar'));
 const AdminSEO = lazy(() => import('./pages/admin/AdminSEO'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
 function PublicSite() {
   return (
@@ -74,6 +75,7 @@ export default function App() {
             <Suspense fallback={<AdminLoading />}>
               <Routes>
                 <Route path="/" element={<PublicSite />} />
+                <Route path="/project/:id" element={<ProjectDetail />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<Navigate to="/admin/hero" replace />} />

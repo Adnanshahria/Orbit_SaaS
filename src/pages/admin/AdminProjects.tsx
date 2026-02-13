@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { SectionHeader, LangToggle, SaveButton, TextField, ErrorAlert, ItemListEditor, useSectionEditor } from '@/components/admin/EditorComponents';
 import { X, Plus, Upload, Trash2 } from 'lucide-react';
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
 
 function compressImage(file: File, maxWidth = 800, quality = 0.8): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -157,7 +158,7 @@ export default function AdminProjects() {
                     renderItem={(item, _i, update) => (
                         <>
                             <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} />
-                            <TextField label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline />
+                            <RichTextEditor label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} />
                             <TextField label="Live Link" value={item.link || ''} onChange={v => update({ ...item, link: v })} />
                             <ImageUpload image={item.image || ''} onChange={v => update({ ...item, image: v })} title={item.title} />
                             <TagsInput tags={item.tags || []} onChange={t => update({ ...item, tags: t })} />
