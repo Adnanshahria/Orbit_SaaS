@@ -37,7 +37,7 @@ export function ServicesSection() {
   const inView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="services" className="py-16 sm:py-24 px-4 sm:px-6 relative">
+    <section id="services" aria-label="Web Development Services" className="py-16 sm:py-24 px-4 sm:px-6 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(108,92,231,0.06),transparent_70%)]" />
       <div className="max-w-6xl mx-auto relative" ref={ref}>
         <motion.div
@@ -54,7 +54,7 @@ export function ServicesSection() {
           {t.services.items.map((item, i) => {
             const Icon = icons[i];
             return (
-              <motion.div
+              <motion.article
                 key={i}
                 initial={{ opacity: 0, y: 40 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -69,7 +69,7 @@ export function ServicesSection() {
                     <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
                   </div>
                 </TiltCard>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>

@@ -12,19 +12,19 @@ export const translations = {
       bookCall: 'Book an Appointment',
     },
     hero: {
-      title: 'Elevating Your Digital Presence',
-      subtitle: 'We build full-stack SaaS products, eCommerce platforms, and enterprise web applications that scale with your ambition.',
+      title: 'Your Web Development Partner',
+      subtitle: 'ORBIT SaaS is a full-stack web development company that builds custom SaaS products, eCommerce platforms, and enterprise web applications using React, Node.js, and modern cloud technologies.',
       cta: 'Book an Appointment',
       learnMore: 'Explore Services',
     },
     services: {
-      title: 'Our Services',
-      subtitle: 'End-to-end digital solutions tailored for your business growth.',
+      title: 'Web Development Services',
+      subtitle: 'End-to-end custom software development solutions tailored for your business growth.',
       items: [
-        { title: 'Custom eCommerce Solutions', desc: 'Scalable online stores with payment gateways, inventory management, and analytics dashboards.' },
-        { title: 'Educational & Study Platforms', desc: 'LMS, course platforms, and interactive study tools built for engagement and scale.' },
-        { title: 'Personal Portfolios & Blogging Sites', desc: 'Stunning, SEO-optimized personal brands with CMS integrations and custom designs.' },
-        { title: 'Enterprise Web Applications', desc: 'Robust, secure, and high-performance applications built for complex business workflows.' },
+        { title: 'Custom eCommerce Development', desc: 'Scalable online stores built with React and Node.js — featuring payment gateways, inventory management, and real-time analytics dashboards.' },
+        { title: 'Educational Platform Development', desc: 'Custom LMS, online course platforms, and interactive study tools built for engagement, scale, and seamless learning experiences.' },
+        { title: 'Portfolio & Blog Website Development', desc: 'Stunning, SEO-optimized personal brands and blogging platforms with CMS integrations, custom responsive designs, and fast performance.' },
+        { title: 'Enterprise Web Application Development', desc: 'Robust, secure, and high-performance enterprise applications built with TypeScript and modern frameworks for complex business workflows.' },
       ],
     },
     techStack: {
@@ -32,12 +32,12 @@ export const translations = {
       subtitle: 'We leverage cutting-edge technologies to deliver world-class solutions.',
     },
     whyUs: {
-      title: 'Why Choose ORBIT SaaS?',
-      subtitle: 'We are not just developers. We are your strategic partners.',
+      title: 'Why Choose ORBIT SaaS as Your Web Development Agency?',
+      subtitle: 'We are not just developers — we are your strategic software development partners.',
       items: [
-        { title: 'Strategic Partners', desc: 'We align technology decisions with your business goals for maximum ROI.' },
-        { title: 'Tech Advisors', desc: 'Expert guidance on architecture, scalability, and emerging technologies.' },
-        { title: 'Long-term Maintenance', desc: 'Ongoing support, updates, and optimization to keep your product competitive.' },
+        { title: 'Strategic Development Partners', desc: 'We align technology decisions with your business goals, delivering custom web solutions with maximum ROI.' },
+        { title: 'Expert Tech Advisors', desc: 'Professional guidance on software architecture, scalability, cloud infrastructure, and emerging web technologies.' },
+        { title: 'Long-term Support & Maintenance', desc: 'Ongoing development support, security updates, performance optimization, and feature enhancements to keep your product competitive.' },
       ],
     },
     projects: {
@@ -60,9 +60,9 @@ export const translations = {
       ],
     },
     contact: {
-      title: 'Let\'s Build Something Great',
-      subtitle: 'Ready to transform your digital presence? Let\'s talk.',
-      cta: 'Book an Appointment on WhatsApp',
+      title: 'Start Your Web Development Project Today',
+      subtitle: 'Ready to build a custom web application? Get a free consultation with our development team.',
+      cta: 'Book a Free Consultation on WhatsApp',
     },
     footer: {
       rights: '© 2025 ORBIT SaaS. All rights reserved.',

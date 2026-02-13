@@ -82,7 +82,7 @@ export function HeroSection() {
   const { t } = useLang();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-16 sm:pt-0 sm:pb-0">
+    <section id="hero" aria-label="ORBIT SaaS - Full-Stack Web Development Company" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-16 sm:pt-0 sm:pb-0">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(108,92,231,0.15),transparent_60%)]" />
@@ -103,7 +103,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full glass-effect text-xs sm:text-sm font-medium text-neon-cyan mb-6 sm:mb-8"
           >
             <span className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse" />
-            Full-Stack SaaS Agency
+            Full-Stack Web Development Agency
           </motion.div>
 
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] mb-4 sm:mb-6">

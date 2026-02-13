@@ -10,9 +10,12 @@ import { ContactSection } from './components/orbit/ContactSection';
 import { OrbitFooter } from './components/orbit/OrbitFooter';
 import { Chatbot } from './components/orbit/Chatbot';
 
+import { StructuredData } from './components/seo/StructuredData';
+
 export default function App() {
   return (
     <LanguageProvider>
+      <StructuredData />
       <div className="min-h-screen bg-background text-foreground">
         <Navbar />
         <main>
