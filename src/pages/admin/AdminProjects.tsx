@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { SectionHeader, LangToggle, SaveButton, TextField, ErrorAlert, ItemListEditor, useSectionEditor } from '@/components/admin/EditorComponents';
-import { X, Plus, Upload, Trash2 } from 'lucide-react';
+import { X, Plus, Upload, Trash2, GripVertical } from 'lucide-react';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 
-function compressImage(file: File, maxWidth = 800, quality = 0.8): Promise<string> {
+/**
+ * Converts an image file to a high-quality base64 data URI.
+ * Uses the original dimensions (no downscale) and high quality (0.95) WebP.
+ */
+function processImage(file: File, maxWidth = 1920, quality = 0.95): Promise<string> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -12,6 +16,7 @@ function compressImage(file: File, maxWidth = 800, quality = 0.8): Promise<strin
                 const canvas = document.createElement('canvas');
                 let w = img.width;
                 let h = img.height;
+                // Only downscale if extremely large (> 1920px) to keep payload reasonable
                 if (w > maxWidth) {
                     h = (h * maxWidth) / w;
                     w = maxWidth;
@@ -30,54 +35,130 @@ function compressImage(file: File, maxWidth = 800, quality = 0.8): Promise<strin
     });
 }
 
-function ImageUpload({ image, onChange, title }: { image: string; onChange: (v: string) => void; title: string }) {
+/**
+ * Multi-image uploader: lets admin upload, preview, reorder, and remove multiple images.
+ */
+function MultiImageUpload({
+    images,
+    onChange,
+    title,
+}: {
+    images: string[];
+    onChange: (imgs: string[]) => void;
+    title: string;
+}) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
 
-    const handleFile = async (file: File) => {
-        if (!file.type.startsWith('image/')) return;
+    const handleFiles = async (files: FileList) => {
+        const imageFiles = Array.from(files).filter((f) => f.type.startsWith('image/'));
+        if (imageFiles.length === 0) return;
         setUploading(true);
         try {
-            const dataUri = await compressImage(file);
-            onChange(dataUri);
+            const newImages = await Promise.all(imageFiles.map((f) => processImage(f)));
+            onChange([...images, ...newImages]);
         } catch {
-            console.error('Failed to process image');
+            console.error('Failed to process one or more images');
         }
         setUploading(false);
     };
 
+    const removeImage = (idx: number) => {
+        onChange(images.filter((_, i) => i !== idx));
+    };
+
+    const moveImage = (from: number, to: number) => {
+        if (to < 0 || to >= images.length) return;
+        const updated = [...images];
+        const [moved] = updated.splice(from, 1);
+        updated.splice(to, 0, moved);
+        onChange(updated);
+    };
+
     return (
         <div>
-            <label className="text-sm font-medium text-foreground mb-1.5 block">Project Image</label>
-            {image ? (
-                <div className="relative max-w-xs rounded-lg overflow-hidden border border-border group">
-                    <img src={image} alt={title || 'Preview'} className="w-full h-auto object-cover" />
-                    <button
-                        onClick={() => onChange('')}
-                        className="absolute top-2 right-2 p-1.5 rounded-full bg-red-500/90 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                    >
-                        <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+            <label className="text-sm font-medium text-foreground mb-1.5 block">
+                Project Images
+                <span className="text-xs font-normal text-muted-foreground ml-2">
+                    ({images.length} image{images.length !== 1 ? 's' : ''} — first image is the cover)
+                </span>
+            </label>
+
+            {/* Image Grid */}
+            {images.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
+                    {images.map((img, i) => (
+                        <div
+                            key={i}
+                            className={`relative rounded-lg overflow-hidden border group ${i === 0 ? 'border-primary border-2 ring-2 ring-primary/20' : 'border-border'}`}
+                        >
+                            <img
+                                src={img}
+                                alt={`${title || 'Project'} image ${i + 1}`}
+                                className="w-full h-32 object-cover"
+                            />
+
+                            {/* Cover badge */}
+                            {i === 0 && (
+                                <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-primary text-white text-[10px] font-semibold uppercase tracking-wide">
+                                    Cover
+                                </span>
+                            )}
+
+                            {/* Controls overlay */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                {i > 0 && (
+                                    <button
+                                        onClick={() => moveImage(i, i - 1)}
+                                        title="Move left"
+                                        className="p-1.5 rounded-full bg-white/90 text-gray-800 hover:bg-white cursor-pointer text-xs font-bold"
+                                    >
+                                        ←
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => removeImage(i)}
+                                    title="Remove image"
+                                    className="p-1.5 rounded-full bg-red-500/90 text-white hover:bg-red-600 cursor-pointer"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                                {i < images.length - 1 && (
+                                    <button
+                                        onClick={() => moveImage(i, i + 1)}
+                                        title="Move right"
+                                        className="p-1.5 rounded-full bg-white/90 text-gray-800 hover:bg-white cursor-pointer text-xs font-bold"
+                                    >
+                                        →
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            ) : (
-                <button
-                    onClick={() => inputRef.current?.click()}
-                    disabled={uploading}
-                    className="w-full max-w-xs h-32 rounded-lg border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-                >
-                    <Upload className="w-6 h-6" />
-                    <span className="text-sm">{uploading ? 'Processing...' : 'Click to upload image'}</span>
-                    <span className="text-xs">PNG, JPG, WebP</span>
-                </button>
             )}
+
+            {/* Upload button */}
+            <button
+                onClick={() => inputRef.current?.click()}
+                disabled={uploading}
+                className="w-full max-w-xs h-28 rounded-lg border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+            >
+                <Upload className="w-5 h-5" />
+                <span className="text-sm">{uploading ? 'Processing...' : 'Add images'}</span>
+                <span className="text-xs">PNG, JPG, WebP — select multiple</span>
+            </button>
+
             <input
                 ref={inputRef}
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
+                multiple
                 className="hidden"
                 onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFile(file);
+                    if (e.target.files && e.target.files.length > 0) {
+                        handleFiles(e.target.files);
+                    }
                     e.target.value = '';
                 }}
             />
@@ -126,14 +207,23 @@ export default function AdminProjects() {
     const { lang, setLang, saving, saved, error, getData, save } = useSectionEditor('projects');
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
-    const [items, setItems] = useState<{ title: string; desc: string; tags: string[]; link: string; image: string }[]>([]);
+    const [items, setItems] = useState<{ title: string; desc: string; tags: string[]; link: string; image: string; images: string[] }[]>([]);
 
     useEffect(() => {
         const d = getData();
         if (d) {
             setTitle(d.title || '');
             setSubtitle(d.subtitle || '');
-            setItems(d.items || []);
+            // Migrate: if old items have `image` but no `images`, put the single image into the array
+            const migratedItems = (d.items || []).map((item: any) => ({
+                ...item,
+                images: item.images && item.images.length > 0
+                    ? item.images
+                    : item.image
+                        ? [item.image]
+                        : [],
+            }));
+            setItems(migratedItems);
         }
     }, [getData]);
 
@@ -153,14 +243,18 @@ export default function AdminProjects() {
                 <ItemListEditor
                     items={items}
                     setItems={setItems}
-                    newItem={{ title: '', desc: '', tags: [], link: '', image: '' }}
+                    newItem={{ title: '', desc: '', tags: [], link: '', image: '', images: [] }}
                     addLabel="Add Project"
                     renderItem={(item, _i, update) => (
                         <>
                             <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} />
                             <RichTextEditor label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} />
                             <TextField label="Live Link" value={item.link || ''} onChange={v => update({ ...item, link: v })} />
-                            <ImageUpload image={item.image || ''} onChange={v => update({ ...item, image: v })} title={item.title} />
+                            <MultiImageUpload
+                                images={item.images || []}
+                                onChange={imgs => update({ ...item, images: imgs, image: imgs[0] || '' })}
+                                title={item.title}
+                            />
                             <TagsInput tags={item.tags || []} onChange={t => update({ ...item, tags: t })} />
                         </>
                     )}
@@ -170,4 +264,3 @@ export default function AdminProjects() {
         </div>
     );
 }
-

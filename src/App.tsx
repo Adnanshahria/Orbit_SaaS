@@ -70,7 +70,7 @@ export default function App() {
     <HelmetProvider>
       <ContentProvider>
         <LanguageProvider>
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <SEOHead />
             <Suspense fallback={<AdminLoading />}>
               <Routes>

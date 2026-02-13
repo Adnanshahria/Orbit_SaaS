@@ -79,12 +79,12 @@ export function ProjectsSection() {
                 }}
                 className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 backdrop-blur-sm"
               >
-                {/* Image */}
-                {item.image && (
+                {/* Image — use images[] array first, fallback to legacy image field */}
+                {(item.images?.[0] || item.image) && (
                   <Link to={`/project/${i}`} className="block">
                     <div className="aspect-video overflow-hidden">
                       <motion.img
-                        src={item.image}
+                        src={item.images?.[0] || item.image}
                         alt={item.title}
                         className="w-full h-full object-cover"
                         whileHover={{ scale: 1.06, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }}
