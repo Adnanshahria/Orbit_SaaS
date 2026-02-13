@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Globe, Sun, Moon, Home, Layers, MessageSquare, Trophy, Users, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
+import orbitLogo from '@/assets/orbit-logo.png';
 
 const WHATSAPP_URL = 'https://wa.me/8801853452264';
 
@@ -69,9 +70,9 @@ export function Navbar() {
           <div className="flex items-center justify-between">
             <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2 sm:gap-3 cursor-pointer shrink-0" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <img
-                src="https://storage.googleapis.com/gpt-engineer-file-uploads/aMjanxrDoUP1QJ5krTWiqhWnSbF3/uploads/1758710472461-logo-icon-BG-circle copy.png"
+                src={orbitLogo}
                 alt="ORBIT SaaS Logo"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full"
+                className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
               />
               <span className="font-display text-foreground text-base sm:text-xl font-bold tracking-wider">ORBIT</span>
             </motion.div>
