@@ -1,15 +1,24 @@
-import { motion } from 'framer-motion';
-import { Menu, X, Globe, Sun, Moon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Globe, Sun, Moon, Home, Layers, MessageSquare, Trophy, Users, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
 const WHATSAPP_URL = 'https://wa.me/8801853452264';
 
+const mobileNavItems = [
+  { href: '#hero', icon: Home, label: 'Home' },
+  { href: '#services', icon: Layers, label: 'Services' },
+  { href: '#tech-stack', icon: Trophy, label: 'Tech' },
+  { href: '#why-us', icon: MessageSquare, label: 'Why Us' },
+  { href: '#leadership', icon: Users, label: 'Team' },
+  { href: '#contact', icon: Phone, label: 'Contact' },
+];
+
 export function Navbar() {
   const { t, lang, toggleLang } = useLang();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const [activeSection, setActiveSection] = useState('#hero');
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -18,15 +27,26 @@ export function Navbar() {
   };
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+
+      // Detect active section
+      const sections = ['hero', 'services', 'tech-stack', 'why-us', 'leadership', 'contact'];
+      let current = 'hero';
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 3) {
+            current = id;
+          }
+        }
+      }
+      setActiveSection(`#${current}`);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : 'unset';
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [mobileOpen]);
 
   const links = [
     { href: '#services', label: t.nav.services },
@@ -38,6 +58,7 @@ export function Navbar() {
 
   return (
     <>
+      {/* Desktop top navbar */}
       <motion.nav
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -55,6 +76,7 @@ export function Navbar() {
               <span className="font-display text-foreground text-base sm:text-xl font-bold tracking-wider">ORBIT</span>
             </motion.div>
 
+            {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-8">
               {links.map(l => (
                 <a key={l.href} href={l.href} className="text-foreground/80 hover:text-foreground font-medium gentle-animation text-sm">{l.label}</a>
@@ -72,31 +94,56 @@ export function Navbar() {
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex items-center px-5 py-2.5 rounded-lg font-semibold text-sm text-primary-foreground bg-primary neon-glow hover:opacity-90 gentle-animation cursor-pointer">
                 {t.nav.bookCall}
               </a>
-              <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden glass-effect p-2 sm:p-2.5 rounded-full text-foreground cursor-pointer">
-                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
             </div>
           </div>
         </div>
       </motion.nav>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="md:hidden fixed inset-0 bg-background/60 backdrop-blur-md z-[100]" onClick={() => setMobileOpen(false)} />
-      )}
+      {/* Mobile bottom pill navbar */}
       <motion.div
-        initial={{ x: '100%' }}
-        animate={{ x: mobileOpen ? '0%' : '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="md:hidden fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-background/95 backdrop-blur-xl border-l border-border z-[105]"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[120]"
       >
-        <div className="flex flex-col p-6 pt-20 gap-4">
-          {links.map(l => (
-            <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)} className="text-foreground px-4 py-3 rounded-lg hover:bg-secondary font-medium text-lg">{l.label}</a>
-          ))}
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)} className="mt-4 text-center px-5 py-3 rounded-lg font-semibold text-primary-foreground bg-primary neon-glow">
-            {t.nav.bookCall}
-          </a>
+        <div className="flex items-center gap-1 px-2.5 py-2.5 rounded-full bg-card/90 backdrop-blur-2xl border border-border shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+          {mobileNavItems.map((item) => {
+            const isActive = activeSection === item.href;
+            const Icon = item.icon;
+
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setActiveSection(item.href)}
+                className="relative"
+              >
+                <motion.div
+                  layout
+                  className={`flex items-center gap-1.5 rounded-full gentle-animation cursor-pointer ${
+                    isActive
+                      ? 'bg-primary/15 dark:bg-primary/20 px-4 py-2.5'
+                      : 'px-3 py-2.5 hover:bg-foreground/5'
+                  }`}
+                >
+                  <Icon className={`w-[18px] h-[18px] shrink-0 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.span
+                        initial={{ width: 0, opacity: 0 }}
+                        animate={{ width: 'auto', opacity: 1 }}
+                        exit={{ width: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="text-sm font-semibold text-primary whitespace-nowrap overflow-hidden"
+                      >
+                        {item.label}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </a>
+            );
+          })}
         </div>
       </motion.div>
     </>
