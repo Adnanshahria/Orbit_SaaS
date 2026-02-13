@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, Sun, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
@@ -9,6 +9,13 @@ export function Navbar() {
   const { t, lang, toggleLang } = useLang();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle('dark', next);
+  };
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50);
@@ -55,6 +62,9 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center gap-3">
+              <button onClick={toggleTheme} className="glass-effect p-2.5 rounded-full text-foreground hover:bg-foreground/10 gentle-animation cursor-pointer" aria-label="Toggle theme">
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
               <button onClick={toggleLang} className="glass-effect px-3 py-2 rounded-full text-foreground hover:bg-foreground/10 gentle-animation flex items-center gap-1.5 text-sm font-medium cursor-pointer">
                 <Globe className="w-4 h-4" />
                 {lang === 'en' ? 'বাং' : 'EN'}
