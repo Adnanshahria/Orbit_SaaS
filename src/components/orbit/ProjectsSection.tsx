@@ -3,13 +3,6 @@ import { useRef } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { useLang } from '@/contexts/LanguageContext';
 
-const projectImages = [
-  'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-];
-
 const cardVariants = {
   hidden: (i: number) => ({
     opacity: 0,
@@ -77,7 +70,7 @@ export function ProjectsSection() {
             >
               <div className="aspect-video overflow-hidden">
                 <motion.img
-                  src={projectImages[i] || ''}
+                  src={item.image || ''}
                   alt={item.title}
                   className="w-full h-full object-cover"
                   whileHover={{ scale: 1.06, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }}

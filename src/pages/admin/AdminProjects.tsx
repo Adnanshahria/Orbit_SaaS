@@ -43,7 +43,7 @@ export default function AdminProjects() {
     const { lang, setLang, saving, saved, error, getData, save } = useSectionEditor('projects');
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
-    const [items, setItems] = useState<{ title: string; desc: string; tags: string[]; link: string }[]>([]);
+    const [items, setItems] = useState<{ title: string; desc: string; tags: string[]; link: string; image: string }[]>([]);
 
     useEffect(() => {
         const d = getData();
@@ -70,13 +70,19 @@ export default function AdminProjects() {
                 <ItemListEditor
                     items={items}
                     setItems={setItems}
-                    newItem={{ title: '', desc: '', tags: [], link: '' }}
+                    newItem={{ title: '', desc: '', tags: [], link: '', image: '' }}
                     addLabel="Add Project"
                     renderItem={(item, _i, update) => (
                         <>
                             <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} />
                             <TextField label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline />
                             <TextField label="Live Link" value={item.link || ''} onChange={v => update({ ...item, link: v })} />
+                            <TextField label="Image URL" value={item.image || ''} onChange={v => update({ ...item, image: v })} />
+                            {item.image && (
+                                <div className="mt-2 rounded-lg overflow-hidden border border-border max-w-xs">
+                                    <img src={item.image} alt={item.title || 'Preview'} className="w-full h-auto object-cover" />
+                                </div>
+                            )}
                             <TagsInput tags={item.tags || []} onChange={t => update({ ...item, tags: t })} />
                         </>
                     )}
