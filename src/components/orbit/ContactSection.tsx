@@ -27,7 +27,7 @@ export function ContactSection() {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-5 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg text-primary-foreground bg-primary neon-glow pulse-glow cursor-pointer"
+            className="inline-flex items-center gap-3 px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg text-primary-foreground bg-primary neon-glow pulse-glow cursor-pointer"
           >
             {t.contact.cta}
             <ArrowRight className="w-5 h-5" />

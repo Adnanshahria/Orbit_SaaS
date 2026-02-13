@@ -1,4 +1,5 @@
 import { useLang } from '@/contexts/LanguageContext';
+import orbitLogo from '@/assets/orbit-logo.png';
 
 export function OrbitFooter() {
   const { t } = useLang();
@@ -8,9 +9,9 @@ export function OrbitFooter() {
       <div className="max-w-6xl mx-auto flex flex-col items-center gap-2 text-center">
         <div className="flex items-center gap-3">
           <img
-            src="https://storage.googleapis.com/gpt-engineer-file-uploads/aMjanxrDoUP1QJ5krTWiqhWnSbF3/uploads/1758710472461-logo-icon-BG-circle copy.png"
+            src={orbitLogo}
             alt="ORBIT SaaS"
-            className="w-8 h-8 rounded-full"
+            className="w-8 h-8 rounded-full object-cover"
           />
           <span className="font-display font-bold text-foreground">ORBIT SaaS</span>
         </div>

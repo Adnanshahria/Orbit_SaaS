@@ -54,8 +54,8 @@ export const translations = {
       title: 'Our Leadership',
       subtitle: 'Meet the team driving innovation at ORBIT SaaS.',
       members: [
-        { name: 'Muhammed Nisar Uddin', role: 'Founder' },
-        { name: 'Mohammed Adnan Shahria', role: 'Co-Founder & Tech Lead' },
+        { name: 'Muhammed Nisar Uddin', role: 'Founder & CTO' },
+        { name: 'Mohammed Adnan Shahria', role: 'Co-Founder & CEO' },
         { name: 'Abdur Rahman Talha', role: 'Chief Marketing Officer (CMO)' },
       ],
     },
@@ -127,8 +127,8 @@ export const translations = {
       title: 'আমাদের নেতৃত্ব',
       subtitle: 'ORBIT SaaS-এ উদ্ভাবন চালিত দলের সাথে পরিচিত হন।',
       members: [
-        { name: 'মুহাম্মদ নিসার উদ্দিন', role: 'প্রতিষ্ঠাতা' },
-        { name: 'মোহাম্মদ আদনান শাহরিয়া', role: 'সহ-প্রতিষ্ঠাতা ও টেক লিড' },
+        { name: 'মুহাম্মদ নিসার উদ্দিন', role: 'প্রতিষ্ঠাতা ও সিটিও' },
+        { name: 'মোহাম্মদ আদনান শাহরিয়া', role: 'সহ-প্রতিষ্ঠাতা ও সিইও' },
         { name: 'আব্দুর রহমান তালহা', role: 'প্রধান বিপণন কর্মকর্তা (CMO)' },
       ],
     },

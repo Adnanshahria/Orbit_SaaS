@@ -1,10 +1,13 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
-import { Rocket, Code, Megaphone } from 'lucide-react';
+import { Cpu, Crown, Target } from 'lucide-react';
 
-const colors = ['from-neon-purple to-neon-blue', 'from-neon-cyan to-neon-purple', 'from-neon-pink to-neon-purple'];
-const icons = [Rocket, Code, Megaphone];
+const memberStyles = [
+  { icon: Cpu, gradient: 'linear-gradient(135deg, #6c5ce7, #3b82f6)', shadow: '0 4px 20px rgba(108, 92, 231, 0.4)' },
+  { icon: Crown, gradient: 'linear-gradient(135deg, #0891b2, #6c5ce7)', shadow: '0 4px 20px rgba(8, 145, 178, 0.4)' },
+  { icon: Target, gradient: 'linear-gradient(135deg, #d946a8, #6c5ce7)', shadow: '0 4px 20px rgba(217, 70, 168, 0.4)' },
+];
 
 export function LeadershipSection() {
   const { t } = useLang();
@@ -26,23 +29,27 @@ export function LeadershipSection() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {t.leadership.members.map((member, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.2 }}
-              className="glass-effect rounded-2xl p-8 text-center group hover:border-neon-purple/40 gentle-animation"
-            >
-              {(() => { const Icon = icons[i]; return (
-                <div className={`w-24 h-24 rounded-full mx-auto mb-6 bg-gradient-to-br ${colors[i]} flex items-center justify-center`}>
-                  <Icon className="w-10 h-10 text-primary-foreground" strokeWidth={1.8} />
+          {t.leadership.members.map((member, i) => {
+            const { icon: Icon, gradient, shadow } = memberStyles[i];
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.2 }}
+                className="glass-effect rounded-2xl p-8 text-center group hover:border-neon-purple/40 gentle-animation"
+              >
+                <div
+                  className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-105 gentle-animation"
+                  style={{ background: gradient, boxShadow: shadow }}
+                >
+                  <Icon className="w-9 h-9 text-white" strokeWidth={1.5} />
                 </div>
-              ); })()}
-              <h3 className="font-display text-xl font-semibold text-foreground mb-1">{member.name}</h3>
-              <p className="text-neon-cyan text-sm font-medium">{member.role}</p>
-            </motion.div>
-          ))}
+                <h3 className="font-display text-xl font-semibold text-foreground mb-1">{member.name}</h3>
+                <p className="text-neon-cyan text-sm font-medium">{member.role}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -2,22 +2,82 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
-const techItems = [
-  { label: 'React.js', category: 'Frontend' },
-  { label: 'Next.js 14', category: 'Frontend' },
-  { label: 'TypeScript', category: 'Frontend' },
-  { label: 'Tailwind CSS', category: 'Frontend' },
-  { label: 'Django', category: 'Backend' },
-  { label: 'Python', category: 'Backend' },
-  { label: 'Node.js', category: 'Backend' },
-  { label: 'Scalable Microservices', category: 'Backend' },
-  { label: 'Cloud-Native Architecture', category: 'Infrastructure' },
-  { label: 'AWS / Google Cloud', category: 'Infrastructure' },
-  { label: 'CI/CD Pipelines', category: 'Infrastructure' },
-  { label: 'PostgreSQL', category: 'Backend' },
+const categories = [
+  {
+    name: 'FRONTEND',
+    color: '#6366f1', // indigo
+    items: ['TypeScript', 'Tailwind CSS', 'React.js', 'Next.js 14', 'Vue.js', 'Framer Motion', 'SASS/SCSS', 'Webpack'],
+  },
+  {
+    name: 'BACKEND',
+    color: '#a855f7', // purple
+    items: ['Scalable Microservices', 'Django', 'Python', 'Node.js', 'PostgreSQL', 'GraphQL', 'Redis', 'Express.js'],
+  },
+  {
+    name: 'INFRASTRUCTURE',
+    color: '#f97316', // orange
+    items: ['AWS', 'Google Cloud', 'CI/CD Pipelines', 'Cloud-Native Architecture', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'],
+  },
 ];
 
-const doubled = [...techItems, ...techItems];
+function MarqueeRow({
+  category,
+  reverse = false,
+}: {
+  category: (typeof categories)[0];
+  reverse?: boolean;
+}) {
+  // Triple the items for a seamless infinite loop
+  const tripled = [...category.items, ...category.items, ...category.items];
+  const items = reverse ? [...tripled].reverse() : tripled;
+
+  return (
+    <div className="mb-6">
+      {/* Category label with decorative lines */}
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <div className="h-px w-16 sm:w-24" style={{ background: `linear-gradient(to right, transparent, ${category.color}40)` }} />
+        <p
+          className="text-xs font-bold tracking-[0.25em]"
+          style={{ color: category.color }}
+        >
+          {category.name}
+        </p>
+        <div className="h-px w-16 sm:w-24" style={{ background: `linear-gradient(to left, transparent, ${category.color}40)` }} />
+      </div>
+
+      {/* Scrolling pills */}
+      <div className="relative w-full overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
+        <div
+          className="flex w-max gap-4 py-1"
+          style={{
+            animation: `marquee ${reverse ? '50s' : '45s'} linear infinite ${reverse ? 'reverse' : ''}`,
+            willChange: 'transform',
+          }}
+        >
+          {items.map((item, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-2.5 rounded-full px-5 py-2.5 border border-border/50 bg-card/70 backdrop-blur-sm hover:border-foreground/25 gentle-animation whitespace-nowrap group cursor-default"
+            >
+              <span
+                className="w-2.5 h-2.5 rounded-full flex-shrink-0 group-hover:scale-125 gentle-animation"
+                style={{
+                  backgroundColor: category.color,
+                  boxShadow: `0 0 6px ${category.color}50`,
+                }}
+              />
+              <span className="font-display font-medium text-foreground/85 text-sm group-hover:text-foreground gentle-animation">
+                {item}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function TechStackSection() {
   const { t } = useLang();
@@ -39,38 +99,10 @@ export function TechStackSection() {
         </motion.div>
       </div>
 
-      {/* Marquee row */}
-      <div className="relative w-full overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
-        <div className="flex marquee w-max gap-6 py-4">
-          {doubled.map((item, i) => (
-            <div
-              key={i}
-              className="glass-effect rounded-xl px-6 py-4 flex flex-col items-center min-w-[180px] hover:border-neon-cyan/40 gentle-animation group"
-            >
-              <span className="text-xs text-neon-cyan font-medium uppercase tracking-wider mb-1 opacity-70">{item.category}</span>
-              <span className="font-display font-semibold text-foreground text-base group-hover:text-neon-cyan gentle-animation">{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Second row, reversed */}
-      <div className="relative w-full overflow-hidden mt-4">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
-        <div className="flex w-max gap-6 py-4" style={{ animation: 'marquee 40s linear infinite reverse' }}>
-          {[...doubled].reverse().map((item, i) => (
-            <div
-              key={i}
-              className="glass-effect rounded-xl px-6 py-4 flex flex-col items-center min-w-[180px] hover:border-neon-purple/40 gentle-animation group"
-            >
-              <span className="text-xs text-neon-purple font-medium uppercase tracking-wider mb-1 opacity-70">{item.category}</span>
-              <span className="font-display font-semibold text-foreground text-base group-hover:text-neon-purple gentle-animation">{item.label}</span>
-            </div>
-          ))}
-        </div>
+      <div className="space-y-2">
+        {categories.map((cat, i) => (
+          <MarqueeRow key={cat.name} category={cat} reverse={i % 2 !== 0} />
+        ))}
       </div>
     </section>
   );

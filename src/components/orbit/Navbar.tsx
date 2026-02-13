@@ -35,12 +35,19 @@ export function Navbar() {
       // Detect active section
       const sections = ['hero', 'services', 'tech-stack', 'why-us', 'projects', 'leadership', 'contact'];
       let current = 'hero';
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight / 3) {
-            current = id;
+
+      // If scrolled to bottom of page, highlight contact
+      const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 50;
+      if (atBottom) {
+        current = 'contact';
+      } else {
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 3) {
+              current = id;
+            }
           }
         }
       }
@@ -82,7 +89,10 @@ export function Navbar() {
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-2">
               {links.map(l => (
-                <a key={l.href} href={l.href} className="px-4 py-1.5 rounded-full border border-foreground/20 dark:border-white/20 text-foreground/80 hover:text-foreground hover:border-foreground/40 dark:hover:border-white/60 hover:bg-foreground/5 dark:hover:bg-white/5 font-medium gentle-animation text-sm">{l.label}</a>
+                <a key={l.href} href={l.href} className={`px-4 py-1.5 rounded-full border font-medium gentle-animation text-sm ${activeSection === l.href
+                  ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_10px_rgba(108,92,231,0.3)]'
+                  : 'border-foreground/20 dark:border-white/20 text-foreground/80 hover:text-foreground hover:border-foreground/40 dark:hover:border-white/60 hover:bg-foreground/5 dark:hover:bg-white/5'
+                  }`}>{l.label}</a>
               ))}
             </div>
 
@@ -94,7 +104,7 @@ export function Navbar() {
                 <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {lang === 'en' ? 'বাং' : 'EN'}
               </button>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex items-center px-5 py-2.5 rounded-lg font-semibold text-sm text-primary-foreground bg-primary neon-glow hover:opacity-90 gentle-animation cursor-pointer">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex items-center px-5 py-2.5 rounded-full font-semibold text-sm text-primary-foreground bg-primary neon-glow hover:opacity-90 gentle-animation cursor-pointer">
                 {t.nav.bookCall}
               </a>
             </div>
@@ -109,7 +119,7 @@ export function Navbar() {
         transition={{ duration: 0.6, delay: 0.8 }}
         className="md:hidden fixed bottom-5 left-4 right-4 z-[120]"
       >
-        <div className="flex items-center gap-1 px-2.5 py-2.5 rounded-full bg-card/90 backdrop-blur-2xl border border-border dark:border-neon-purple/30 shadow-[0_8px_40px_rgba(0,0,0,0.4)] dark:shadow-[0_0_25px_rgba(139,92,246,0.2)] overflow-x-auto scrollbar-hide mx-auto w-fit max-w-full">
+        <div className="flex items-center gap-0.5 px-3 py-3 rounded-[28px] bg-card/90 backdrop-blur-2xl border border-border dark:border-neon-purple/25 shadow-[0_10px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_0_30px_rgba(139,92,246,0.2)] overflow-x-auto scrollbar-hide mx-auto w-fit max-w-full">
           {mobileNavItems.map((item) => {
             const isActive = activeSection === item.href;
             const Icon = item.icon;
@@ -123,13 +133,12 @@ export function Navbar() {
               >
                 <motion.div
                   layout
-                  className={`flex items-center gap-1.5 rounded-full gentle-animation cursor-pointer ${
-                    isActive
-                      ? 'bg-primary/15 dark:bg-primary/20 px-4 py-2.5 border border-primary/40 dark:border-neon-purple/50 shadow-[0_0_10px_rgba(139,92,246,0.15)]'
-                      : 'px-3 py-2.5 hover:bg-foreground/5 border border-transparent'
-                  }`}
+                  className={`flex items-center gap-2 rounded-full gentle-animation cursor-pointer ${isActive
+                    ? 'bg-primary/20 px-4 py-2.5 border border-primary/50 shadow-[0_0_12px_rgba(108,92,231,0.3)]'
+                    : 'px-3 py-2.5 hover:bg-foreground/5 border border-transparent'
+                    }`}
                 >
-                  <Icon className={`w-[18px] h-[18px] shrink-0 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
                   <AnimatePresence>
                     {isActive && (
                       <motion.span

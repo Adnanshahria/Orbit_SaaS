@@ -124,7 +124,7 @@ export function HeroSection() {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-2xl font-semibold text-primary-foreground bg-gradient-to-r from-primary to-neon-blue neon-glow gentle-animation cursor-pointer w-full sm:w-auto justify-center text-base"
+              className="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-full font-semibold text-primary-foreground bg-gradient-to-r from-primary to-neon-blue neon-glow gentle-animation cursor-pointer w-full sm:w-auto justify-center text-base"
             >
               {t.hero.cta}
               <ArrowRight className="w-5 h-5" />
@@ -133,7 +133,7 @@ export function HeroSection() {
               href="#services"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-2xl font-semibold glass-effect text-foreground cursor-pointer w-full sm:w-auto justify-center text-base"
+              className="inline-flex items-center gap-2 px-7 sm:px-8 py-4 rounded-full font-semibold glass-effect text-foreground cursor-pointer w-full sm:w-auto justify-center text-base"
             >
               {t.hero.learnMore}
             </motion.a>
