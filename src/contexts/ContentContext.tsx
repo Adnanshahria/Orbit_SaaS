@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
 import { translations } from '@/lib/i18n';
+import { useQueries, useQueryClient } from '@tanstack/react-query';
 
 type ContentData = Record<string, unknown>;
 
@@ -14,50 +15,39 @@ const ContentContext = createContext<ContentContextValue | null>(null);
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
+async function fetchContentData(lang: string) {
+    const res = await fetch(`${API_BASE}/api/content?lang=${lang}`);
+    if (!res.ok) throw new Error('API Error');
+    const data = await res.json();
+    if (!data.success || Object.keys(data.content).length === 0) {
+        throw new Error('No content found');
+    }
+    return data.content;
+}
+
 export function ContentProvider({ children }: { children: React.ReactNode }) {
-    const [content, setContent] = useState<{ en: ContentData; bn: ContentData }>({
-        en: { ...translations.en },
-        bn: { ...translations.bn },
+    const queryClient = useQueryClient();
+
+    const results = useQueries({
+        queries: [
+            { queryKey: ['content', 'en'], queryFn: () => fetchContentData('en') },
+            { queryKey: ['content', 'bn'], queryFn: () => fetchContentData('bn') },
+        ],
     });
-    const [loading, setLoading] = useState(true);
 
-    const fetchContent = useCallback(async () => {
-        try {
-            const [enRes, bnRes] = await Promise.all([
-                fetch(`${API_BASE}/api/content?lang=en`),
-                fetch(`${API_BASE}/api/content?lang=bn`),
-            ]);
+    const [enQuery, bnQuery] = results;
 
-            if (enRes.ok) {
-                const enData = await enRes.json();
-                if (enData.success && Object.keys(enData.content).length > 0) {
-                    setContent(prev => ({
-                        ...prev,
-                        en: { ...translations.en, ...enData.content },
-                    }));
-                }
-            }
+    // Derived state from queries
+    const content = {
+        en: { ...translations.en, ...(enQuery.data || {}) },
+        bn: { ...translations.bn, ...(bnQuery.data || {}) },
+    };
 
-            if (bnRes.ok) {
-                const bnData = await bnRes.json();
-                if (bnData.success && Object.keys(bnData.content).length > 0) {
-                    setContent(prev => ({
-                        ...prev,
-                        bn: { ...translations.bn, ...bnData.content },
-                    }));
-                }
-            }
-        } catch {
-            // Fallback to i18n.ts defaults — no error needed
-            console.log('Using default content (API unavailable)');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+    const loading = enQuery.isLoading || bnQuery.isLoading;
 
-    useEffect(() => {
-        fetchContent();
-    }, [fetchContent]);
+    const refreshContent = useCallback(async () => {
+        await queryClient.invalidateQueries({ queryKey: ['content'] });
+    }, [queryClient]);
 
     const updateSection = useCallback(async (section: string, lang: string, data: unknown): Promise<boolean> => {
         const token = localStorage.getItem('admin_token');
@@ -74,10 +64,13 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
             });
 
             if (res.ok) {
-                setContent(prev => ({
-                    ...prev,
-                    [lang]: { ...prev[lang as 'en' | 'bn'], [section]: data },
+                // Update cache immediately for better UX
+                queryClient.setQueryData(['content', lang], (old: ContentData | undefined) => ({
+                    ...old,
+                    [section]: data
                 }));
+                // Also invalidate to ensure sync
+                queryClient.invalidateQueries({ queryKey: ['content', lang] });
                 return true;
             }
             return false;
@@ -87,7 +80,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     return (
-        <ContentContext.Provider value={{ content, loading, updateSection, refreshContent: fetchContent }}>
+        <ContentContext.Provider value={{ content, loading, updateSection, refreshContent }}>
             {children}
         </ContentContext.Provider>
     );

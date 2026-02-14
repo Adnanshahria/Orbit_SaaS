@@ -65,38 +65,54 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Analytics } from '@vercel/analytics/react';
 import { SEOHead } from './components/seo/SEOHead';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0, // Consider data stale immediately
+      refetchOnWindowFocus: true, // Refetch when window gains focus
+      refetchOnMount: true, // Refetch on mount
+      refetchOnReconnect: true, // Refetch on reconnect
+      retry: 1,
+    },
+  },
+});
+
 export default function App() {
   return (
     <HelmetProvider>
-      <ContentProvider>
-        <LanguageProvider>
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <SEOHead />
-            <Suspense fallback={<AdminLoading />}>
-              <Routes>
-                <Route path="/" element={<PublicSite />} />
-                <Route path="/project/:id" element={<ProjectDetail />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<Navigate to="/admin/hero" replace />} />
-                  <Route path="hero" element={<AdminHero />} />
-                  <Route path="services" element={<AdminServices />} />
-                  <Route path="tech-stack" element={<AdminTechStack />} />
-                  <Route path="why-us" element={<AdminWhyUs />} />
-                  <Route path="projects" element={<AdminProjects />} />
-                  <Route path="leadership" element={<AdminLeadership />} />
-                  <Route path="contact" element={<AdminContact />} />
-                  <Route path="footer" element={<AdminFooter />} />
-                  <Route path="chatbot" element={<AdminChatbot />} />
-                  <Route path="navbar" element={<AdminNavbar />} />
-                  <Route path="seo" element={<AdminSEO />} />
-                </Route>
-              </Routes>
-            </Suspense>
-            <Analytics />
-          </BrowserRouter>
-        </LanguageProvider>
-      </ContentProvider>
+      <QueryClientProvider client={queryClient}>
+        <ContentProvider>
+          <LanguageProvider>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <SEOHead />
+              <Suspense fallback={<AdminLoading />}>
+                <Routes>
+                  <Route path="/" element={<PublicSite />} />
+                  <Route path="/project/:id" element={<ProjectDetail />} />
+                  <Route path="/admin/login" element={<AdminLogin />} />
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Navigate to="/admin/hero" replace />} />
+                    <Route path="hero" element={<AdminHero />} />
+                    <Route path="services" element={<AdminServices />} />
+                    <Route path="tech-stack" element={<AdminTechStack />} />
+                    <Route path="why-us" element={<AdminWhyUs />} />
+                    <Route path="projects" element={<AdminProjects />} />
+                    <Route path="leadership" element={<AdminLeadership />} />
+                    <Route path="contact" element={<AdminContact />} />
+                    <Route path="footer" element={<AdminFooter />} />
+                    <Route path="chatbot" element={<AdminChatbot />} />
+                    <Route path="navbar" element={<AdminNavbar />} />
+                    <Route path="seo" element={<AdminSEO />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+              <Analytics />
+            </BrowserRouter>
+          </LanguageProvider>
+        </ContentProvider>
+      </QueryClientProvider>
     </HelmetProvider>
   );
 }
