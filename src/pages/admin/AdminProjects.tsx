@@ -358,7 +358,7 @@ function ProjectEditor({ item, update }: { item: UnifiedProject; update: (i: Uni
 
 
 export default function AdminProjects() {
-    const { content, updateSection, refreshContent } = useContent();
+    const { content, updateSection, refreshContent, loading: contentLoading } = useContent();
     const [loading, setLoading] = useState(true);
     const [projects, setProjects] = useState<UnifiedProject[]>([]);
     const [sectionInfo, setSectionInfo] = useState({
@@ -386,7 +386,15 @@ export default function AdminProjects() {
     }, [content]);
 
     useEffect(() => {
-        if (!content.en || !content.bn) return;
+        // If context is still loading, wait.
+        if (contentLoading) return;
+
+        // If context is done but data is missing, we should still stop "local" loading to show empty state.
+        if (!content.en || !content.bn) {
+            setProjects([]);
+            setLoading(false);
+            return;
+        }
 
         const enItems = (content.en.projects as any)?.items || [];
         const bnItems = (content.bn.projects as any)?.items || [];
@@ -428,7 +436,7 @@ export default function AdminProjects() {
 
         setProjects(merged);
         setLoading(false);
-    }, [content, loading]);
+    }, [content, contentLoading]);
 
     const handleSave = async () => {
         setSaving(true);
