@@ -4,9 +4,9 @@ export function StructuredData() {
         "@type": "Organization",
         "name": "ORBIT SaaS",
         "alternateName": ["Orbit SaaS Agency", "ORBIT SaaS Web Development", "ORBIT Web Solutions"],
-        "url": "https://orbitsaas.com",
-        "logo": "https://orbitsaas.com/favicon.png",
-        "image": "https://orbitsaas.com/og-banner.png",
+        "url": "https://orbitsaas.cloud",
+        "logo": "https://orbitsaas.cloud/favicon.png",
+        "image": "https://orbitsaas.cloud/og-banner.png",
         "description": "ORBIT SaaS is a leading website development company offering custom web solutions, eCommerce platforms, SaaS products, and enterprise web applications. Build your website with expert developers.",
         "slogan": "Build Your Dream Website – Custom Web Solutions That Scale",
         "foundingDate": "2024",
@@ -62,15 +62,12 @@ export function StructuredData() {
         "@type": "WebSite",
         "name": "ORBIT SaaS – Website Development Company",
         "alternateName": "ORBIT SaaS",
-        "url": "https://orbitsaas.com",
+        "url": "https://orbitsaas.cloud",
         "description": "ORBIT SaaS is a professional website development company. Build custom websites, web applications, eCommerce platforms, and SaaS products with our expert team.",
         "inLanguage": ["en", "bn"],
         "potentialAction": {
             "@type": "SearchAction",
-            "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": "https://orbitsaas.com/?q={search_term_string}"
-            },
+            "target": "https://orbitsaas.cloud/?s={search_term_string}",
             "query-input": "required name=search_term_string"
         }
     };
@@ -79,8 +76,8 @@ export function StructuredData() {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "ORBIT SaaS – Website Development & Custom Web Solutions",
-        "url": "https://orbitsaas.com",
-        "image": "https://orbitsaas.com/og-banner.png",
+        "url": "https://orbitsaas.cloud",
+        "image": "https://orbitsaas.cloud/og-banner.png",
         "description": "Professional website development company specializing in building custom websites, web applications, eCommerce platforms, SaaS products, educational platforms, and enterprise web solutions using React, Node.js, and modern cloud technologies.",
         "priceRange": "$$",
         "address": {
@@ -198,13 +195,12 @@ export function StructuredData() {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://orbitsaas.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Web Development Services", "item": "https://orbitsaas.com/#services" },
-            { "@type": "ListItem", "position": 3, "name": "Tech Stack", "item": "https://orbitsaas.com/#tech-stack" },
-            { "@type": "ListItem", "position": 4, "name": "Why Choose Us", "item": "https://orbitsaas.com/#why-us" },
-            { "@type": "ListItem", "position": 5, "name": "Our Projects", "item": "https://orbitsaas.com/#projects" },
-            { "@type": "ListItem", "position": 6, "name": "Leadership", "item": "https://orbitsaas.com/#leadership" },
-            { "@type": "ListItem", "position": 7, "name": "Contact", "item": "https://orbitsaas.com/#contact" }
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://orbitsaas.cloud" },
+            { "@type": "ListItem", "position": 2, "name": "Web Development Services", "item": "https://orbitsaas.cloud/#services" },
+            { "@type": "ListItem", "position": 3, "name": "Custom Software", "item": "https://orbitsaas.cloud/#tech-stack" },
+            { "@type": "ListItem", "position": 4, "name": "SaaS Development", "item": "https://orbitsaas.cloud/#projects" },
+            { "@type": "ListItem", "position": 5, "name": "About ORBIT SaaS", "item": "https://orbitsaas.cloud/#why-us" },
+            { "@type": "ListItem", "position": 6, "name": "Contact Us", "item": "https://orbitsaas.cloud/#contact" }
         ]
     };
 
@@ -282,42 +278,42 @@ export function StructuredData() {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Custom Website Development",
-                "url": "https://orbitsaas.com/#services",
+                "url": "https://orbitsaas.cloud/#services",
                 "description": "Build custom websites with React, Node.js, and modern web technologies"
             },
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "eCommerce Website Development",
-                "url": "https://orbitsaas.com/#services",
+                "url": "https://orbitsaas.cloud/#services",
                 "description": "Build scalable online stores with payment gateways and analytics"
             },
             {
                 "@type": "ListItem",
                 "position": 3,
                 "name": "SaaS Web Application Development",
-                "url": "https://orbitsaas.com/#services",
+                "url": "https://orbitsaas.cloud/#services",
                 "description": "Build full-stack SaaS products with cloud infrastructure"
             },
             {
                 "@type": "ListItem",
                 "position": 4,
                 "name": "Enterprise Web Application Development",
-                "url": "https://orbitsaas.com/#services",
+                "url": "https://orbitsaas.cloud/#services",
                 "description": "Build secure enterprise web solutions for complex workflows"
             },
             {
                 "@type": "ListItem",
                 "position": 5,
                 "name": "Educational Platform Development",
-                "url": "https://orbitsaas.com/#services",
+                "url": "https://orbitsaas.cloud/#services",
                 "description": "Build learning management systems and online course platforms"
             },
             {
                 "@type": "ListItem",
                 "position": 6,
                 "name": "Portfolio & Blog Website Development",
-                "url": "https://orbitsaas.com/#services",
+                "url": "https://orbitsaas.cloud/#services",
                 "description": "Build SEO-optimized portfolio websites and blogging platforms"
             }
         ]
@@ -327,7 +323,7 @@ export function StructuredData() {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "ORBIT SaaS",
-        "url": "https://orbitsaas.com",
+        "url": "https://orbitsaas.cloud",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "All",
         "browserRequirements": "Requires JavaScript. Requires HTML5.",

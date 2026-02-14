@@ -19,9 +19,9 @@ export function SEOHead() {
     const description = (content[lang]?.['seo_description'] as string) || defaultDesc;
     const keywords = (content[lang]?.['seo_keywords'] as string) || defaultKeywords;
 
-    const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://orbitsaas.com';
-    const canonicalUrl = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : 'https://orbitsaas.com';
-    const image = 'https://orbitsaas.com/og-banner.png';
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://orbitsaas.cloud';
+    const canonicalUrl = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : 'https://orbitsaas.cloud';
+    const image = 'https://orbitsaas.cloud/og-banner.png';
 
     return (
         <Helmet>

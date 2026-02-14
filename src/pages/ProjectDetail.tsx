@@ -197,8 +197,8 @@ export default function ProjectDetail() {
     const plainDesc = stripHtml(project.desc || '');
     const seoDesc = project.seo?.description || (plainDesc.length > 160 ? plainDesc.substring(0, 157) + '...' : plainDesc);
     const seoKeywords = project.seo?.keywords?.join(', ') || project.tags?.join(', ') || 'SaaS, Portfolio, Case Study';
-    const ogImage = allImages[0] ? ensureAbsoluteUrl(allImages[0]) : 'https://orbitsaas.com/og-banner.png';
-    const currentUrl = `https://orbitsaas.com/project/${id}`;
+    const ogImage = allImages[0] ? ensureAbsoluteUrl(allImages[0]) : 'https://orbitsaas.cloud/og-banner.png';
+    const currentUrl = `https://orbitsaas.cloud/project/${id}`;
 
     return (
         <div className="min-h-screen bg-background text-foreground">

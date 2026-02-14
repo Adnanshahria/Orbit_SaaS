@@ -8,7 +8,7 @@ Disallow: /admin
 Crawl-delay: 1
 
 # Sitemaps
-Sitemap: https://orbitsaas.com/sitemap.xml
+Sitemap: https://orbitsaas.cloud/sitemap.xml
 
 # Host
-Host: https://orbitsaas.com
+Host: https://orbitsaas.cloud
