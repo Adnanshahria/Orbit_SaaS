@@ -7,31 +7,21 @@ import { useContent } from '@/contexts/ContentContext';
 
 // --- Shared Helper Components ---
 
-function processImage(file: File, maxWidth = 1920, quality = 0.95): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let w = img.width;
-                let h = img.height;
-                if (w > maxWidth) {
-                    h = (h * maxWidth) / w;
-                    w = maxWidth;
-                }
-                canvas.width = w;
-                canvas.height = h;
-                const ctx = canvas.getContext('2d')!;
-                ctx.drawImage(img, 0, 0, w, h);
-                resolve(canvas.toDataURL('image/webp', quality));
-            };
-            img.onerror = reject;
-            img.src = e.target?.result as string;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+// --- ImgBB Config ---
+const IMGBB_API_KEY = 'b98cf36f5342d5f1e8036109c33d1c09';
+
+async function uploadToImgBB(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: 'POST',
+        body: formData,
     });
+
+    if (!res.ok) throw new Error('ImgBB upload failed');
+    const data = await res.json();
+    return data.data.url;
 }
 
 function MultiImageUpload({ images, onChange, title }: { images: string[]; onChange: (imgs: string[]) => void; title: string; }) {
@@ -40,14 +30,26 @@ function MultiImageUpload({ images, onChange, title }: { images: string[]; onCha
     const handleFiles = async (files: FileList) => {
         const imageFiles = Array.from(files).filter((f) => f.type.startsWith('image/'));
         if (imageFiles.length === 0) return;
+
         setUploading(true);
+        const toastId = toast.loading(`Uploading ${imageFiles.length} images...`);
+
         try {
-            const newImages = await Promise.all(imageFiles.map((f) => processImage(f)));
-            onChange([...images, ...newImages]);
-        } catch {
-            console.error('Failed to process one or more images');
+            // Upload sequentially to avoid aggressive rate limiting
+            const newUrls: string[] = [];
+            for (const file of imageFiles) {
+                const url = await uploadToImgBB(file);
+                newUrls.push(url);
+            }
+
+            onChange([...images, ...newUrls]);
+            toast.success('Images uploaded successfully!', { id: toastId });
+        } catch (err) {
+            console.error('Upload failed:', err);
+            toast.error('Upload failed. Check Cloudinary settings.', { id: toastId });
+        } finally {
+            setUploading(false);
         }
-        setUploading(false);
     };
 
     const removeImage = (idx: number) => {
@@ -80,11 +82,21 @@ function MultiImageUpload({ images, onChange, title }: { images: string[]; onCha
                 if (document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement) return;
 
                 setUploading(true);
+                const toastId = toast.loading(`Uploading pasted image...`);
                 try {
-                    const newImages = await Promise.all(imageFiles.map((f) => processImage(f)));
-                    onChange([...images, ...newImages]);
-                } catch (err) { console.error(err); }
-                setUploading(false);
+                    const newUrls: string[] = [];
+                    for (const file of imageFiles) {
+                        const url = await uploadToImgBB(file);
+                        newUrls.push(url);
+                    }
+                    onChange([...images, ...newUrls]);
+                    toast.success('Image uploaded!', { id: toastId });
+                } catch (err) {
+                    console.error(err);
+                    toast.error('Upload failed', { id: toastId });
+                } finally {
+                    setUploading(false);
+                }
             }
         };
         window.addEventListener('paste', handlePaste);
@@ -115,7 +127,7 @@ function MultiImageUpload({ images, onChange, title }: { images: string[]; onCha
             <label className="w-full max-w-xs h-24 rounded-lg border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors">
                 <div className="flex flex-col items-center gap-1 text-muted-foreground">
                     <Upload className="w-5 h-5" />
-                    <span className="text-xs">{uploading ? 'Processing...' : 'Click to Upload or Paste (Ctrl+V)'}</span>
+                    <span className="text-xs">{uploading ? 'Uploading...' : 'Click to Upload to Cloud or Paste'}</span>
                 </div>
                 <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => e.target.files && handleFiles(e.target.files)} />
             </label>
