@@ -32,10 +32,16 @@ export function Navbar() {
     document.documentElement.classList.toggle('dark', next);
   };
 
-  // Handle scroll spy
+  // Handle scroll spy — only on home page
   useEffect(() => {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      // Only detect active sections on the home page
+      if (location.pathname !== '/') {
+        setActiveSection('');
+        return;
+      }
 
       // Detect active section
       const sections = ['hero', 'services', 'tech-stack', 'why-us', 'projects', 'leadership', 'contact'];
@@ -59,8 +65,9 @@ export function Navbar() {
       setActiveSection(`#${current}`);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // Run immediately to set correct state
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [location.pathname]);
 
   // Handle hash scrolling on mount or when location changes (for cross-page nav)
   useEffect(() => {
