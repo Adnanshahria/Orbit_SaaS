@@ -40,8 +40,9 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
 
     const variants = {
         enter: (direction: number) => ({
-            x: direction > 0 ? 300 : -300,
-            opacity: 0
+            x: direction > 0 ? '100%' : '-100%',
+            opacity: 0,
+            zIndex: 0
         }),
         center: {
             zIndex: 1,
@@ -50,7 +51,7 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
         },
         exit: (direction: number) => ({
             zIndex: 0,
-            x: direction < 0 ? 300 : -300,
+            x: direction < 0 ? '100%' : '-100%',
             opacity: 0
         })
     };
@@ -64,10 +65,10 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                 transition={{ duration: 0.6 }}
                 className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-8"
             >
-                <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl shadow-primary/5 group">
+                <div className="relative w-full aspect-video bg-muted/10 rounded-2xl overflow-hidden border border-border shadow-2xl shadow-primary/5 group">
                     {/* Main Image */}
-                    <div className="cursor-pointer overflow-hidden relative" onClick={openLightbox}>
-                        <AnimatePresence mode='wait' custom={direction}>
+                    <div className="absolute inset-0 cursor-pointer" onClick={openLightbox}>
+                        <AnimatePresence initial={false} custom={direction}>
                             <motion.img
                                 key={currentIndex}
                                 src={images[currentIndex]}
@@ -84,7 +85,7 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                                 dragConstraints={{ left: 0, right: 0 }}
                                 dragElastic={1}
                                 onDragEnd={handleDragEnd}
-                                className="w-full h-auto max-h-[600px] object-contain bg-black/5 touch-pan-y"
+                                className="absolute inset-0 w-full h-full object-contain bg-black/5 touch-pan-y"
                                 alt={`${title} - slide ${currentIndex + 1}`}
                             />
                         </AnimatePresence>
