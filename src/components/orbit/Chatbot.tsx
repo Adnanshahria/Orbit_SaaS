@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
+import { useContent } from '@/contexts/ContentContext';
 import { sendToGroq, ChatMessage } from '@/services/aiService';
 
 export function Chatbot() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const { content } = useContent(); // Access dynamic content
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -30,18 +32,89 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
-      // Prepare context for the AI including system prompt if needed
-      // You might want to add a system prompt at the beginning of the conversation
-      // Prepare context for the AI including system prompt and Q&A
-      const systemPrompt = t.chatbot.systemPrompt || `You are Orbit AI, a helpful assistant for Orbit SaaS. 
-      You help users with questions about web development, our services, and technical support.
-      Be professional, friendly, and concise.`;
+      // 1. Prepare Dynamic Knowledge Base
+      // We use the current language's content, falling back to English if missing
+      const activeContent = content[lang] || content['en'];
 
+      let knowledgeBase = "Here is the comprehensive context about various sections of the website:\n\n";
+
+      // --- Projects ---
+      const projects = (activeContent.projects as any)?.items || [];
+      if (projects.length > 0) {
+        knowledgeBase += "## PORTFOLIO / PROJECTS:\n";
+        projects.forEach((p: any) => {
+          knowledgeBase += `- Name: ${p.title}\n  Description: ${p.desc}\n  Tech Stack/Tags: ${(p.tags || []).join(', ')}\n  Link: ${p.link}\n\n`;
+        });
+      }
+
+      // --- Services ---
+      const services = (activeContent.services as any)?.items || [];
+      if (services.length > 0) {
+        knowledgeBase += "## SERVICES WE OFFER:\n";
+        services.forEach((s: any) => {
+          knowledgeBase += `- ${s.title}: ${s.desc}\n`;
+        });
+        knowledgeBase += "\n";
+      }
+
+      // --- Tech Stack ---
+      const techStack = (activeContent.techStack as any)?.items || []; // Assuming tech stack might have items, otherwise just general knowledge
+      if (techStack.length > 0) {
+        knowledgeBase += "## TECH STACK:\n" + techStack.map((t: any) => t.name || t).join(', ') + "\n\n";
+      }
+
+      // --- Company Info (Hero/Why Us) ---
+      const hero = (activeContent.hero as any);
+      if (hero) {
+        knowledgeBase += `## COMPANY OVERVIEW:\nTagline: ${hero.title}\nSummary: ${hero.subtitle}\n\n`;
+      }
+
+      const whyUs = (activeContent.whyUs as any)?.items || [];
+      if (whyUs.length > 0) {
+        knowledgeBase += "## WHY CHOOSE US:\n";
+        whyUs.forEach((w: any) => {
+          knowledgeBase += `- ${w.title}: ${w.desc}\n`;
+        });
+        knowledgeBase += "\n";
+      }
+
+      // --- Leadership ---
+      const leadership = (activeContent.leadership as any)?.members || [];
+      if (leadership.length > 0) {
+        knowledgeBase += "## LEADERSHIP TEAM:\n";
+        leadership.forEach((l: any) => {
+          knowledgeBase += `- ${l.name} (${l.role})\n`;
+        });
+        knowledgeBase += "\n";
+      }
+
+      // --- Contact ---
+      const contact = (activeContent.contact as any);
+      if (contact) {
+        knowledgeBase += `## CONTACT INFO:\nCTA: ${contact.cta}\nTitle: ${contact.title}\n\n`;
+      }
+
+      // 2. Prepare System Prompt
+      const systemPrompt = t.chatbot.systemPrompt || `You are Orbit AI, the advanced AI assistant for Orbit SaaS (a web development agency). 
+      Your goal is to help potential clients understand our services, view our portfolio, and book appointments.
+      
+      Tone: Professional, enthusiastic, knowledgeable, and helpful.
+      Format: Use Markdown for readable responses (bolding key terms, bullet points for lists).
+      
+      CRITICAL INSTRUCTIONS:
+      - You have access to the FULL website content below. USE IT to answer specific questions.
+      - If asked about projects, mention specific ones from the Portfolio section.
+      - If asked about services, detail our specific offerings.
+      - If unsure, ask the user to clarify or suggest booking a consultation.
+      - Do NOT make up facts not present in the context.`;
+
+      // 3. Prepare Q&A Context
       const qaContext = (t.chatbot.qaPairs || [])
         .map((qa: { question: string; answer: string }) => `Q: ${qa.question}\nA: ${qa.answer}`)
         .join('\n\n');
 
-      const fullSystemMessage = `${systemPrompt}\n\n${qaContext ? `Here is some specific knowledge you have:\n${qaContext}` : ''}`;
+      // 4. Combine everything
+      const fullSystemMessage = `${systemPrompt}\n\n=== WEBSITE CONTENT / KNOWLEDGE BASE ===\n${knowledgeBase}\n\n=== SPECIFIC Q&A TRAINING ===\n${qaContext ? qaContext : 'No specific Q&A pairs.'}`;
 
       const conversationHistory = messages.length === 0
         ? [
