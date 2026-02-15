@@ -39,6 +39,8 @@ export function StructuredData() {
             "availableLanguage": ["English", "Bengali"]
         },
         "knowsAbout": [
+            "Web Solution",
+            "Website Related Solutions",
             "Website Development",
             "Web Solutions",
             "Custom Website Development",
@@ -101,6 +103,8 @@ export function StructuredData() {
             }
         ],
         "serviceType": [
+            "Web Solution",
+            "Website Related Solutions",
             "Website Development",
             "Web Application Development",
             "Custom Web Solutions",

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -37,6 +38,10 @@ export default function AdminLayout() {
 
     return (
         <div className="min-h-screen bg-background flex">
+            <Helmet>
+                <title>Admin Panel | Orbit SaaS</title>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             {/* Mobile overlay */}
             {sidebarOpen && (
                 <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />

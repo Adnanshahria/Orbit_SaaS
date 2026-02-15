@@ -10,9 +10,9 @@ export function SEOHead() {
     const seoData = content[lang] as Record<string, any> || {};
 
     // Keyword-optimized defaults
-    const defaultTitle = "Best Website Development Company | Build Custom Websites & Web Solutions | ORBIT SaaS";
-    const defaultDesc = "ORBIT SaaS is a top website development company offering custom web solutions, web app development, eCommerce platforms, SaaS products & enterprise software. Build your website today — get a free consultation.";
-    const defaultKeywords = "website development, web development company, web solution, build website, custom website development, website builder, web app development, web development services, best web development company, website design and development, professional website development, custom web solutions, web application development, build custom website, eCommerce website development, SaaS development, enterprise web application, React development, Node.js development, full-stack web development, web build, build web app, website maker, ORBIT SaaS";
+    const defaultTitle = "Best Website Development Company | Custom Web Solutions | ORBIT SaaS";
+    const defaultDesc = "ORBIT SaaS is a top website development company offering custom web solutions, website related solutions, web app development, eCommerce platforms, & enterprise software. Build your website today — get a free consultation.";
+    const defaultKeywords = "web solution, website related solutions, website development, web development company, build website, custom website development, website builder, web app development, web development services, best web development company, website design and development, professional website development, custom web solutions, web application development, build custom website, eCommerce website development, SaaS development, enterprise web application, React development, Node.js development, full-stack web development, web build, build web app, website maker, ORBIT SaaS";
 
     // Data from DB (saved via AdminSEO)
     const title = (content[lang]?.['seo_title'] as string) || defaultTitle;
