@@ -11,12 +11,15 @@ import { ensureAbsoluteUrl } from '@/lib/utils';
 
 function ImageGallery({ images, title }: { images: string[]; title: string }) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
 
     if (!images || images.length === 0) return null;
 
-    const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % images.length);
-    const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    const paginate = (newDirection: number) => {
+        setDirection(newDirection);
+        setCurrentIndex((prev) => (prev + newDirection + images.length) % images.length);
+    };
 
     const openLightbox = () => setLightboxOpen(true);
     const closeLightbox = () => setLightboxOpen(false);
@@ -29,10 +32,27 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
         const swipe = swipePower(offset.x, velocity.x);
 
         if (swipe < -10000) {
-            nextSlide();
+            paginate(1);
         } else if (swipe > 10000) {
-            prevSlide();
+            paginate(-1);
         }
+    };
+
+    const variants = {
+        enter: (direction: number) => ({
+            x: direction > 0 ? 300 : -300,
+            opacity: 0
+        }),
+        center: {
+            zIndex: 1,
+            x: 0,
+            opacity: 1
+        },
+        exit: (direction: number) => ({
+            zIndex: 0,
+            x: direction < 0 ? 300 : -300,
+            opacity: 0
+        })
     };
 
     return (
@@ -47,20 +67,25 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                 <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl shadow-primary/5 group">
                     {/* Main Image */}
                     <div className="cursor-pointer overflow-hidden relative" onClick={openLightbox}>
-                        <AnimatePresence mode='wait'>
+                        <AnimatePresence mode='wait' custom={direction}>
                             <motion.img
                                 key={currentIndex}
                                 src={images[currentIndex]}
-                                alt={`${title} - slide ${currentIndex + 1}`}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.3 }}
+                                custom={direction}
+                                variants={variants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{
+                                    x: { type: "spring", stiffness: 300, damping: 30 },
+                                    opacity: { duration: 0.2 }
+                                }}
                                 drag="x"
                                 dragConstraints={{ left: 0, right: 0 }}
                                 dragElastic={1}
                                 onDragEnd={handleDragEnd}
                                 className="w-full h-auto max-h-[600px] object-contain bg-black/5 touch-pan-y"
+                                alt={`${title} - slide ${currentIndex + 1}`}
                             />
                         </AnimatePresence>
                     </div>
@@ -69,13 +94,13 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                     {images.length > 1 && (
                         <>
                             <button
-                                onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                                onClick={(e) => { e.stopPropagation(); paginate(-1); }}
                                 className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/50 hover:bg-black/70 text-white backdrop-blur-sm transition-all opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transform hover:scale-110 z-10"
                             >
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
                             <button
-                                onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                                onClick={(e) => { e.stopPropagation(); paginate(1); }}
                                 className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/50 hover:bg-black/70 text-white backdrop-blur-sm transition-all opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transform hover:scale-110 z-10"
                             >
                                 <ChevronRight className="w-6 h-6" />
@@ -86,7 +111,11 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                                 {images.map((_, idx) => (
                                     <button
                                         key={idx}
-                                        onClick={(e) => { e.stopPropagation(); setCurrentIndex(idx); }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setDirection(idx > currentIndex ? 1 : -1);
+                                            setCurrentIndex(idx);
+                                        }}
                                         className={`w-2 h-2 rounded-full transition-all ${idx === currentIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'
                                             }`}
                                     />
@@ -118,13 +147,13 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                         {images.length > 1 && (
                             <>
                                 <button
-                                    onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                                    onClick={(e) => { e.stopPropagation(); paginate(-1); }}
                                     className="absolute left-4 md:left-8 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors opacity-100 sm:opacity-70 sm:hover:opacity-100"
                                 >
                                     <ChevronLeft className="w-10 h-10" />
                                 </button>
                                 <button
-                                    onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                                    onClick={(e) => { e.stopPropagation(); paginate(1); }}
                                     className="absolute right-4 md:right-8 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors opacity-100 sm:opacity-70 sm:hover:opacity-100"
                                 >
                                     <ChevronRight className="w-10 h-10" />
