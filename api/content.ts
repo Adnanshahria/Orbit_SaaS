@@ -56,12 +56,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             const etag = `"${simpleHash(contentJson)}"`;
 
             if (req.headers['if-none-match'] === etag) {
-                res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
+                res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                 res.setHeader('ETag', etag);
                 return res.status(304).end();
             }
 
-            res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
             res.setHeader('ETag', etag);
 
             return res.status(200).json({ success: true, content, lang: language });
@@ -96,9 +96,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                     assembled[row.section as string] = JSON.parse(row.data as string);
                 }
                 await db.execute({
-                    sql: `INSERT INTO content_cache (lang, data, built_at)
+                    sql: `INSERT INTO content_cache (lang, data, updated_at)
                           VALUES (?, ?, datetime('now'))
-                          ON CONFLICT(lang) DO UPDATE SET data = ?, built_at = datetime('now')`,
+                          ON CONFLICT(lang) DO UPDATE SET data = ?, updated_at = datetime('now')`,
                     args: [lang, JSON.stringify(assembled), JSON.stringify(assembled)],
                 });
             } catch {

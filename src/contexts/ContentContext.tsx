@@ -49,8 +49,8 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
 
     const results = useQueries({
         queries: [
-            { queryKey: ['content', 'en'], queryFn: () => fetchContentData('en'), staleTime: 30_000 },
-            { queryKey: ['content', 'bn'], queryFn: () => fetchContentData('bn'), staleTime: 30_000 },
+            { queryKey: ['content', 'en'], queryFn: () => fetchContentData('en'), staleTime: 0, gcTime: 0 },
+            { queryKey: ['content', 'bn'], queryFn: () => fetchContentData('bn'), staleTime: 0, gcTime: 0 },
         ],
     });
 
@@ -88,10 +88,10 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
                     ...old,
                     [section]: data
                 }));
-                // Delay invalidation to avoid race with server write commit
+                // Short delay then refetch to ensure server has committed
                 setTimeout(() => {
                     queryClient.invalidateQueries({ queryKey: ['content', lang] });
-                }, 3000);
+                }, 500);
                 return true;
             }
             return false;
