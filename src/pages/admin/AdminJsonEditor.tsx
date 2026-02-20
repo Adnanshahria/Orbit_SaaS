@@ -18,9 +18,12 @@ const SECTIONS = [
     { id: 'seo', label: 'SEO' },
 ];
 
+import { useSearchParams } from 'react-router-dom';
+
 export default function AdminJsonEditor() {
     const { content, updateSection, loading } = useContent();
-    const [selectedSection, setSelectedSection] = useState(SECTIONS[0].id);
+    const [searchParams] = useSearchParams();
+    const [selectedSection, setSelectedSection] = useState(searchParams.get('section') || SECTIONS[0].id);
     const [lang, setLang] = useState('en');
     const [jsonText, setJsonText] = useState('');
     const [saving, setSaving] = useState(false);

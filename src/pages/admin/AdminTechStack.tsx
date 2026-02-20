@@ -228,6 +228,7 @@ export default function AdminTechStack() {
                 <SectionHeader
                     title="Tech Stack Manager (Unified)"
                     description="Edit tech stack categories and marquee items with English & Bangla content in sync."
+                    sectionId="techStack"
                 />
             </div>
 

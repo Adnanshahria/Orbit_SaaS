@@ -205,6 +205,7 @@ export default function AdminWhyUs() {
                 <SectionHeader
                     title="Why Us Manager (Unified)"
                     description="Manage unique selling points with English & Bangla content in sync."
+                    sectionId="whyUs"
                 />
                 <div className="text-xs text-muted-foreground bg-secondary px-3 py-1 rounded-full">
                     ✅ Sync-Mode Active
