@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
 
@@ -110,6 +110,10 @@ export function HeroSection() {
   const subtitle = t.hero.subtitle || '';
   const words = subtitle.split(' ');
 
+  // Loader sync: Only delay if this is the absolute first visit (loader runs for 3.5s)
+  const [isFirstVisit] = useState(!sessionStorage.getItem('orbit_has_visited'));
+  const baseDelay = isFirstVisit ? 3.6 : 0;
+
   // Theme Customization from admin
   const taglineColor = (t.hero as any).taglineColor || '#00F5FF';
   const titleColor = (t.hero as any).titleColor || '#FF00A8';
@@ -124,7 +128,7 @@ export function HeroSection() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-32 pb-24 sm:pt-0 sm:pb-0"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-36 pb-24 sm:pt-0 sm:pb-0"
     >
       {/* Parallax background layers */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 bg-gradient-to-br from-background via-secondary/40 to-background" />
@@ -142,34 +146,33 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-effect text-[10px] sm:text-xs font-bold mb-8 sm:mb-10 uppercase tracking-[0.2em]"
+            transition={{ type: 'spring', stiffness: 100, damping: 20, delay: baseDelay + 0.2 }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-effect text-[10px] sm:text-xs font-bold mb-10 sm:mb-14 uppercase tracking-[0.2em]"
             style={{ color: taglineColor }}
           >
             <span
-              className="w-2 h-2 rounded-full animate-pulse"
-              style={{ backgroundColor: taglineColor, boxShadow: `0 0 10px ${taglineColor}` }}
+              className="w-2.5 h-2.5 rounded-full animate-pulse bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]"
             />
             {t.hero.tagline}
           </motion.div>
         )}
 
         {/* Title — "ORBIT SaaS" scales up dramatically */}
-        <motion.h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground leading-[1] mb-10 sm:mb-14 tracking-tighter">
+        <motion.h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black text-foreground leading-[1] mb-12 sm:mb-16 tracking-tighter">
           <motion.span
             className="block"
             initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ type: 'spring', stiffness: 80, damping: 18, delay: 0.4 }}
+            transition={{ type: 'spring', stiffness: 80, damping: 18, delay: baseDelay + 0.4 }}
           >
             ORBIT <span className="text-primary">SaaS</span>
           </motion.span>
           <motion.span
-            className="block mt-4 sm:mt-8 text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-black italic leading-tight"
+            className="block mt-6 sm:mt-10 text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-black italic leading-tight px-2"
             style={{ color: titleColor }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 80, damping: 18, delay: 0.7 }}
+            transition={{ type: 'spring', stiffness: 80, damping: 18, delay: baseDelay + 0.7 }}
           >
             {t.hero.title}
           </motion.span>
@@ -184,7 +187,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.4,
-                delay: 0.9 + i * 0.04,
+                delay: baseDelay + 0.9 + i * 0.04,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
             >
@@ -197,7 +200,7 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 60, damping: 16, delay: 1.6 }}
+          transition={{ type: 'spring', stiffness: 60, damping: 16, delay: baseDelay + 1.6 }}
           className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4 sm:px-0"
         >
           <motion.a
@@ -230,7 +233,7 @@ export function HeroSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
+        transition={{ delay: baseDelay + 2.5 }}
         className="absolute bottom-12 sm:bottom-10 left-1/2 -translate-x-1/2"
       >
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}>
