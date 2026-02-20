@@ -298,8 +298,8 @@ function ProjectEditor({ item, update }: { item: UnifiedProject; update: (i: Uni
                     </div>
 
                     <div className="space-y-3">
-                        <TextField label="Meta Title" value={item.seo?.title || ''} onChange={v => updateSeo('title', v)} />
-                        <TextField label="Meta Description" value={item.seo?.description || ''} onChange={v => updateSeo('description', v)} multiline />
+                        <TextField label="Meta Title" value={item.seo?.title || ''} onChange={v => updateSeo('title', v)} lang="en" />
+                        <TextField label="Meta Description" value={item.seo?.description || ''} onChange={v => updateSeo('description', v)} multiline lang="en" />
                         <TagsInput tags={item.seo?.keywords || []} onChange={t => updateSeo('keywords', t)} />
                     </div>
                 </div>
@@ -327,6 +327,7 @@ function ProjectEditor({ item, update }: { item: UnifiedProject; update: (i: Uni
                         label={tab === 'en' ? "Project Title" : "প্রজেক্টের নাম"}
                         value={item[tab].title}
                         onChange={v => updateLoc(tab, 'title', v)}
+                        lang={tab}
                     />
 
                     <RichTextEditor
@@ -511,13 +512,13 @@ export default function AdminProjects() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card rounded-xl p-6 border border-border">
                 <div className="space-y-4">
                     <h3 className="font-semibold text-primary">English Section Info</h3>
-                    <TextField label="Title" value={sectionInfo.en.title} onChange={v => setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, title: v } })} />
-                    <TextField label="Subtitle" value={sectionInfo.en.subtitle} onChange={v => setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, subtitle: v } })} multiline />
+                    <TextField label="Title" value={sectionInfo.en.title} onChange={v => setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, title: v } })} lang="en" />
+                    <TextField label="Subtitle" value={sectionInfo.en.subtitle} onChange={v => setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, subtitle: v } })} multiline lang="en" />
                 </div>
                 <div className="space-y-4">
                     <h3 className="font-semibold text-primary">Bangla Section Info</h3>
-                    <TextField label="শিরোনাম (Title)" value={sectionInfo.bn.title} onChange={v => setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, title: v } })} />
-                    <TextField label="সাবটাইটেল (Subtitle)" value={sectionInfo.bn.subtitle} onChange={v => setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, subtitle: v } })} multiline />
+                    <TextField label="শিরোনাম (Title)" value={sectionInfo.bn.title} onChange={v => setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, title: v } })} lang="bn" />
+                    <TextField label="সাবটাইটেল (Subtitle)" value={sectionInfo.bn.subtitle} onChange={v => setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, subtitle: v } })} multiline lang="bn" />
                 </div>
             </div>
 

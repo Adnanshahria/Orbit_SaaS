@@ -192,6 +192,7 @@ export default function AdminFooter() {
                         onChange={(v) =>
                             setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, rights: v } })
                         }
+                        lang="en"
                     />
                     <TextField
                         label="Tagline"
@@ -199,6 +200,7 @@ export default function AdminFooter() {
                         onChange={(v) =>
                             setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, tagline: v } })
                         }
+                        lang="en"
                     />
                 </div>
                 <div className="space-y-4">
@@ -209,6 +211,7 @@ export default function AdminFooter() {
                         onChange={(v) =>
                             setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, rights: v } })
                         }
+                        lang="bn"
                     />
                     <TextField
                         label="ট্যাগলাইন (Tagline)"
@@ -216,6 +219,7 @@ export default function AdminFooter() {
                         onChange={(v) =>
                             setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, tagline: v } })
                         }
+                        lang="bn"
                     />
                 </div>
             </div>
@@ -237,8 +241,8 @@ export default function AdminFooter() {
                             <div
                                 key={social.platform}
                                 className={`flex items-center gap-3 p-3 rounded-xl border transition-colors ${social.enabled
-                                        ? 'border-primary/30 bg-primary/5'
-                                        : 'border-border bg-secondary/30'
+                                    ? 'border-primary/30 bg-primary/5'
+                                    : 'border-border bg-secondary/30'
                                     }`}
                             >
                                 <Icon

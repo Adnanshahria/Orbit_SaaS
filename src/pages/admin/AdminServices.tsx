@@ -24,8 +24,8 @@ export default function AdminServices() {
             </div>
             <ErrorAlert message={error} />
             <div className="space-y-4 bg-card rounded-xl p-6 border border-border">
-                <TextField label="Section Title" value={title} onChange={setTitle} />
-                <TextField label="Section Subtitle" value={subtitle} onChange={setSubtitle} multiline />
+                <TextField label="Section Title" value={title} onChange={setTitle} lang={lang} />
+                <TextField label="Section Subtitle" value={subtitle} onChange={setSubtitle} multiline lang={lang} />
             </div>
             <div className="bg-card rounded-xl p-6 border border-border">
                 <h3 className="font-semibold text-foreground mb-4">Service Items</h3>
@@ -36,8 +36,8 @@ export default function AdminServices() {
                     addLabel="Add Service"
                     renderItem={(item, _i, update) => (
                         <>
-                            <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} />
-                            <TextField label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline />
+                            <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} lang={lang} />
+                            <TextField label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline lang={lang} />
                         </>
                     )}
                 />

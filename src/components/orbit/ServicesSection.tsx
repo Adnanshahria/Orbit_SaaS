@@ -47,7 +47,7 @@ export function ServicesSection() {
         {/* Cards — alternate entrance from left/right */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {t.services.items.map((item, i) => {
-            const Icon = icons[i];
+            const Icon = icons[i % icons.length];
             return (
               <motion.article
                 key={i}

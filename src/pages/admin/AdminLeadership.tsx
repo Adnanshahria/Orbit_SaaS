@@ -153,8 +153,8 @@ function MemberEditor({
                     <button
                         onClick={() => setTab('en')}
                         className={`flex-1 py-3 text-sm font-medium transition-colors ${tab === 'en'
-                                ? 'bg-background border-t-2 border-t-primary text-primary'
-                                : 'text-muted-foreground hover:bg-secondary'
+                            ? 'bg-background border-t-2 border-t-primary text-primary'
+                            : 'text-muted-foreground hover:bg-secondary'
                             }`}
                     >
                         English
@@ -162,8 +162,8 @@ function MemberEditor({
                     <button
                         onClick={() => setTab('bn')}
                         className={`flex-1 py-3 text-sm font-medium transition-colors ${tab === 'bn'
-                                ? 'bg-background border-t-2 border-t-primary text-primary'
-                                : 'text-muted-foreground hover:bg-secondary'
+                            ? 'bg-background border-t-2 border-t-primary text-primary'
+                            : 'text-muted-foreground hover:bg-secondary'
                             }`}
                     >
                         বাংলা (Bangla)
@@ -175,11 +175,13 @@ function MemberEditor({
                         label={tab === 'en' ? 'Name' : 'নাম'}
                         value={item[tab].name}
                         onChange={(v) => updateLoc(tab, 'name', v)}
+                        lang={tab}
                     />
                     <TextField
                         label={tab === 'en' ? 'Role / Title' : 'পদবি'}
                         value={item[tab].role}
                         onChange={(v) => updateLoc(tab, 'role', v)}
+                        lang={tab}
                     />
                 </div>
             </div>
@@ -333,6 +335,7 @@ export default function AdminLeadership() {
                                 en: { ...sectionInfo.en, title: v },
                             })
                         }
+                        lang="en"
                     />
                     <TextField
                         label="Subtitle"
@@ -344,6 +347,7 @@ export default function AdminLeadership() {
                             })
                         }
                         multiline
+                        lang="en"
                     />
                 </div>
                 <div className="space-y-4">
@@ -357,6 +361,7 @@ export default function AdminLeadership() {
                                 bn: { ...sectionInfo.bn, title: v },
                             })
                         }
+                        lang="bn"
                     />
                     <TextField
                         label="সাবটাইটেল (Subtitle)"
@@ -368,6 +373,7 @@ export default function AdminLeadership() {
                             })
                         }
                         multiline
+                        lang="bn"
                     />
                 </div>
             </div>

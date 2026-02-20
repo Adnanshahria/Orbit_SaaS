@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useContent } from '@/contexts/ContentContext';
 import { toast } from 'sonner';
-import { Save, Check, AlertCircle, Plus, Trash2, GripVertical, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { Save, Check, AlertCircle, Plus, Trash2, GripVertical, ChevronDown, ChevronsUpDown, Sparkles, Loader2 } from 'lucide-react';
 
 /* ─── Language Toggle ─── */
 export function LangToggle({ lang, setLang }: { lang: string; setLang: (l: string) => void }) {
@@ -50,21 +50,87 @@ export function SaveButton({ onClick, saving, saved }: { onClick: () => void; sa
     );
 }
 
+/* ─── AI Enhance Button ─── */
+export function AIEnhanceButton({
+    text,
+    lang,
+    onEnhanced,
+}: {
+    text: string;
+    lang: string;
+    onEnhanced: (enhanced: string) => void;
+}) {
+    const [loading, setLoading] = useState(false);
+
+    const handleEnhance = async () => {
+        if (!text.trim() || loading) return;
+        setLoading(true);
+        const toastId = toast.loading('Enhancing with AI...');
+
+        try {
+            const token = localStorage.getItem('orbit_admin_token');
+            const response = await fetch('/api/enhance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ text, lang }),
+            });
+
+            if (!response.ok) throw new Error('Failed to enhance');
+            const data = await response.json();
+            if (data.enhancedText) {
+                onEnhanced(data.enhancedText);
+                toast.success('Content enhanced!', { id: toastId });
+            }
+        } catch (err) {
+            console.error('AI Enhance error:', err);
+            toast.error('AI enhancement failed', { id: toastId });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <button
+            onClick={handleEnhance}
+            disabled={loading || !text.trim()}
+            className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary hover:text-primary/80 disabled:opacity-50 transition-colors cursor-pointer"
+            title="Enhance with AI"
+        >
+            {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+            Enhance
+        </button>
+    );
+}
+
 /* ─── Text Field ─── */
 export function TextField({
     label,
     value,
     onChange,
     multiline = false,
+    lang,
 }: {
     label: string;
     value: string;
     onChange: (v: string) => void;
     multiline?: boolean;
+    lang?: string;
 }) {
     return (
         <div>
-            <label className="text-sm font-medium text-foreground mb-1.5 block">{label}</label>
+            <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-medium text-foreground block">{label}</label>
+                {lang && (
+                    <AIEnhanceButton
+                        text={value}
+                        lang={lang}
+                        onEnhanced={onChange}
+                    />
+                )}
+            </div>
             {multiline ? (
                 <textarea
                     value={value}

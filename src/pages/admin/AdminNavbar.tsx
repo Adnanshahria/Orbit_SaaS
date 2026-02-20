@@ -32,13 +32,13 @@ export default function AdminNavbar() {
             </div>
             <ErrorAlert message={error} />
             <div className="space-y-4 bg-card rounded-xl p-6 border border-border">
-                <TextField label="Services Link" value={services} onChange={setServices} />
-                <TextField label="Tech Stack Link" value={techStack} onChange={setTechStack} />
-                <TextField label="Why Us Link" value={whyUs} onChange={setWhyUs} />
-                <TextField label="Projects Link" value={projects} onChange={setProjects} />
-                <TextField label="Leadership Link" value={leadership} onChange={setLeadership} />
-                <TextField label="Contact Link" value={contact} onChange={setContact} />
-                <TextField label="Book Call Button Text" value={bookCall} onChange={setBookCall} />
+                <TextField label="Services Link" value={services} onChange={setServices} lang={lang} />
+                <TextField label="Tech Stack Link" value={techStack} onChange={setTechStack} lang={lang} />
+                <TextField label="Why Us Link" value={whyUs} onChange={setWhyUs} lang={lang} />
+                <TextField label="Projects Link" value={projects} onChange={setProjects} lang={lang} />
+                <TextField label="Leadership Link" value={leadership} onChange={setLeadership} lang={lang} />
+                <TextField label="Contact Link" value={contact} onChange={setContact} lang={lang} />
+                <TextField label="Book Call Button Text" value={bookCall} onChange={setBookCall} lang={lang} />
             </div>
             <SaveButton onClick={() => save({ services, techStack, whyUs, leadership, contact, projects, bookCall })} saving={saving} saved={saved} />
         </div>

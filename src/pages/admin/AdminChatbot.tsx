@@ -31,9 +31,9 @@ export default function AdminChatbot() {
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-4 bg-card rounded-xl p-6 border border-border h-fit">
                     <h3 className="font-semibold text-lg">General Settings</h3>
-                    <TextField label="Bot Title" value={title} onChange={setTitle} />
-                    <TextField label="Input Placeholder" value={placeholder} onChange={setPlaceholder} />
-                    <TextField label="Greeting Message" value={greeting} onChange={setGreeting} multiline />
+                    <TextField label="Bot Title" value={title} onChange={setTitle} lang={lang} />
+                    <TextField label="Input Placeholder" value={placeholder} onChange={setPlaceholder} lang={lang} />
+                    <TextField label="Greeting Message" value={greeting} onChange={setGreeting} multiline lang={lang} />
                 </div>
 
                 <div className="space-y-4 bg-card rounded-xl p-6 border border-border h-fit">
@@ -43,6 +43,7 @@ export default function AdminChatbot() {
                         value={systemPrompt}
                         onChange={setSystemPrompt}
                         multiline
+                        lang={lang}
                     />
                     <p className="text-xs text-muted-foreground">
                         Define the AI's persona, tone, and strict rules here.
@@ -66,12 +67,14 @@ export default function AdminChatbot() {
                                 label="Question / Trigger"
                                 value={item.question}
                                 onChange={(v) => update({ ...item, question: v })}
+                                lang={lang}
                             />
                             <TextField
                                 label="Answer / Response"
                                 value={item.answer}
                                 onChange={(v) => update({ ...item, answer: v })}
                                 multiline
+                                lang={lang}
                             />
                         </div>
                     )}

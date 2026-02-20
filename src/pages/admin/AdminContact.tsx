@@ -26,9 +26,9 @@ export default function AdminContact() {
             </div>
             <ErrorAlert message={error} />
             <div className="space-y-4 bg-card rounded-xl p-6 border border-border">
-                <TextField label="Title" value={title} onChange={setTitle} />
-                <TextField label="Subtitle" value={subtitle} onChange={setSubtitle} multiline />
-                <TextField label="CTA Button Text" value={cta} onChange={setCta} />
+                <TextField label="Title" value={title} onChange={setTitle} lang={lang} />
+                <TextField label="Subtitle" value={subtitle} onChange={setSubtitle} multiline lang={lang} />
+                <TextField label="CTA Button Text" value={cta} onChange={setCta} lang={lang} />
                 <TextField label="WhatsApp Number (with country code)" value={whatsapp} onChange={setWhatsapp} />
             </div>
             <SaveButton onClick={() => save({ title, subtitle, cta, whatsapp })} saving={saving} saved={saved} />
