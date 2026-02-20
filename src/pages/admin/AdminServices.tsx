@@ -128,17 +128,21 @@ export default function AdminServices() {
                                                         boxShadow: `0 20px 40px -10px ${(item.color || iconColor)}33`
                                                     }}
                                                 >
-                                                    <div
-                                                        className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-lg"
-                                                        style={{
-                                                            backgroundColor: `${(item.color || iconColor)}15`,
-                                                            boxShadow: `inset 0 0 10px ${(item.color || iconColor)}10`
-                                                        }}
-                                                    >
-                                                        <div className="w-6 h-6 rounded-md" style={{ backgroundColor: (item.color || iconColor) }} />
+                                                    {/* Horizontal Header Preview */}
+                                                    <div className="flex items-center gap-4 mb-4">
+                                                        <div
+                                                            className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
+                                                            style={{
+                                                                backgroundColor: `${(item.color || iconColor)}15`,
+                                                                boxShadow: `inset 0 0 10px ${(item.color || iconColor)}10`
+                                                            }}
+                                                        >
+                                                            <div className="w-5 h-5 rounded-md" style={{ backgroundColor: (item.color || iconColor) }} />
+                                                        </div>
+                                                        <div className="h-4 w-1/2 rounded-full bg-foreground/30" />
                                                     </div>
+
                                                     <div className="space-y-2">
-                                                        <div className="h-4 w-3/4 rounded-full bg-foreground/20" />
                                                         <div className="h-2 w-full rounded-full bg-foreground/10" />
                                                         <div className="h-2 w-5/6 rounded-full bg-foreground/10" />
                                                     </div>

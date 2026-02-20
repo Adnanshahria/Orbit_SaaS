@@ -128,28 +128,31 @@ export function ServicesSection() {
                 />
 
                 <div className="flex flex-col h-full relative z-10">
-                  <motion.div
-                    className="w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-all duration-500"
-                    style={{
-                      backgroundColor: `${itemAccent}10`,
-                      boxShadow: `inset 0 0 20px ${itemAccent}05`
-                    }}
-                    variants={{
-                      hover: {
-                        scale: 1.1,
-                        rotate: [0, -5, 5, 0],
-                        boxShadow: `0 15px 30px ${itemAccent}20`
-                      }
-                    }}
-                  >
-                    <Icon className="w-10 h-10" style={{ color: itemAccent }} />
-                  </motion.div>
+                  {/* Compact Horizontal Header */}
+                  <div className="flex items-center gap-5 mb-6">
+                    <motion.div
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500"
+                      style={{
+                        backgroundColor: `${itemAccent}10`,
+                        boxShadow: `inset 0 0 15px ${itemAccent}05`
+                      }}
+                      variants={{
+                        hover: {
+                          scale: 1.1,
+                          rotate: [0, -5, 5, 0],
+                          boxShadow: `0 10px 20px ${itemAccent}20`
+                        }
+                      }}
+                    >
+                      <Icon className="w-7 h-7" style={{ color: itemAccent }} />
+                    </motion.div>
 
-                  <h3 className="font-display text-2xl font-black text-foreground mb-4 leading-tight group-hover:translate-x-1 transition-transform duration-300">
-                    {item.title}
-                  </h3>
+                    <h3 className="font-display text-xl font-black text-foreground leading-tight group-hover:translate-x-1 transition-transform duration-300">
+                      {item.title}
+                    </h3>
+                  </div>
 
-                  <p className="text-muted-foreground leading-relaxed text-base sm:text-lg opacity-80 group-hover:opacity-100 transition-all duration-300">
+                  <p className="text-muted-foreground leading-relaxed text-sm sm:text-base opacity-80 group-hover:opacity-100 transition-all duration-300">
                     {item.desc}
                   </p>
                 </div>
