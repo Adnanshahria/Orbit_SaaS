@@ -1,9 +1,9 @@
 import { motion, useInView } from 'framer-motion';
-import { Handshake, Lightbulb, Wrench } from 'lucide-react';
+import { Handshake, Lightbulb, Wrench, Bot } from 'lucide-react';
 import { useRef } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
-const icons = [Handshake, Lightbulb, Wrench];
+const icons = [Handshake, Lightbulb, Wrench, Bot];
 
 const containerVariants = {
   hidden: {},
@@ -52,7 +52,7 @@ export function WhyUsSection() {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
         >
           {t.whyUs.items.map((item, i) => {
             const Icon = icons[i % icons.length];

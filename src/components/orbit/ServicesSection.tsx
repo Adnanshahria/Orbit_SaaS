@@ -1,9 +1,9 @@
 import { motion, useInView } from 'framer-motion';
-import { ShoppingCart, GraduationCap, Palette, Building2, Bot, Globe } from 'lucide-react';
+import { Globe, Bot, Zap, Smartphone, ShoppingCart, Rocket } from 'lucide-react';
 import { useRef } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
-const icons = [ShoppingCart, GraduationCap, Palette, Building2, Globe, Bot];
+const icons = [Globe, Bot, Zap, Smartphone, ShoppingCart, Rocket];
 
 const cardVariants = {
   hidden: {
