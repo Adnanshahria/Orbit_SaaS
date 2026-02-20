@@ -47,7 +47,7 @@ export function LeadershipSection() {
   return (
     <section id="leadership" className="py-16 sm:py-24 px-4 sm:px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/20 to-transparent" />
-      <div className="max-w-5xl mx-auto relative" ref={ref}>
+      <div className="max-w-7xl mx-auto relative" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
           animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
@@ -62,7 +62,7 @@ export function LeadershipSection() {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
         >
           {sortedMembers.map((member: any, i: number) => {
             const style = fallbackStyles[i % fallbackStyles.length];
@@ -77,11 +77,11 @@ export function LeadershipSection() {
                   boxShadow: '0 20px 40px rgba(108, 92, 231, 0.15)',
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
-                className="glass-effect rounded-[2.5rem] p-8 text-center group hover:border-primary/40 transition-colors duration-300"
+                className="glass-effect rounded-2xl sm:rounded-[2.5rem] p-4 sm:p-6 lg:p-8 text-center group hover:border-primary/40 transition-colors duration-300"
               >
                 {/* Circular photo or fallback icon */}
                 <motion.div
-                  className="w-44 h-44 sm:w-56 sm:h-56 rounded-full mx-auto mb-8 overflow-hidden flex items-center justify-center bg-secondary/30 border-4 border-background shadow-2xl relative"
+                  className="w-24 h-24 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full mx-auto mb-4 sm:mb-6 lg:mb-8 overflow-hidden flex items-center justify-center bg-secondary/30 border-2 sm:border-4 border-background shadow-xl lg:shadow-2xl relative"
                   style={
                     hasImage
                       ? { boxShadow: style.shadow }
@@ -100,8 +100,8 @@ export function LeadershipSection() {
                   )}
                   <div className="absolute inset-0 rounded-full border border-white/10 pointer-events-none" />
                 </motion.div>
-                <h3 className="font-display text-2xl font-bold text-foreground mb-1.5 leading-tight">{member.name}</h3>
-                <p className="text-neon-cyan text-sm sm:text-base font-bold tracking-wide uppercase">{member.role}</p>
+                <h3 className="font-display text-lg sm:text-xl lg:text-2xl font-bold text-foreground mb-1 sm:mb-1.5 leading-tight">{member.name}</h3>
+                <p className="text-neon-cyan text-xs sm:text-sm lg:text-base font-bold tracking-wide uppercase">{member.role}</p>
               </motion.div>
             );
           })}
