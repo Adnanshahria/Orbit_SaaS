@@ -3,9 +3,9 @@ import { SectionHeader, SaveButton, TextField, ErrorAlert, useSectionEditor } fr
 
 export default function AdminSEO() {
     const { lang, saving, saved, error, getData, save } = useSectionEditor('seo');
-    const [seoTitle, setSeoTitle] = useState('ORBIT SaaS - Full-Stack Web Development Agency');
-    const [seoDesc, setSeoDesc] = useState('Custom SaaS products, eCommerce platforms, and enterprise web applications.');
-    const [seoKeywords, setSeoKeywords] = useState('web development, SaaS, React, Node.js, eCommerce');
+    const [seoTitle, setSeoTitle] = useState('');
+    const [seoDesc, setSeoDesc] = useState('');
+    const [seoKeywords, setSeoKeywords] = useState('');
 
     useEffect(() => {
         const d = getData();

@@ -45,9 +45,7 @@ export default function AdminChatbot() {
                         multiline
                         lang={lang}
                     />
-                    <p className="text-xs text-muted-foreground">
-                        Define the AI's persona, tone, and strict rules here.
-                    </p>
+                    <div className="h-4" />
                 </div>
             </div>
 

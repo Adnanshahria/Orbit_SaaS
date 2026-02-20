@@ -64,14 +64,10 @@ export const translations = {
       ],
     },
     chatbot: {
-      title: 'ORBIT AI Assistant',
-      placeholder: 'Ask me anything about our services...',
-      greeting: 'Hi! 👋 I\'m the ORBIT SaaS assistant. How can I help you today?',
-      systemPrompt: `You are Orbit AI, the snappy and compact assistant for ORBIT SaaS.
-      - STYLE: Extremely concise. One or two short sentences per point. 
-      - FORMAT: Use bullet points. Use bold for key terms ONLY. No fluff. 
-      - GOAL: Quick answers on services/projects/booking.
-      - BORDERLINE: Directly answer users. No repetitive greetings.`,
+      title: '',
+      placeholder: '',
+      greeting: '',
+      systemPrompt: '',
       qaPairs: [] as { question: string; answer: string }[],
     },
   },
@@ -138,14 +134,10 @@ export const translations = {
       ],
     },
     chatbot: {
-      title: 'ORBIT AI সহকারী',
-      placeholder: 'আমাদের সেবা সম্পর্কে যেকোনো কিছু জিজ্ঞাসা করুন...',
-      greeting: 'হ্যালো! 👋 আমি ORBIT SaaS সহকারী। আজ আপনাকে কীভাবে সাহায্য করতে পারি?',
-      systemPrompt: `আপনি ORBIT SaaS-এর জন্য একজন চটপটে এবং সংক্ষিপ্ত উত্তর প্রদানকারী AI সহকারী।
-      - শৈলী: অত্যন্ত সংক্ষিপ্ত। প্রতি পয়েন্টে এক বা দুটি ছোট বাক্য।
-      - ফরম্যাট: বুলেট পয়েন্ট ব্যবহার করুন। শুধুমাত্র গুরুত্বপূর্ণ শব্দের জন্য বোল্ড ব্যবহার করুন। 
-      - লক্ষ্য: সেবা/প্রকল্প/বুকিং সম্পর্কে দ্রুত উত্তর দেওয়া।
-      - সীমা: সরাসরি উত্তর দিন। বারবার শুভেচ্ছা জানাবেন না।`,
+      title: '',
+      placeholder: '',
+      greeting: '',
+      systemPrompt: '',
       qaPairs: [] as { question: string; answer: string }[],
     },
   },

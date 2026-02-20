@@ -99,7 +99,6 @@ export function HeroSection() {
     <section
       ref={sectionRef}
       id="hero"
-      aria-label="ORBIT SaaS - Full-Stack Web Development Company"
       className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-28 pb-20 sm:pt-0 sm:pb-0"
     >
       {/* Parallax background layers */}
@@ -126,16 +125,8 @@ export function HeroSection() {
           </motion.div>
         )}
 
-        {/* Title — "ORBIT SaaS" scales up dramatically */}
+        {/* Title — Scales up dramatically */}
         <motion.h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground leading-[1] mb-6 sm:mb-8 tracking-tighter">
-          <motion.span
-            className="block"
-            initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ type: 'spring', stiffness: 80, damping: 18, delay: 0.4 }}
-          >
-            ORBIT <span className="text-primary">SaaS</span>
-          </motion.span>
           <motion.span
             className="block mt-4 sm:mt-6 text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink bg-clip-text text-transparent italic"
             initial={{ opacity: 0, y: 30 }}

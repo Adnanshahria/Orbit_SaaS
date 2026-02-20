@@ -19,7 +19,7 @@ export function Navbar() {
   const { t, lang, toggleLang } = useLang();
 
   // Dynamic WhatsApp URL from admin settings
-  const whatsappNumber = (t.contact as any).whatsapp || '8801853452264';
+  const whatsappNumber = (t.contact as any).whatsapp || '';
   const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}`;
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -147,10 +147,9 @@ export function Navbar() {
             }}>
               <img
                 src={orbitLogo}
-                alt="ORBIT SaaS Logo"
+                alt="Logo"
                 className="w-8 h-8 sm:w-9 sm:h-9 object-cover rounded-full"
               />
-              <span className="font-display text-foreground text-base sm:text-xl font-bold tracking-wider">ORBIT</span>
             </motion.div>
 
             {/* Desktop nav links */}

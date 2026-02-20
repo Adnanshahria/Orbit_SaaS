@@ -28,7 +28,7 @@ export default function AdminHero() {
             </div>
             <ErrorAlert message={error} />
             <div className="space-y-4 bg-card rounded-xl p-6 border border-border">
-                <TextField label="Tagline (Launch at Zero...)" value={tagline} onChange={setTagline} lang={lang} />
+                <TextField label="Tagline" value={tagline} onChange={setTagline} lang={lang} />
                 <TextField label="Title" value={title} onChange={setTitle} lang={lang} />
                 <TextField label="Subtitle" value={subtitle} onChange={setSubtitle} multiline lang={lang} />
                 <TextField label="CTA Button Text" value={cta} onChange={setCta} lang={lang} />

@@ -271,7 +271,7 @@ function ProjectEditor({ item, update }: { item: UnifiedProject; update: (i: Uni
                         <textarea
                             className="w-full bg-background/50 rounded-lg px-3 py-2 text-xs font-mono text-muted-foreground border border-border/50 outline-none resize-y"
                             rows={2}
-                            placeholder="Quick Fill: Paste <meta> tags here..."
+                            placeholder=""
                             onChange={(e) => {
                                 const val = e.target.value;
                                 if (!val.trim()) return;
@@ -534,7 +534,7 @@ export default function AdminProjects() {
                     setItems={setProjects}
                     newItem={DEFAULT_PROJECT}
                     addLabel="Add New Project"
-                    getItemLabel={(item) => item.en.title || item.bn.title || 'Untitled Project'}
+                    getItemLabel={(item) => item.en.title || item.bn.title || ''}
                     renderItem={(item, _i, update) => (
                         <ProjectEditor item={item} update={update} />
                     )}

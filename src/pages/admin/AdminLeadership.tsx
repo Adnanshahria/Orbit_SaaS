@@ -392,7 +392,7 @@ export default function AdminLeadership() {
                     newItem={{ ...DEFAULT_MEMBER, order: members.length + 1 }}
                     addLabel="Add Member"
                     getItemLabel={(item) =>
-                        item.en.name || item.bn.name || 'Untitled Member'
+                        item.en.name || item.bn.name || ''
                     }
                     renderItem={(item, _i, update) => (
                         <MemberEditor item={item} update={update} />
