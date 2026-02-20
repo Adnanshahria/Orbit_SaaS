@@ -219,18 +219,19 @@ export function Navbar() {
         className="md:hidden fixed bottom-5 left-4 right-4 z-[120]"
       >
         <div className="flex items-center gap-0.5 px-3 py-3 rounded-[28px] bg-card/90 backdrop-blur-2xl border border-border dark:border-neon-purple/25 shadow-[0_10px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_0_30px_rgba(139,92,246,0.2)] overflow-x-auto scrollbar-hide mx-auto w-fit max-w-full">
-          {mobileNavItems.map((item) => {
-            const isActive = activeSection === item.href;
-            const Icon = item.icon;
+          {links.map((link) => {
+            const isActive = activeSection === link.href;
+            // Map href to icon
+            const Icon = mobileNavItems.find(i => i.href === link.href)?.icon || Layers;
 
             return (
               <a
-                key={item.href}
-                href={item.href}
+                key={link.href}
+                href={link.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection(e, item.href);
-                  setActiveSection(item.href);
+                  scrollToSection(e, link.href);
+                  setActiveSection(link.href);
                 }}
                 className="relative"
               >
@@ -251,7 +252,7 @@ export function Navbar() {
                         transition={{ duration: 0.25 }}
                         className="text-sm font-semibold text-primary whitespace-nowrap overflow-hidden"
                       >
-                        {item.label}
+                        {link.label}
                       </motion.span>
                     )}
                   </AnimatePresence>
