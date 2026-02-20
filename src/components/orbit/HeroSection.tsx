@@ -126,7 +126,7 @@ export function HeroSection() {
         )}
 
         {/* Title — "ORBIT SaaS" scales up dramatically */}
-        <motion.h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground leading-[1] mb-6 sm:mb-8 tracking-tighter">
+        <motion.h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-foreground leading-[1] mb-8 sm:mb-10 tracking-tighter">
           <motion.span
             className="block"
             initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
@@ -136,7 +136,8 @@ export function HeroSection() {
             ORBIT <span className="text-primary">SaaS</span>
           </motion.span>
           <motion.span
-            className="block mt-4 sm:mt-6 text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary italic"
+            className="block mt-3 sm:mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold italic leading-snug"
+            style={{ fontFamily: "'Lobster Two', cursive", color: 'var(--neon-pink)' }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 80, damping: 18, delay: 0.7 }}
