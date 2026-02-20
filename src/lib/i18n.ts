@@ -66,13 +66,13 @@ export const translations = {
       ] as any[],
     },
     whyUs: {
-      title: 'Why Choose ORBIT SaaS?',
-      subtitle: 'Visionary leaders partner with experts to craft bespoke software solutions.',
+      title: 'Why Choose ORBIT?',
+      subtitle: 'We don\'t just build products — we become your AI-powered technology partner, from idea to launch and beyond.',
       items: [
-        { title: 'Strategic Development Partners', desc: 'We align technology decisions with your business goals, delivering custom web solutions with maximum ROI.' },
-        { title: 'Expert Tech Advisors', desc: 'Professional guidance on software architecture, scalability, cloud infrastructure, and emerging web technologies.' },
-        { title: 'Long-term Support & Maintenance', desc: 'Ongoing development support, security updates, performance optimization, and feature enhancements to keep your product competitive.' },
-        { title: 'AI & Automation Driven', desc: 'Leverage cutting-edge AI chatbots and automation pipelines to streamline workflows and reduce operational costs.' }
+        { title: 'AI-First Development', desc: 'Every solution we build is designed with AI at its core — from intelligent chatbots and agentic automation to AI-enhanced user experiences that give your business a real competitive edge.', bg: '#eef2ff', color: '#4f46e5' },
+        { title: 'Full-Spectrum Tech Expertise', desc: 'Web, mobile, PWA, eCommerce, SaaS — we cover the full stack. Whether it\'s an Android app, a multi-panel dashboard, or an enterprise platform, one team handles everything end to end.', bg: '#f0fdf4', color: '#16a34a' },
+        { title: 'Fast Delivery, Zero Compromise', desc: 'We move fast without cutting corners. Agile sprints, transparent communication, and a customer-first mindset mean you get your product on time — with extra features, not missing ones.', bg: '#fffbeb', color: '#d97706' },
+        { title: 'Long-term Support & Growth', desc: 'Our relationship doesn\'t end at launch. We provide ongoing maintenance, security updates, performance optimization, and continuous AI improvements — so your product keeps evolving with your business.', bg: '#fff0f6', color: '#db2777' }
       ] as any[],
     },
     projects: {
@@ -178,13 +178,13 @@ export const translations = {
       ] as any[],
     },
     whyUs: {
-      title: 'কেন ORBIT SaaS বেছে নিবেন?',
-      subtitle: 'বিচক্ষণ নেতারা কাস্টম সফটওয়্যার সলিউশন তৈরিতে বিশেষজ্ঞদের সাথে অংশীদারিত্ব করেন।',
+      title: 'কেন ORBIT বেছে নিবেন?',
+      subtitle: 'আমরা শুধু প্রোডাক্ট তৈরি করি না — শুরু থেকে শেষ পর্যন্ত আমরা আপনার এআই-চালিত প্রযুক্তি অংশীদার।',
       items: [
-        { title: 'স্ট্র্যাটেজিক ডেভেলপমেন্ট পার্টনার', desc: 'আমরা আপনার ব্যবসার লক্ষ্যের সাথে প্রযুক্তির সমন্বয় ঘটাই এবং সর্বোচ্চ রিটার্ন অন ইনভেস্টমেন্ট (ROI) নিশ্চিত করে কাস্টম ওয়েব সলিউশন প্রদান করি।' },
-        { title: 'বিশেষজ্ঞ টেক অ্যাডভাইজার', desc: 'সফটওয়্যার আর্কিটেকচার, স্কেলেবিলিটি, ক্লাউড ইনফ্রাস্ট্রাকচার, এবং আধুনিক ওয়েব প্রযুক্তির উপর পেশাদার নির্দেশনা প্রদান করি।' },
-        { title: 'দীর্ঘমেয়াদী সাপোর্ট এবং মেইনটিনেন্স', desc: 'আপনার প্রোডাক্টকে প্রতিযোগিতায় টিকিয়ে রাখতে চলমান ডেভেলপমেন্ট সাপোর্ট, নিরাপত্তা আপডেট, পারফরম্যান্স অপ্টিমাইজেশন এবং ফিচার এনহ্যান্সমেন্ট সরবরাহ করি।' },
-        { title: 'এআই ও অটোমেশন চালিত', desc: 'অত্যাধুনিক এআই চ্যাটবট এবং অটোমেশন পাইপলাইন ব্যবহার করে কাজের প্রবাহ আরও সহজ এবং পরিচালন ব্যয় হ্রাস করি।' }
+        { title: 'এআই-ফার্স্ট ডেভেলপমেন্ট', desc: 'আমাদের প্রতিটি সলিউশন এআই-এর ওপর ভিত্তি করে তৈরি — ইন্টেলিজেন্ট চ্যাটবট এবং এজেন্টিক অটোমেশন থেকে শুরু করে এআই-চালিত ইউজার এক্সপেরিয়েন্স, যা আপনার ব্যবসাকে প্রতিযোগিতায় এগিয়ে রাখে।', bg: '#eef2ff', color: '#4f46e5' },
+        { title: 'ফুল-স্পেকট্রাম টেক দক্ষতা', desc: 'ওয়েব, মোবাইল, PWA, ই-কমার্স, সাআস — আমরা সব ক্ষেত্রেই দক্ষ। অ্যান্ড্রয়েড অ্যাপ, মাল্টি-প্যানেল ড্যাশবোর্ড, বা এন্টারপ্রাইজ প্ল্যাটফর্ম যাই হোক না কেন, আমাদের একটি টিম সবকিছু সম্পন্ন করে।', bg: '#f0fdf4', color: '#16a34a' },
+        { title: 'দ্রুত ডেলিভারি, জিরো কম্প্রোমাইজ', desc: 'আমরা গুণের সাথে আপস না করেই দ্রুত কাজ করি। অ্যাজাইল স্প্রিন্ট, স্বচ্ছ যোগাযোগ এবং কাস্টমার-ফার্স্ট মানসিকতার ফলে আপনি আপনার প্রোডাক্ট সময়মতো পান — তাও কোনো ফিচার বাদ না দিয়ে।', bg: '#fffbeb', color: '#d97706' },
+        { title: 'দীর্ঘমেয়াদী সাপোর্ট এবং গ্রোথ', desc: 'লঞ্চের পরেই আমাদের সম্পর্ক শেষ হয়ে যায় না। আপনার প্রোডাক্ট যেন ব্যবসার সাথে তাল মিলিয়ে বাড়তে পারে, তার জন্য আমরা চলমান মেইনটিনেন্স, নিরাপত্তা আপডেট এবং এআই ইমপ্রুভমেন্ট দিয়ে থাকি।', bg: '#fff0f6', color: '#db2777' }
       ] as any[],
     },
     projects: {

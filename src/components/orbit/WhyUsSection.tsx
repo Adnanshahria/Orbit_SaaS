@@ -1,9 +1,9 @@
 import { motion, useInView } from 'framer-motion';
-import { Handshake, Lightbulb, Wrench, Bot } from 'lucide-react';
+import { Brain, Wrench, Zap, ShieldCheck } from 'lucide-react';
 import { useRef } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 
-const icons = [Handshake, Lightbulb, Wrench, Bot];
+const icons = [Brain, Wrench, Zap, ShieldCheck];
 
 const containerVariants = {
   hidden: {},
@@ -68,10 +68,11 @@ export function WhyUsSection() {
                 className="glass-effect rounded-2xl p-8 text-center group hover:border-primary/40 transition-colors duration-300"
               >
                 <motion.div
-                  className="w-16 h-16 rounded-2xl bg-neon-cyan/10 flex items-center justify-center mx-auto mb-6"
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                  style={{ backgroundColor: item.bg || '#00f5ff1a', color: item.color || '#00f5ff' }}
                   whileHover={{ scale: 1.1, rotate: 5, transition: { type: 'spring', stiffness: 300, damping: 12 } }}
                 >
-                  <Icon className="w-8 h-8 text-neon-cyan" />
+                  <Icon className="w-8 h-8" />
                 </motion.div>
                 <h3 className="font-display text-xl font-semibold text-foreground mb-3">{item.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
