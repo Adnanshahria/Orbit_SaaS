@@ -19,7 +19,7 @@ export default function AdminServices() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-3">
-                <SectionHeader title="Services Section" description="Manage your service offerings" />
+                <SectionHeader title="Services Section" description="Manage your service offerings" sectionId="services" />
                 <LangToggle lang={lang} setLang={setLang} />
             </div>
             <ErrorAlert message={error} />

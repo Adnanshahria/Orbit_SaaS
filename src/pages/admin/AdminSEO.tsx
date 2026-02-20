@@ -18,7 +18,7 @@ export default function AdminSEO() {
 
     return (
         <div className="space-y-6">
-            <SectionHeader title="SEO Settings" description="Manage search engine optimization metadata" />
+            <SectionHeader title="SEO Settings" description="Manage search engine optimization metadata" sectionId="seo" />
             <ErrorAlert message={error} />
             <div className="space-y-4 bg-card rounded-xl p-6 border border-border">
                 <TextField label="Page Title" value={seoTitle} onChange={setSeoTitle} lang="en" />
