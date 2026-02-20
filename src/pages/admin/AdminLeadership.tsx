@@ -319,7 +319,6 @@ export default function AdminLeadership() {
                 <SectionHeader
                     title="Leadership Manager (Unified)"
                     description="Manage team members with English & Bangla content, photos, and ordering."
-                    sectionId="leadership"
                 />
                 <div className="text-xs text-muted-foreground bg-secondary px-3 py-1 rounded-full">
                     ✅ Dual-Language Mode Active

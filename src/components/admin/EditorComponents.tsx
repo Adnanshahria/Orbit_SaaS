@@ -151,27 +151,12 @@ export function TextField({
     );
 }
 
-import { Link } from 'react-router-dom';
-import { Braces } from 'lucide-react';
-
 /* ─── Section Header ─── */
-export function SectionHeader({ title, description, sectionId }: { title: string; description: string; sectionId?: string }) {
+export function SectionHeader({ title, description }: { title: string; description: string }) {
     return (
-        <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-                <h1 className="font-display text-2xl font-bold text-foreground">{title}</h1>
-                <p className="text-muted-foreground text-sm mt-1">{description}</p>
-            </div>
-            {sectionId && (
-                <Link
-                    to={`/admin/json-tool?section=${sectionId}`}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/50 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all text-xs font-medium border border-border/50"
-                    title="Edit raw JSON for this section"
-                >
-                    <Braces className="w-3.5 h-3.5" />
-                    Raw JSON
-                </Link>
-            )}
+        <div className="mb-6">
+            <h1 className="font-display text-2xl font-bold text-foreground">{title}</h1>
+            <p className="text-muted-foreground text-sm mt-1">{description}</p>
         </div>
     );
 }

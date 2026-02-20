@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { Braces, ChevronDown, ChevronUp, Copy, ClipboardPaste, AlertTriangle, Check } from 'lucide-react';
 import {
     SectionHeader,
     SaveButton,
@@ -27,6 +28,170 @@ const DEFAULT_CATEGORY: UnifiedTechCategory = {
     en: { name: '', items: [] },
     bn: { name: '', items: [] },
 };
+
+// ─── Inline JSON Parser ───
+
+function JsonPanel({
+    sectionInfo,
+    categories,
+    onImport,
+}: {
+    sectionInfo: { en: { title: string; subtitle: string }; bn: { title: string; subtitle: string } };
+    categories: UnifiedTechCategory[];
+    onImport: (info: typeof sectionInfo, cats: UnifiedTechCategory[]) => void;
+}) {
+    const [open, setOpen] = useState(false);
+    const [jsonText, setJsonText] = useState('');
+    const [parseError, setParseError] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    // Build exportable JSON from current form state
+    const buildExportJson = () => {
+        const enData = {
+            title: sectionInfo.en.title,
+            subtitle: sectionInfo.en.subtitle,
+            categories: categories.map(c => ({
+                name: c.en.name,
+                color: c.color,
+                items: c.en.items,
+            })),
+        };
+        const bnData = {
+            title: sectionInfo.bn.title,
+            subtitle: sectionInfo.bn.subtitle,
+            categories: categories.map(c => ({
+                name: c.bn.name,
+                color: c.color,
+                items: c.bn.items,
+            })),
+        };
+        return JSON.stringify({ en: enData, bn: bnData }, null, 2);
+    };
+
+    const handleExport = () => {
+        const json = buildExportJson();
+        setJsonText(json);
+        setParseError('');
+    };
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(jsonText || buildExportJson());
+            setCopied(true);
+            toast.success('JSON copied to clipboard!');
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            toast.error('Failed to copy');
+        }
+    };
+
+    const handleImport = () => {
+        setParseError('');
+        try {
+            const parsed = JSON.parse(jsonText);
+
+            // Validate structure
+            if (!parsed.en || !parsed.bn) {
+                setParseError('JSON must have "en" and "bn" keys at the top level.');
+                return;
+            }
+
+            const enData = parsed.en;
+            const bnData = parsed.bn;
+
+            const newInfo = {
+                en: { title: enData.title || '', subtitle: enData.subtitle || '' },
+                bn: { title: bnData.title || '', subtitle: bnData.subtitle || '' },
+            };
+
+            const enCats = enData.categories || [];
+            const bnCats = bnData.categories || [];
+            const maxLen = Math.max(enCats.length, bnCats.length);
+
+            const merged: UnifiedTechCategory[] = [];
+            for (let i = 0; i < maxLen; i++) {
+                const en = enCats[i] || {};
+                const bn = bnCats[i] || {};
+                merged.push({
+                    color: en.color || bn.color || '#6366f1',
+                    en: { name: en.name || '', items: en.items || [] },
+                    bn: { name: bn.name || '', items: bn.items || [] },
+                });
+            }
+
+            onImport(newInfo, merged);
+            toast.success('JSON imported into form! Click "Save Changes" to persist.');
+        } catch (err: any) {
+            setParseError(`Invalid JSON: ${err.message}`);
+        }
+    };
+
+    return (
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
+            <button
+                onClick={() => { setOpen(!open); if (!open) handleExport(); }}
+                className="w-full flex items-center justify-between px-6 py-4 hover:bg-secondary/30 transition-colors cursor-pointer"
+            >
+                <div className="flex items-center gap-2.5">
+                    <Braces className="w-5 h-5 text-primary" />
+                    <span className="font-semibold text-foreground">JSON Import / Export</span>
+                    <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">Power Tool</span>
+                </div>
+                {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+            </button>
+
+            {open && (
+                <div className="px-6 pb-6 space-y-4 border-t border-border pt-4">
+                    <p className="text-xs text-muted-foreground">
+                        Export the current form data as JSON, edit it externally, or paste JSON below and import it back. <b>Importing fills the form</b> — you still need to click <b>"Save Changes"</b> to persist.
+                    </p>
+
+                    {/* Action buttons */}
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            onClick={handleExport}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary text-foreground text-xs font-medium hover:bg-secondary/80 transition-colors cursor-pointer"
+                        >
+                            <Braces className="w-3.5 h-3.5" /> Export Current
+                        </button>
+                        <button
+                            onClick={handleCopy}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary text-foreground text-xs font-medium hover:bg-secondary/80 transition-colors cursor-pointer"
+                        >
+                            {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+                            {copied ? 'Copied!' : 'Copy'}
+                        </button>
+                        <button
+                            onClick={handleImport}
+                            disabled={!jsonText.trim()}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:opacity-90 transition-all cursor-pointer disabled:opacity-40"
+                        >
+                            <ClipboardPaste className="w-3.5 h-3.5" /> Import into Form
+                        </button>
+                    </div>
+
+                    {/* Error */}
+                    {parseError && (
+                        <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-xs">
+                            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                            <span>{parseError}</span>
+                        </div>
+                    )}
+
+                    {/* Textarea */}
+                    <textarea
+                        value={jsonText}
+                        onChange={(e) => { setJsonText(e.target.value); setParseError(''); }}
+                        placeholder='Paste your JSON here...\n\n{\n  "en": { "title": "...", "subtitle": "...", "categories": [...] },\n  "bn": { "title": "...", "subtitle": "...", "categories": [...] }\n}'
+                        rows={16}
+                        className="w-full rounded-lg bg-background border border-border p-4 text-sm font-mono text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-y"
+                        spellCheck={false}
+                    />
+                </div>
+            )}
+        </div>
+    );
+}
 
 // ─── Category Editor (per-marquee row, with EN/BN tabs) ───
 
@@ -97,7 +262,7 @@ function CategoryEditor({
                         lang={tab}
                     />
                     <TextField
-                        label={tab === 'en' ? 'Skills (comma separated)' : 'স্কিলসমূহ (কমা দিয়ে আলাদা করুন)'}
+                        label={tab === 'en' ? 'Skills (comma separated)' : 'স্কিলসমূহ (কমা দিয়ে আলাদা করুন)'}
                         value={category[tab].items.join(', ')}
                         onChange={(v) => updateLocStr(tab, 'items', v)}
                         multiline
@@ -161,6 +326,15 @@ export default function AdminTechStack() {
         setCategories(merged);
         setLoading(false);
     }, [content, contentLoading]);
+
+    // ─── JSON Import Handler ───
+    const handleJsonImport = (
+        info: { en: { title: string; subtitle: string }; bn: { title: string; subtitle: string } },
+        cats: UnifiedTechCategory[]
+    ) => {
+        setSectionInfo(info);
+        setCategories(cats);
+    };
 
     // ─── Save ───
     const handleSave = async () => {
@@ -228,7 +402,6 @@ export default function AdminTechStack() {
                 <SectionHeader
                     title="Tech Stack Manager (Unified)"
                     description="Edit tech stack categories and marquee items with English & Bangla content in sync."
-                    sectionId="techStack"
                 />
             </div>
 
@@ -309,6 +482,13 @@ export default function AdminTechStack() {
                     )}
                 />
             </div>
+
+            {/* ── Inline JSON Import / Export ── */}
+            <JsonPanel
+                sectionInfo={sectionInfo}
+                categories={categories}
+                onImport={handleJsonImport}
+            />
 
             <SaveButton onClick={handleSave} saving={saving} saved={saved} />
         </div>

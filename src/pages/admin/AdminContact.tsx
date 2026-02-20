@@ -26,7 +26,7 @@ export default function AdminContact() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-3">
-                <SectionHeader title="Contact Section" description="Edit the contact call-to-action" sectionId="contact" />
+                <SectionHeader title="Contact Section" description="Edit the contact call-to-action" />
                 <LangToggle lang={lang} setLang={setLang} />
             </div>
             <ErrorAlert message={error} />

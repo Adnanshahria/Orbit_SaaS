@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import {
     LayoutDashboard, Type, ShoppingCart, Users, FolderOpen,
     MessageCircle, Globe, Shield, LogOut, Menu, X,
-    Lightbulb, Phone, FileText, Cpu, CloudUpload, Loader2, Braces
+    Lightbulb, Phone, FileText, Cpu, CloudUpload, Loader2
 } from 'lucide-react';
 
 const navItems = [
@@ -21,7 +21,6 @@ const navItems = [
     { label: 'Chatbot', path: '/admin/chatbot', icon: MessageCircle },
     { label: 'Navbar', path: '/admin/navbar', icon: Globe },
     { label: 'SEO', path: '/admin/seo', icon: Shield },
-    { label: 'Raw JSON Tool', path: '/admin/json-tool', icon: Braces },
 ];
 
 export default function AdminLayout() {

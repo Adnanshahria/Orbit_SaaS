@@ -30,7 +30,6 @@ const AdminFooter = lazy(() => import('./pages/admin/AdminFooter'));
 const AdminChatbot = lazy(() => import('./pages/admin/AdminChatbot'));
 const AdminNavbar = lazy(() => import('./pages/admin/AdminNavbar'));
 const AdminSEO = lazy(() => import('./pages/admin/AdminSEO'));
-const AdminJsonEditor = lazy(() => import('./pages/admin/AdminJsonEditor'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
 function PublicSite() {
@@ -108,7 +107,7 @@ export default function App() {
                     <Route path="chatbot" element={<AdminChatbot />} />
                     <Route path="navbar" element={<AdminNavbar />} />
                     <Route path="seo" element={<AdminSEO />} />
-                    <Route path="json-tool" element={<AdminJsonEditor />} />
+
                   </Route>
                 </Routes>
               </Suspense>

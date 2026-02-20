@@ -27,7 +27,7 @@ export default function AdminNavbar() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-3">
-                <SectionHeader title="Navbar" description="Edit navigation link labels" sectionId="nav" />
+                <SectionHeader title="Navbar" description="Edit navigation link labels" />
                 <LangToggle lang={lang} setLang={setLang} />
             </div>
             <ErrorAlert message={error} />
