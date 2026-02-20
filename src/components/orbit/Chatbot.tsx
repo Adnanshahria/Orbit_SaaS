@@ -47,6 +47,17 @@ export function Chatbot() {
   }, [showMenu]);
 
   useEffect(() => {
+    if (open && window.innerWidth < 768) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages, open]);
 
@@ -268,7 +279,7 @@ export function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-0 md:bottom-24 left-0 right-0 md:left-auto md:right-6 z-[200] w-full md:w-[400px] max-w-full md:max-w-[400px] rounded-t-3xl md:rounded-2xl overflow-hidden border-t md:border border-border bg-card shadow-2xl flex flex-col h-[85svh] md:h-auto"
+            className="fixed bottom-0 md:bottom-24 left-0 right-0 md:left-auto md:right-6 z-[200] w-full md:w-[400px] max-w-full md:max-w-[400px] rounded-t-3xl md:rounded-2xl overflow-hidden border-t md:border border-border bg-card shadow-2xl flex flex-col h-[90dvh] md:h-auto"
           >
             {/* Header */}
             <div className="px-5 py-3.5 bg-primary/10 border-b border-border flex items-center justify-between relative">
@@ -436,7 +447,7 @@ export function Chatbot() {
             </div>
 
             {/* Input */}
-            <div className="px-4 py-3 border-t border-border flex gap-2 bg-card">
+            <div className="px-4 py-3 pb-6 md:pb-3 border-t border-border flex gap-2 bg-card">
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
