@@ -22,12 +22,12 @@ export function LangToggle({ lang, setLang }: { lang: string; setLang: (l: strin
 }
 
 /* ─── Save Button ─── */
-export function SaveButton({ onClick, saving, saved }: { onClick: () => void; saving: boolean; saved: boolean }) {
+export function SaveButton({ onClick, saving, saved, className = '' }: { onClick: () => void; saving: boolean; saved: boolean; className?: string }) {
     return (
         <button
             onClick={onClick}
             disabled={saving}
-            className={`px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all cursor-pointer ${saved
+            className={`px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all cursor-pointer ${className} ${saved
                 ? 'bg-green-500/20 text-green-500 border border-green-500/30'
                 : 'bg-primary text-primary-foreground hover:opacity-90'
                 } disabled:opacity-50`}
