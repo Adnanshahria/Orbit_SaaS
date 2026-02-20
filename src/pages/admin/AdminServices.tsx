@@ -5,9 +5,15 @@ export default function AdminServices() {
     const { lang, setLang, saving, saved, error, getData, save } = useSectionEditor('services');
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
-    const [items, setItems] = useState<{ title: string; desc: string; color?: string }[]>([]);
+    const [items, setItems] = useState<{
+        title: string;
+        desc: string;
+        color?: string; // Accent color
+        bg?: string;    // Custom background
+        border?: string; // Custom border
+    }[]>([]);
 
-    // Theme Customization
+    // Global Theme (Defaults)
     const [titleColor, setTitleColor] = useState('');
     const [subtitleColor, setSubtitleColor] = useState('');
     const [cardBg, setCardBg] = useState('');
@@ -21,7 +27,7 @@ export default function AdminServices() {
             setSubtitle(d.subtitle || '');
             setItems(d.items || []);
 
-            // Defaults for colors
+            // Defaults for global theme
             setTitleColor(d.titleColor || '#ffffff');
             setSubtitleColor(d.subtitleColor || '#94a3b8');
             setCardBg(d.cardBg || 'rgba(15, 23, 42, 0.3)');
@@ -36,65 +42,109 @@ export default function AdminServices() {
     };
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto">
-            <div className="flex items-center justify-between flex-wrap gap-3">
-                <SectionHeader title="Services Section" description="Manage offerings and section theme" />
-                <LangToggle lang={lang} setLang={setLang} />
+        <div className="space-y-8 max-w-7xl mx-auto pb-20">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+                <SectionHeader
+                    title="Services Designer"
+                    description="Craft unique digital experiences with granular per-card branding."
+                />
+                <div className="flex items-center gap-3">
+                    <LangToggle lang={lang} setLang={setLang} />
+                    <SaveButton onClick={() => save(currentPayload)} saving={saving} saved={saved} />
+                </div>
             </div>
+
             <ErrorAlert message={error} />
 
-            <div className="grid gap-6 lg:grid-cols-12">
-                {/* Content - 8 cols */}
-                <div className="lg:col-span-8 space-y-6">
-                    <div className="space-y-4 bg-card rounded-2xl p-6 border border-border shadow-sm">
-                        <h3 className="font-bold text-foreground mb-1 flex items-center gap-2 text-lg">
-                            📝 Header Content
-                        </h3>
-                        <TextField label="Section Title" value={title} onChange={setTitle} lang={lang} />
-                        <TextField label="Section Subtitle" value={subtitle} onChange={setSubtitle} multiline lang={lang} />
+            <div className="grid gap-8 lg:grid-cols-12">
+                {/* Content & Individual Card Designers - 8 cols */}
+                <div className="lg:col-span-8 space-y-8">
+                    {/* Section Header Editor */}
+                    <div className="bg-card rounded-[2rem] p-8 border border-border shadow-xl shadow-primary/5">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                <span className="text-xl">✍️</span>
+                            </div>
+                            <h3 className="font-black text-xl text-foreground">Header Settings</h3>
+                        </div>
+                        <div className="space-y-6">
+                            <TextField label="Section Title" value={title} onChange={setTitle} lang={lang} />
+                            <TextField label="Section Subtitle" value={subtitle} onChange={setSubtitle} multiline lang={lang} />
+                        </div>
                     </div>
 
-                    <div className="bg-card rounded-2xl p-6 border border-border shadow-sm">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
-                                🛠️ Service Items
-                            </h3>
-                            <span className="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-bold">
-                                {items.length} Services
-                            </span>
+                    {/* Service Items Designer */}
+                    <div className="bg-card rounded-[2rem] p-8 border border-border shadow-xl shadow-primary/5">
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+                                    <span className="text-xl">💠</span>
+                                </div>
+                                <h3 className="font-black text-xl text-foreground">Service Customizer</h3>
+                            </div>
+                            <div className="text-xs font-black uppercase tracking-widest text-muted-foreground bg-secondary px-3 py-1.5 rounded-full">
+                                {items.length} Active Modules
+                            </div>
                         </div>
+
                         <ItemListEditor
                             items={items}
                             setItems={setItems}
-                            newItem={{ title: '', desc: '', color: iconColor }}
-                            addLabel="Add New Service"
+                            newItem={{ title: '', desc: '', color: iconColor, bg: cardBg, border: cardBorder }}
+                            addLabel="Add Custom Service"
                             renderItem={(item, _i, update) => (
-                                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                                    <div className="md:col-span-8 space-y-4">
-                                        <TextField label="Title" value={item.title} onChange={v => update({ ...item, title: v })} lang={lang} />
-                                        <TextField label="Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline lang={lang} />
-                                    </div>
-                                    <div className="md:col-span-4 space-y-4 pt-1">
-                                        <label className="text-sm font-bold text-foreground block uppercase tracking-wider text-[10px]">Card Branding</label>
-                                        <ColorField label="Primary Color" value={item.color || iconColor} onChange={v => update({ ...item, color: v })} />
-
-                                        {/* Mini Preview */}
-                                        <div
-                                            className="mt-4 p-4 rounded-xl border border-border/50 transition-all"
-                                            style={{
-                                                backgroundColor: cardBg,
-                                                borderColor: cardBorder,
-                                                boxShadow: `0 8px 16px -4px ${(item.color || iconColor)}22`
-                                            }}
-                                        >
-                                            <div
-                                                className="w-8 h-8 rounded-lg flex items-center justify-center mb-2"
-                                                style={{ backgroundColor: `${(item.color || iconColor)}22` }}
-                                            >
-                                                <div className="w-4 h-4 rounded" style={{ backgroundColor: (item.color || iconColor) }} />
+                                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start py-4">
+                                    {/* Text Content */}
+                                    <div className="xl:col-span-12 space-y-4">
+                                        <div className="flex gap-4">
+                                            <div className="flex-1">
+                                                <TextField label="Module Title" value={item.title} onChange={v => update({ ...item, title: v })} lang={lang} />
                                             </div>
-                                            <div className="h-3 w-16 rounded bg-foreground/20 mb-1" />
-                                            <div className="h-2 w-full rounded bg-foreground/10" />
+                                        </div>
+                                        <TextField label="Capability Description" value={item.desc} onChange={v => update({ ...item, desc: v })} multiline lang={lang} />
+                                    </div>
+
+                                    {/* Visual branding row */}
+                                    <div className="xl:col-span-12 pt-4 border-t border-border/50">
+                                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-6">Indivdiual Card Design System</h4>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                                            {/* Design Controls */}
+                                            <div className="grid grid-cols-1 gap-5">
+                                                <ColorField label="Accent (Icon & Glow)" value={item.color || iconColor} onChange={v => update({ ...item, color: v })} />
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <ColorField label="Card Base" value={item.bg || cardBg} onChange={v => update({ ...item, bg: v })} />
+                                                    <ColorField label="Card Edge" value={item.border || cardBorder} onChange={v => update({ ...item, border: v })} />
+                                                </div>
+                                            </div>
+
+                                            {/* High Fidelity Preview */}
+                                            <div className="relative group">
+                                                <div className="absolute -inset-4 bg-gradient-to-br from-primary/5 to-transparent rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <div
+                                                    className="relative p-7 rounded-[2.5rem] border transition-all duration-500 shadow-2xl"
+                                                    style={{
+                                                        backgroundColor: item.bg || cardBg,
+                                                        borderColor: item.border || cardBorder,
+                                                        boxShadow: `0 20px 40px -10px ${(item.color || iconColor)}33`
+                                                    }}
+                                                >
+                                                    <div
+                                                        className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-lg"
+                                                        style={{
+                                                            backgroundColor: `${(item.color || iconColor)}15`,
+                                                            boxShadow: `inset 0 0 10px ${(item.color || iconColor)}10`
+                                                        }}
+                                                    >
+                                                        <div className="w-6 h-6 rounded-md" style={{ backgroundColor: (item.color || iconColor) }} />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <div className="h-4 w-3/4 rounded-full bg-foreground/20" />
+                                                        <div className="h-2 w-full rounded-full bg-foreground/10" />
+                                                        <div className="h-2 w-5/6 rounded-full bg-foreground/10" />
+                                                    </div>
+                                                </div>
+                                                <div className="absolute top-2 right-2 text-[9px] font-black bg-foreground text-background px-2 py-0.5 rounded-full uppercase">Live Preview</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -103,36 +153,47 @@ export default function AdminServices() {
                     </div>
                 </div>
 
-                {/* Theme - 4 cols */}
+                {/* Global Theme & Utilities - 4 cols */}
                 <div className="lg:col-span-4 space-y-6">
-                    <div className="space-y-6 bg-card rounded-2xl p-6 border border-border shadow-sm sticky top-6">
-                        <h3 className="font-bold text-lg text-foreground mb-1 flex items-center gap-2">
-                            🎨 Global Theme
-                        </h3>
+                    <div className="bg-card rounded-[2rem] p-8 border border-border shadow-2xl shadow-primary/5 sticky top-8">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
+                                <span className="text-xl">🍭</span>
+                            </div>
+                            <h3 className="font-black text-xl text-foreground">Global Defaults</h3>
+                        </div>
 
-                        <div className="space-y-5">
+                        <div className="space-y-8">
                             <div className="space-y-4">
-                                <label className="text-sm font-bold text-foreground block uppercase tracking-wider text-[10px]">Typography</label>
-                                <div className="grid grid-cols-1 gap-4">
-                                    <ColorField label="Title" value={titleColor} onChange={setTitleColor} />
-                                    <ColorField label="Subtitle" value={subtitleColor} onChange={setSubtitleColor} />
-                                </div>
-                            </div>
-
-                            <div className="pt-5 border-t border-border space-y-4">
-                                <label className="text-sm font-bold text-foreground block uppercase tracking-wider text-[10px]">Card Default Aesthetics</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                                    <span>Typography</span>
+                                    <div className="h-px flex-1 bg-border ml-4" />
+                                </label>
                                 <div className="space-y-4">
-                                    <ColorField label="Background" value={cardBg} onChange={setCardBg} />
-                                    <ColorField label="Border" value={cardBorder} onChange={setCardBorder} />
-                                    <ColorField label="Fallback Icon Color" value={iconColor} onChange={setIconColor} />
+                                    <ColorField label="Header Title" value={titleColor} onChange={setTitleColor} />
+                                    <ColorField label="Header Subtitle" value={subtitleColor} onChange={setSubtitleColor} />
                                 </div>
                             </div>
 
-                            <div className="pt-5 border-t border-border">
-                                <label className="text-sm font-bold text-foreground block mb-4 uppercase tracking-wider text-[10px]">Header Preview</label>
-                                <div className="text-center p-4 rounded-xl bg-secondary/20 border border-border/50">
-                                    <h4 className="font-bold text-sm mb-1" style={{ color: titleColor }}>Section Title</h4>
-                                    <p className="text-[10px] opacity-80 line-clamp-1" style={{ color: subtitleColor }}>Section subtitle preview text here...</p>
+                            <div className="space-y-4">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                                    <span>Base Aesthetics</span>
+                                    <div className="h-px flex-1 bg-border ml-4" />
+                                </label>
+                                <div className="space-y-4">
+                                    <ColorField label="Fallback Background" value={cardBg} onChange={setCardBg} />
+                                    <ColorField label="Fallback Border" value={cardBorder} onChange={setCardBorder} />
+                                    <ColorField label="Fallback Accent" value={iconColor} onChange={setIconColor} />
+                                </div>
+                            </div>
+
+                            {/* Section Preview */}
+                            <div className="pt-4">
+                                <div className="p-6 rounded-[2rem] bg-secondary/30 border border-border/50 text-center">
+                                    <h4 className="font-black text-lg mb-2" style={{ color: titleColor }}>Section Branding</h4>
+                                    <p className="text-xs font-medium opacity-60 leading-relaxed" style={{ color: subtitleColor }}>
+                                        Global colors define the baseline for all headers and fallback styles.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -140,13 +201,10 @@ export default function AdminServices() {
                 </div>
             </div>
 
-            <div className="flex justify-end pt-4">
-                <SaveButton onClick={() => save(currentPayload)} saving={saving} saved={saved} />
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-border">
+            <div className="border-t border-border pt-12">
                 <JsonPanel
-                    title={`JSON Import / Export (${lang.toUpperCase()})`}
+                    title={`Master Blueprint (${lang.toUpperCase()})`}
+                    description="Export the complete services 디자인 system as JSON."
                     data={currentPayload}
                     onImport={(parsed) => {
                         setTitle(parsed.title || '');

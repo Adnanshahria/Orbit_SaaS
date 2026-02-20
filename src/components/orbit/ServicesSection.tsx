@@ -88,7 +88,10 @@ export function ServicesSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {t.services.items.map((item: any, i: number) => {
             const Icon = icons[i % icons.length];
-            const itemColor = item.color || iconColor;
+            // Granular per-item styling or fallback to global defaults
+            const itemAccent = item.color || iconColor;
+            const itemBg = item.bg || cardBg;
+            const itemBorder = item.border || cardBorder;
 
             return (
               <motion.article
@@ -100,8 +103,8 @@ export function ServicesSection() {
                 whileHover="hover"
                 className="relative rounded-[2.5rem] p-10 h-full group cursor-default border transition-colors duration-500 overflow-hidden"
                 style={{
-                  backgroundColor: cardBg,
-                  borderColor: cardBorder,
+                  backgroundColor: itemBg,
+                  borderColor: itemBorder,
                   backdropFilter: 'blur(16px)',
                   WebkitBackdropFilter: 'blur(16px)',
                 }}
@@ -110,14 +113,14 @@ export function ServicesSection() {
                 <motion.div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(circle at 50% 0%, ${itemColor}15, transparent 70%)`
+                    background: `radial-gradient(circle at 50% 0%, ${itemAccent}15, transparent 70%)`
                   }}
                 />
 
                 {/* Animated Shimmer/Border Light */}
                 <div className="absolute -inset-px rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none border-2 border-transparent"
                   style={{
-                    background: `linear-gradient(135deg, ${itemColor}40, transparent, ${itemColor}20) border-box`,
+                    background: `linear-gradient(135deg, ${itemAccent}40, transparent, ${itemAccent}20) border-box`,
                     WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
                     WebkitMaskComposite: 'destination-out',
                     maskComposite: 'exclude'
@@ -128,18 +131,18 @@ export function ServicesSection() {
                   <motion.div
                     className="w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-all duration-500"
                     style={{
-                      backgroundColor: `${itemColor}10`,
-                      boxShadow: `inset 0 0 20px ${itemColor}05`
+                      backgroundColor: `${itemAccent}10`,
+                      boxShadow: `inset 0 0 20px ${itemAccent}05`
                     }}
                     variants={{
                       hover: {
                         scale: 1.1,
                         rotate: [0, -5, 5, 0],
-                        boxShadow: `0 15px 30px ${itemColor}20`
+                        boxShadow: `0 15px 30px ${itemAccent}20`
                       }
                     }}
                   >
-                    <Icon className="w-10 h-10" style={{ color: itemColor }} />
+                    <Icon className="w-10 h-10" style={{ color: itemAccent }} />
                   </motion.div>
 
                   <h3 className="font-display text-2xl font-black text-foreground mb-4 leading-tight group-hover:translate-x-1 transition-transform duration-300">
@@ -153,7 +156,7 @@ export function ServicesSection() {
 
                 {/* Corner accent */}
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-                  style={{ backgroundColor: itemColor }} />
+                  style={{ backgroundColor: itemAccent }} />
               </motion.article>
             );
           })}
