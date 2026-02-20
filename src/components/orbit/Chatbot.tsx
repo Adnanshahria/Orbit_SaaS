@@ -18,6 +18,8 @@ export function Chatbot() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [chatLang, setChatLang] = useState<Lang>('en'); // Independent chat language
+  const [viewportStyle, setViewportStyle] = useState<React.CSSProperties>({});
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   // Dynamic chatbot strings with fallbacks to static translations
   const chatContent = {
@@ -56,6 +58,38 @@ export function Chatbot() {
       document.body.style.overflow = 'unset';
     };
   }, [open]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const updateViewport = () => {
+      if (window.visualViewport) {
+        const isKbOpen = window.visualViewport.height < window.innerHeight * 0.8;
+        setIsKeyboardOpen(isKbOpen);
+
+        if (window.innerWidth < 768) {
+          const height = isKbOpen ? window.visualViewport.height : window.visualViewport.height * 0.9;
+          const bottom = Math.max(0, window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop);
+
+          setViewportStyle({
+            height: `${height}px`,
+            bottom: `${bottom}px`
+          });
+        } else {
+          setViewportStyle({});
+        }
+      }
+    };
+
+    updateViewport();
+    window.visualViewport?.addEventListener('resize', updateViewport);
+    window.visualViewport?.addEventListener('scroll', updateViewport);
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', updateViewport);
+      window.visualViewport?.removeEventListener('scroll', updateViewport);
+    };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -279,7 +313,8 @@ export function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-0 md:bottom-24 left-0 right-0 md:left-auto md:right-6 z-[200] w-full md:w-[400px] max-w-full md:max-w-[400px] rounded-t-3xl md:rounded-2xl overflow-hidden border-t md:border border-border bg-card shadow-2xl flex flex-col h-[90dvh] md:h-auto"
+            style={typeof window !== 'undefined' && window.innerWidth < 768 ? viewportStyle : {}}
+            className={`fixed md:bottom-24 left-0 right-0 md:left-auto md:right-6 z-[200] w-full md:w-[400px] max-w-full md:max-w-[400px] overflow-hidden border-t md:border border-border bg-card shadow-2xl flex flex-col md:h-auto transition-all duration-200 ease-out ${isKeyboardOpen && typeof window !== 'undefined' && window.innerWidth < 768 ? 'rounded-none border-t-0' : 'bottom-0 rounded-t-3xl md:rounded-2xl h-[90dvh]'}`}
           >
             {/* Header */}
             <div className="px-5 py-3.5 bg-primary/10 border-b border-border flex items-center justify-between relative">
