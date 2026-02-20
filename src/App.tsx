@@ -32,9 +32,12 @@ const AdminNavbar = lazy(() => import('./pages/admin/AdminNavbar'));
 const AdminSEO = lazy(() => import('./pages/admin/AdminSEO'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
+import { InitialLoader } from './components/orbit/InitialLoader';
+
 function PublicSite() {
   return (
     <>
+      <InitialLoader />
       <StructuredData />
       <div className="min-h-screen bg-background text-foreground">
         <Navbar />
