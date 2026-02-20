@@ -18,6 +18,14 @@ export function Chatbot() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [chatLang, setChatLang] = useState<Lang>('en'); // Independent chat language
+
+  // Dynamic chatbot strings with fallbacks to static translations
+  const chatContent = {
+    title: (content[chatLang] as any)?.chatbot?.title || translations[chatLang].chatbot.title,
+    placeholder: (content[chatLang] as any)?.chatbot?.placeholder || translations[chatLang].chatbot.placeholder,
+    greeting: (content[chatLang] as any)?.chatbot?.greeting || translations[chatLang].chatbot.greeting,
+    systemPrompt: (content[chatLang] as any)?.chatbot?.systemPrompt || '',
+  };
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -139,7 +147,9 @@ export function Chatbot() {
       }
 
       // 2. Prepare System Prompt based on chatLang
-      const systemPrompt = (chatLang === 'en'
+      // Use admin-editable system prompt if available, otherwise use defaults
+      const adminPrompt = chatContent.systemPrompt;
+      const defaultPrompt = (chatLang === 'en'
         ? `You are the PRIMARY AUTHORITY and official representative for ORBIT SaaS.
            - MISSION: You have unfettered access to all agency data. You discuss ORBIT's services, team, and portfolio with absolute confidence.
            - LIMITATION: NEVER act as a general AI. If asked about non-agency topics (math, generic life advice), steer back to ORBIT's expertise.
@@ -154,6 +164,7 @@ export function Chatbot() {
            - বিশেষ সতর্কবার্তা: আপনাকে অবশ্যই শুধুমাত্র বাংলায় উত্তর দিতে হবে।
            - শৈলী: মার্জিত, পেশাদার এবং সংক্ষিপ্ত।
            - সুইচ ডিটেক্টর: ইউজার ইংরেজিতে কথা বললে শুরুতে "[SUGGEST_SWITCH]" লিখুন।`);
+      const systemPrompt = (adminPrompt && adminPrompt.trim()) ? adminPrompt : defaultPrompt;
 
       // 3. Prepare Q&A Context
       const qaContext = (activeT.chatbot.qaPairs || [])
@@ -250,7 +261,7 @@ export function Chatbot() {
             <div className="px-5 py-3.5 bg-primary/10 border-b border-border flex items-center justify-between relative">
               <div>
                 <h4 className="font-display font-semibold text-foreground text-sm leading-tight">
-                  {chatLang === 'bn' ? translations.bn.chatbot.title : translations.en.chatbot.title}
+                  {chatContent.title}
                 </h4>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
@@ -417,7 +428,7 @@ export function Chatbot() {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
-                placeholder={chatLang === 'bn' ? translations.bn.chatbot.placeholder : translations.en.chatbot.placeholder}
+                placeholder={chatContent.placeholder}
                 disabled={isLoading}
                 className="flex-1 bg-secondary rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
               />

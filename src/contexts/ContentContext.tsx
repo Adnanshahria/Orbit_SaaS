@@ -49,8 +49,8 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
 
     const results = useQueries({
         queries: [
-            { queryKey: ['content', 'en'], queryFn: () => fetchContentData('en') },
-            { queryKey: ['content', 'bn'], queryFn: () => fetchContentData('bn') },
+            { queryKey: ['content', 'en'], queryFn: () => fetchContentData('en'), staleTime: 30_000 },
+            { queryKey: ['content', 'bn'], queryFn: () => fetchContentData('bn'), staleTime: 30_000 },
         ],
     });
 
@@ -96,7 +96,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
         } catch {
             return false;
         }
-    }, []);
+    }, [queryClient]);
 
     return (
         <ContentContext.Provider value={{ content, loading, updateSection, refreshContent }}>

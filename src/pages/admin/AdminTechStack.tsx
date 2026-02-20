@@ -48,6 +48,7 @@ export default function AdminTechStack() {
                                     value={item.items.join(', ')}
                                     onChange={(v) => update({ ...item, items: v.split(',').map(s => s.trim()).filter(Boolean) })}
                                     multiline
+                                    lang={lang}
                                 />
                             </div>
                         )}

@@ -69,7 +69,8 @@ export function AIEnhanceButton({
 
         try {
             const token = localStorage.getItem('admin_token');
-            const response = await fetch('/api/enhance', {
+            const API_BASE = import.meta.env.VITE_API_URL || '';
+            const response = await fetch(`${API_BASE}/api/enhance`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
