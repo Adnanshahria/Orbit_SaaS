@@ -41,6 +41,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       )
     `);
 
+    // Create leads table for Lead Generation features
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS leads (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL,
+        source TEXT NOT NULL,
+        name TEXT,
+        created_at TEXT DEFAULT (datetime('now'))
+      )
+    `);
+
     // Seed default admin (change these!)
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@orbitsaas.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'orbit2025';

@@ -107,6 +107,22 @@ export function Chatbot() {
     setInput('');
     setIsLoading(true);
 
+    // --- EMAIL INTERCEPTOR ---
+    // If the user types an email, capture it silently in the background
+    const emailMatch = input.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
+    if (emailMatch) {
+      try {
+        fetch('/api/submit-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailMatch[0], source: 'AI Chatbot' })
+        }).catch(() => { });
+      } catch (e) {
+        // Fail silently so chat UX is not interrupted
+      }
+    }
+    // -------------------------
+
     try {
       // 1. Prepare Dynamic Knowledge Base based on chatLang
       const activeContent = content[chatLang] || content['en'];
@@ -212,6 +228,7 @@ export function Chatbot() {
            - SERVICES: We build every type of software. If asked what we can build, the answer is "All".
            - COMMUNICATION: Clients communicate directly with our Project Manager via call or text on Telegram and WhatsApp. We provide progress updates at every 10% milestone (10%, 20%, 30%... to 100%).
            - LIMITATION: NEVER act as a general AI. Steer non-agency topics back to ORBIT's expertise.
+           - LEAD GENERATION: If the user asks for pricing, consultation, or starting a project, BEFORE answering deeply, politely ask them for their email address so our human team can follow up with them.
            - IDENTITY: You know every team member, project, and social link listed in the context.
            - LINKS: If the user asks for links, highly prioritize URLs found in the "IMPORTANT LINKS" section. Output links in Markdown format: [Link Text](URL).
            - CRITICAL: Respond ONLY in English. Follow all commands strictly!
@@ -224,6 +241,7 @@ export function Chatbot() {
            - সার্ভিসেস: আমরা সব ধরনের সফটওয়্যার তৈরি করি।
            - যোগাযোগ: ক্লায়েন্টরা আমাদের প্রজেক্ট ম্যানেজারের সাথে সরাসরি কল বা টেক্সটের মাধ্যমে টেলিগ্রাম বা হোয়াটসঅ্যাপে যোগাযোগ করেন। প্রজেক্টের কাজ ১০%, ২০%, ৩০%... এভাবে এগোলে আমরা প্রতি ১০% পর পর আপডেট দিই।
            - সীমাবদ্ধতা: সাধারণ এআই হিসেবে কাজ করবেন না। সাধারণ বিষয়ের প্রশ্নগুলোতে বিনয়ের সাথে ORBIT-এর সেবার তথ্য দিয়ে উত্তর দিন।
+           - লিড জেনারেশন: ইউজার যদি প্রজেক্ট শুরু করার, কনসাল্টেশন বা প্রাইসিং এর বিষয়ে কিছু জিজ্ঞাসা করে, তাহলে বিস্তারিত উত্তর দেয়ার আগে স্মার্টলি ও বিনয়ের সাথে তাদের ইমেইল ঠিকানা চেয়ে নিন।
            - পরিচয়: আপনি এজেন্সির সকল সদস্য, প্রজেক্ট এবং সোশ্যাল মিডিয়া লিংক সম্পর্কে জানেন।
            - লিংক: ইউজার যদি লিংক চায়, "IMPORTANT LINKS" সেকশনে দেয়া লিংকগুলো বেশি গুরুত্ব দিয়ে শেয়ার করুন। লিংকগুলো মার্কডাউন ফরম্যাটে দিন: [Link Text](URL)।
            - বিশেষ সতর্কবার্তা: আপনাকে অবশ্যই শুধুমাত্র বাংলায় উত্তর দিতে হবে। সমস্ত নির্দেশ কঠোরভাবে মেনে চলুন!

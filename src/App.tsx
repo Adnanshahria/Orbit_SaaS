@@ -12,6 +12,7 @@ import { ContactSection } from './components/orbit/ContactSection';
 import { OrbitFooter } from './components/orbit/OrbitFooter';
 import { Chatbot } from './components/orbit/Chatbot';
 import { StructuredData } from './components/seo/StructuredData';
+import { LeadMagnetPopup } from './components/orbit/LeadMagnetPopup';
 import ScrollToTop from './components/ScrollToTop';
 
 import { lazy, Suspense, useEffect } from 'react';
@@ -28,6 +29,7 @@ const AdminLeadership = lazy(() => import('./pages/admin/AdminLeadership'));
 const AdminContact = lazy(() => import('./pages/admin/AdminContact'));
 const AdminFooter = lazy(() => import('./pages/admin/AdminFooter'));
 const AdminChatbot = lazy(() => import('./pages/admin/AdminChatbot'));
+const AdminLeads = lazy(() => import('./pages/admin/AdminLeads'));
 const AdminLinks = lazy(() => import('./pages/admin/AdminLinks'));
 const AdminNavbar = lazy(() => import('./pages/admin/AdminNavbar'));
 const AdminSEO = lazy(() => import('./pages/admin/AdminSEO'));
@@ -66,6 +68,7 @@ function PublicSite() {
 
   return (
     <>
+      <LeadMagnetPopup />
       <InitialLoader />
       <StructuredData />
       <div className="min-h-screen bg-background text-foreground">
@@ -141,6 +144,7 @@ export default function App() {
                     <Route path="links" element={<AdminLinks />} />
                     <Route path="navbar" element={<AdminNavbar />} />
                     <Route path="seo" element={<AdminSEO />} />
+                    <Route path="leads" element={<AdminLeads />} />
                     <Route path="backup" element={<AdminBackup />} />
 
                   </Route>

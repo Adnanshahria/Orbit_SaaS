@@ -7,7 +7,7 @@ import {
     LayoutDashboard, Type, ShoppingCart, Users, FolderOpen,
     MessageCircle, Globe, Shield, LogOut, Menu, X,
     Lightbulb, Phone, FileText, Cpu, CloudUpload, Loader2, Link as LinkIcon,
-    Database
+    Database, Mail
 } from 'lucide-react';
 
 const navItems = [
@@ -23,6 +23,7 @@ const navItems = [
     { label: 'Links', path: '/admin/links', icon: LinkIcon },
     { label: 'Navbar', path: '/admin/navbar', icon: Globe },
     { label: 'SEO', path: '/admin/seo', icon: Shield },
+    { label: 'Leads', path: '/admin/leads', icon: Mail },
     { label: 'Backup', path: '/admin/backup', icon: Database },
 ];
 

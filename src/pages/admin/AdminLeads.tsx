@@ -1,0 +1,178 @@
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { SectionHeader } from '@/components/admin/EditorComponents';
+import { Download, Trash2, Mail, Loader2, Calendar, Globe } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface Lead {
+    id: number;
+    email: string;
+    source: string;
+    name?: string;
+    created_at: string;
+}
+
+export default function AdminLeads() {
+    const [leads, setLeads] = useState<Lead[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchLeads = async () => {
+        try {
+            const token = localStorage.getItem('admin_token');
+            const API_BASE = import.meta.env.VITE_API_URL || '';
+            const res = await fetch(`${API_BASE}/api/leads`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setLeads(data.leads || []);
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error('Failed to load leads');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchLeads();
+    }, []);
+
+    const handleDelete = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this lead?')) return;
+
+        try {
+            const token = localStorage.getItem('admin_token');
+            const API_BASE = import.meta.env.VITE_API_URL || '';
+            const res = await fetch(`${API_BASE}/api/leads?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                toast.success('Lead deleted');
+                setLeads(leads.filter(l => l.id !== id));
+            } else {
+                toast.error('Failed to delete lead');
+            }
+        } catch {
+            toast.error('An error occurred');
+        }
+    };
+
+    const exportCSV = () => {
+        if (leads.length === 0) return toast.error('No leads to export');
+
+        const headers = ['ID', 'Email', 'Source', 'Date'];
+        const csvContent = [
+            headers.join(','),
+            ...leads.map(lead => [
+                lead.id,
+                lead.email,
+                lead.source,
+                new Date(lead.created_at).toLocaleString().replace(/,/g, '')
+            ].join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `orbitsaas_leads_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        toast.success('Exporting leads...');
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center p-20">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <SectionHeader
+                    title="Captured Leads"
+                    description={`You have collected ${leads.length} email${leads.length === 1 ? '' : 's'}.`}
+                />
+                <button
+                    onClick={exportCSV}
+                    className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-semibold shadow-sm"
+                >
+                    <Download className="w-4 h-4" />
+                    Export CSV
+                </button>
+            </div>
+
+            <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm whitespace-nowrap">
+                        <thead className="bg-secondary/50 text-muted-foreground uppercase tracking-wider text-[11px] font-bold border-b border-border">
+                            <tr>
+                                <th className="px-6 py-4">Lead Email</th>
+                                <th className="px-6 py-4">Source</th>
+                                <th className="px-6 py-4">Captured At</th>
+                                <th className="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                            <AnimatePresence>
+                                {leads.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
+                                            No leads captured yet. They will appear here once visitors submit their emails.
+                                        </td>
+                                    </tr>
+                                ) : leads.map((lead) => (
+                                    <motion.tr
+                                        key={lead.id}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, backgroundColor: 'rgba(239, 68, 68, 0.1)' }}
+                                        className="hover:bg-muted/50 transition-colors"
+                                    >
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                                    <Mail className="w-4 h-4 text-primary" />
+                                                </div>
+                                                <span className="font-medium text-foreground">{lead.email}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary w-fit text-xs font-medium text-muted-foreground border border-border">
+                                                <Globe className="w-3.5 h-3.5" />
+                                                {lead.source}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-muted-foreground">
+                                            <div className="flex items-center gap-1.5">
+                                                <Calendar className="w-3.5 h-3.5" />
+                                                {new Date(lead.created_at).toLocaleString()}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <button
+                                                onClick={() => handleDelete(lead.id)}
+                                                className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+                                                title="Delete Lead"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </AnimatePresence>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+}

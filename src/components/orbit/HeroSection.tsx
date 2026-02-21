@@ -1,7 +1,8 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, Send, Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
+import { toast } from 'sonner';
 
 
 
@@ -96,8 +97,37 @@ function ParticleField() {
 
 /* ── Hero component ───────────────────────────────────────────── */
 export function HeroSection() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const sectionRef = useRef<HTMLElement>(null);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) {
+      toast.error(lang === 'bn' ? 'সঠিক ইমেইল দিন' : 'Please enter a valid email');
+      return;
+    }
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'Hero Section' })
+      });
+      if (res.ok) {
+        setStatus('success');
+        toast.success(lang === 'bn' ? 'সাবস্ক্রাইব করা হয়েছে!' : 'Subscribed successfully!');
+        setEmail('');
+        setTimeout(() => setStatus('idle'), 3000);
+      } else {
+        throw new Error('Failed');
+      }
+    } catch {
+      toast.error(lang === 'bn' ? 'ত্রুটি হয়েছে' : 'Something went wrong');
+      setStatus('idle');
+    }
+  };
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -225,6 +255,38 @@ export function HeroSection() {
           >
             {t.hero.learnMore}
           </motion.a>
+        </motion.div>
+
+        {/* Newsletter Subscribe */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 60, damping: 16, delay: baseDelay + 1.8 }}
+          className="mt-12 sm:mt-16 max-w-md mx-auto px-4 sm:px-0"
+        >
+          <form onSubmit={handleSubscribe} className="relative flex items-center">
+            <input
+              type="email"
+              placeholder={lang === 'bn' ? 'আপনার ইমেইল...' : 'Enter your email...'}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={status === 'loading'}
+              className="w-full bg-secondary/80 border border-border backdrop-blur-md rounded-full py-3.5 pl-6 pr-[130px] sm:pr-[150px] text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all shadow-lg text-foreground"
+            />
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="absolute right-1.5 top-1.5 bottom-1.5 px-4 sm:px-6 rounded-full bg-primary text-primary-foreground font-semibold text-[13px] sm:text-sm flex items-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer"
+            >
+              {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              <span className="inline">{lang === 'bn' ? 'জমা দিন' : 'Subscribe'}</span>
+            </button>
+          </form>
+          {status === 'success' && (
+            <p className="text-green-500 text-xs mt-3 text-center animate-in fade-in slide-in-from-bottom-2 font-medium">
+              {lang === 'bn' ? 'আমাদের ফ্রি নিউজলেটারে স্বাগতম!' : 'Welcome to our newsletter!'}
+            </p>
+          )}
         </motion.div>
       </motion.div>
 
