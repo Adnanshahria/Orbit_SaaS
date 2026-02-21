@@ -10,9 +10,9 @@ export function SEOHead() {
     const seoData = content[lang] as Record<string, any> || {};
 
     // Keyword-optimized defaults
-    const defaultTitle = "Best Website Development Company | Custom Web Solutions | ORBIT SaaS";
-    const defaultDesc = "ORBIT SaaS is a top website development company offering custom web solutions, website related solutions, web app development, eCommerce platforms, & enterprise software. Build your website today — get a free consultation.";
-    const defaultKeywords = "web solution, website related solutions, website development, web development company, build website, custom website development, website builder, web app development, web development services, best web development company, website design and development, professional website development, custom web solutions, web application development, build custom website, eCommerce website development, SaaS development, enterprise web application, React development, Node.js development, full-stack web development, web build, build web app, website maker, ORBIT SaaS";
+    const defaultTitle = "Web Development, AI Chatbot, Mobile App & Automation Agency | ORBIT SaaS";
+    const defaultDesc = "ORBIT SaaS — full-service software & AI agency. We build websites, AI chatbots, agentic AI automation, mobile apps (Flutter/React Native), eCommerce platforms, PWAs & enterprise solutions. Get a free consultation today.";
+    const defaultKeywords = "web development company, full stack web development, custom website development, AI chatbot development, custom AI chatbot, chatbot integration, LLM chatbot, conversational AI, AI automation, agentic AI, AI agent development, intelligent automation, workflow automation, mobile app development, Flutter app development, React Native app development, Android app, iOS app, eCommerce website development, enterprise web application, PWA development, progressive web app, SaaS development, React development, Node.js development, full-stack development, software development agency, ORBIT SaaS, web development Bangladesh, build mobile app, AI solutions company";
 
     // Data from DB (saved via AdminSEO)
     const title = (content[lang]?.['seo_title'] as string) || defaultTitle;
@@ -35,9 +35,9 @@ export function SEOHead() {
             <meta property="og:description" content={description} />
             <meta property="og:url" content={currentUrl} />
             <meta property="og:image" content={image} />
-            <meta property="og:image:alt" content="ORBIT SaaS - Website Development Company" />
+            <meta property="og:image:alt" content="ORBIT SaaS — Full-Service Software & AI Agency" />
             <meta property="og:type" content="website" />
-            <meta property="og:site_name" content="ORBIT SaaS – Website Development Company" />
+            <meta property="og:site_name" content="ORBIT SaaS – Full-Service Software & AI Agency" />
             <meta property="og:locale" content={lang === 'bn' ? 'bn_BD' : 'en_US'} />
 
             {/* Twitter */}
@@ -45,7 +45,7 @@ export function SEOHead() {
             <meta name="twitter:title" content={title} />
             <meta name="twitter:description" content={description} />
             <meta name="twitter:image" content={image} />
-            <meta name="twitter:image:alt" content="ORBIT SaaS - Website Development Company" />
+            <meta name="twitter:image:alt" content="ORBIT SaaS — Full-Service Software & AI Agency" />
 
             {/* Canonical */}
             <link rel="canonical" href={canonicalUrl} />

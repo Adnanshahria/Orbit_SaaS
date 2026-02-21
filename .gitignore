@@ -25,3 +25,14 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Build cache
+*.tsbuildinfo
+
+# Recordings & media
+*.mp4
+*.webm
+
+# Temp files
+temp/
+bun.lockb
