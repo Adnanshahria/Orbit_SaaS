@@ -180,72 +180,104 @@ function ServiceCard({
                         </div>
 
                         {/* Branding Section */}
-                        <div className="rounded-xl bg-gradient-to-r from-secondary/40 to-secondary/20 border border-border/30 p-4">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-2">
-                                    <Palette className="w-3.5 h-3.5 text-primary" />
-                                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Branding</span>
-                                    <span className="text-[9px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-md font-semibold">Synced</span>
+                        <div className="rounded-2xl border border-border/40 overflow-hidden">
+                            {/* Header */}
+                            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-secondary/50 via-secondary/30 to-transparent border-b border-border/20">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ backgroundColor: `${accentColor}15` }}>
+                                        <Palette className="w-3 h-3" style={{ color: accentColor }} />
+                                    </div>
+                                    <span className="text-xs font-bold text-foreground tracking-wide">Appearance</span>
+                                    <span className="text-[8px] bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Synced</span>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={() => setShowAdvanced(!showAdvanced)}
-                                    className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 ${showAdvanced
-                                        ? 'bg-primary/10 text-primary border border-primary/20'
-                                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent'
+                                    className={`text-[10px] font-semibold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${showAdvanced
+                                        ? 'bg-primary text-white shadow-sm shadow-primary/20'
+                                        : 'text-muted-foreground hover:text-foreground bg-secondary/60 hover:bg-secondary border border-border/30'
                                         }`}
                                 >
                                     <Paintbrush className="w-3 h-3" />
-                                    {showAdvanced ? 'Hide Advanced' : 'Advanced'}
+                                    {showAdvanced ? 'Less' : 'More'}
                                 </button>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-5">
-                                {/* Accent color */}
-                                <div className="w-44">
-                                    <ColorField label="Accent Color" value={accentColor} onChange={v => update({ ...item, color: v })} />
-                                </div>
-
-                                {/* Live Mini Preview */}
-                                <div className="flex-1 flex items-center gap-4 min-w-[200px]">
-                                    <div className="flex items-center gap-2 text-muted-foreground/60 shrink-0">
-                                        <Eye className="w-3 h-3" />
-                                        <span className="text-[9px] font-bold uppercase tracking-widest">Live</span>
+                            {/* Main Content: Color Picker + Live Preview */}
+                            <div className="p-4">
+                                <div className="flex flex-col sm:flex-row gap-5">
+                                    {/* Color Picker Side */}
+                                    <div className="w-full sm:w-48 shrink-0">
+                                        <ColorField label="Accent Color" value={accentColor} onChange={v => update({ ...item, color: v })} />
                                     </div>
-                                    <div
-                                        className="flex items-center gap-3 px-4 py-3 rounded-xl border shadow-sm flex-1 max-w-[240px] transition-all"
-                                        style={{
-                                            backgroundColor: item.bg || cardBg,
-                                            borderColor: item.border || cardBorder,
-                                        }}
-                                    >
+
+                                    {/* Live Preview — Full-width realistic card mockup */}
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-1.5 mb-2">
+                                            <Eye className="w-3 h-3 text-muted-foreground/50" />
+                                            <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">Live Preview</span>
+                                        </div>
                                         <div
-                                            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all"
-                                            style={{ backgroundColor: `${accentColor}15` }}
+                                            className="relative rounded-xl border p-4 transition-all duration-300 overflow-hidden"
+                                            style={{
+                                                backgroundColor: item.bg || cardBg,
+                                                borderColor: item.border || cardBorder,
+                                            }}
                                         >
-                                            <Sparkles className="w-4 h-4" style={{ color: accentColor }} />
-                                        </div>
-                                        <div className="space-y-1.5 flex-1 min-w-0">
-                                            <div className="h-2 w-full rounded-full bg-foreground/20" />
-                                            <div className="h-1.5 w-3/4 rounded-full bg-foreground/10" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            {/* Accent gradient glow at top */}
+                                            <div
+                                                className="absolute top-0 left-0 right-0 h-1 rounded-t-xl"
+                                                style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}30)` }}
+                                            />
 
-                            {/* Advanced Colors */}
-                            {showAdvanced && (
-                                <div className="mt-4 pt-4 border-t border-border/20 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <ColorField label="Card Background" value={item.bg || cardBg} onChange={v => update({ ...item, bg: v })} />
-                                        <button className="text-[10px] text-muted-foreground/60 hover:text-foreground font-medium transition-colors" onClick={() => update({ ...item, bg: undefined })}>↻ Reset to Global</button>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <ColorField label="Card Border" value={item.border || cardBorder} onChange={v => update({ ...item, border: v })} />
-                                        <button className="text-[10px] text-muted-foreground/60 hover:text-foreground font-medium transition-colors" onClick={() => update({ ...item, border: undefined })}>↻ Reset to Global</button>
+                                            <div className="flex items-start gap-3.5 mt-1">
+                                                {/* Icon */}
+                                                <div
+                                                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
+                                                    style={{ backgroundColor: `${accentColor}12`, border: `1px solid ${accentColor}20` }}
+                                                >
+                                                    <Sparkles className="w-5 h-5" style={{ color: accentColor }} />
+                                                </div>
+
+                                                {/* Skeleton text */}
+                                                <div className="flex-1 pt-0.5 space-y-2.5">
+                                                    <div className="h-2.5 w-3/5 rounded-full" style={{ backgroundColor: `${accentColor}30` }} />
+                                                    <div className="space-y-1.5">
+                                                        <div className="h-1.5 w-full rounded-full bg-foreground/8" />
+                                                        <div className="h-1.5 w-4/5 rounded-full bg-foreground/6" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            )}
+
+                                {/* Advanced Colors — Card Background & Border */}
+                                {showAdvanced && (
+                                    <div className="mt-5 pt-4 border-t border-border/15">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                            <div className="space-y-2.5">
+                                                <ColorField label="Card Background" value={item.bg || cardBg} onChange={v => update({ ...item, bg: v })} />
+                                                <button
+                                                    className="text-[10px] text-muted-foreground/50 hover:text-primary font-medium transition-colors flex items-center gap-1"
+                                                    onClick={() => update({ ...item, bg: undefined })}
+                                                >
+                                                    <span className="text-xs">↺</span> Reset to global
+                                                </button>
+                                            </div>
+                                            <div className="space-y-2.5">
+                                                <ColorField label="Card Border" value={item.border || cardBorder} onChange={v => update({ ...item, border: v })} />
+                                                <button
+                                                    className="text-[10px] text-muted-foreground/50 hover:text-primary font-medium transition-colors flex items-center gap-1"
+                                                    onClick={() => update({ ...item, border: undefined })}
+                                                >
+                                                    <span className="text-xs">↺</span> Reset to global
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
