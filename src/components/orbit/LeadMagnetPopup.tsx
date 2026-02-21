@@ -94,7 +94,7 @@ export function LeadMagnetPopup() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="fixed left-1/2 top-1/2 z-[260] w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card border border-border shadow-2xl overflow-hidden"
+                        className="fixed left-1/2 top-1/2 z-[260] w-[92%] sm:w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card border border-border shadow-2xl overflow-hidden"
                     >
                         <button
                             onClick={handleClose}
@@ -104,21 +104,21 @@ export function LeadMagnetPopup() {
                         </button>
 
                         {/* Gradient Header Pattern */}
-                        <div className="h-32 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent relative overflow-hidden">
+                        <div className="h-24 sm:h-32 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent relative overflow-hidden">
                             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,198,255,0.1),transparent_50%)]" />
-                            <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
+                            <div className="absolute -bottom-8 -right-8 w-24 h-24 sm:w-32 sm:h-32 bg-primary/10 rounded-full blur-xl sm:blur-2xl" />
                         </div>
 
-                        <div className="px-6 pb-8 pt-0 relative z-10 -mt-12 text-center">
-                            <div className="w-20 h-20 mx-auto bg-card border border-border shadow-lg rounded-2xl flex items-center justify-center mb-5 relative group">
+                        <div className="px-5 sm:px-6 pb-6 sm:pb-8 pt-0 relative z-10 -mt-10 sm:-mt-12 text-center">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-card border border-border shadow-lg rounded-2xl flex items-center justify-center mb-4 sm:mb-5 relative group">
                                 <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                                <BookOpen className="w-10 h-10 text-primary relative z-10" />
+                                <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-primary relative z-10" />
                             </div>
 
-                            <h2 className="font-display text-2xl font-bold mb-2">
+                            <h2 className="font-display text-xl sm:text-2xl font-bold mb-2">
                                 {lang === 'bn' ? 'ওয়েটলিস্টে যুক্ত হোন' : 'Join The Waitlist'}
                             </h2>
-                            <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                            <p className="text-muted-foreground text-xs sm:text-sm mb-5 sm:mb-6 leading-relaxed px-2">
                                 {lang === 'bn'
                                     ? 'আমাদের এক্সক্লুসিভ আপডেটের জন্য ওয়েটলিস্টে যুক্ত হোন।'
                                     : 'Join our exclusive waitlist to get early access and modern AI insights.'
@@ -140,7 +140,7 @@ export function LeadMagnetPopup() {
                                         type="email"
                                         required
                                         placeholder={lang === 'bn' ? 'আপনার সেরা ইমেইল' : 'Enter your best email address'}
-                                        className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow text-center"
+                                        className="w-full bg-secondary border border-border rounded-xl px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow text-center"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         disabled={status === 'loading'}
@@ -148,7 +148,7 @@ export function LeadMagnetPopup() {
                                     <button
                                         type="submit"
                                         disabled={status === 'loading'}
-                                        className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(0,198,255,0.3)] disabled:opacity-50 cursor-pointer"
+                                        className="w-full bg-primary text-primary-foreground font-semibold py-2.5 sm:py-3 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(0,198,255,0.3)] disabled:opacity-50 cursor-pointer"
                                     >
                                         {status === 'loading' ? (
                                             <Loader2 className="w-5 h-5 animate-spin" />
