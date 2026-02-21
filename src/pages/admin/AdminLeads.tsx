@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { SectionHeader } from '@/components/admin/EditorComponents';
-import { Download, Trash2, Mail, Loader2, Calendar, Globe, Users, Target } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Download, Trash2, Mail, Loader2, Calendar, Globe, Users, Target, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Lead {
@@ -9,6 +10,7 @@ interface Lead {
     email: string;
     source: string;
     name?: string;
+    interest?: string;
     created_at: string;
 }
 
@@ -99,8 +101,34 @@ export default function AdminLeads() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center p-20">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <Skeleton className="h-8 w-64 mb-2" />
+                        <Skeleton className="h-4 w-96" />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <Skeleton className="h-28 rounded-2xl" />
+                    <Skeleton className="h-28 rounded-2xl" />
+                </div>
+
+                <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+                    <Skeleton className="h-12 w-full border-b border-border rounded-none" />
+                    <div className="divide-y divide-border">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <div key={i} className="flex items-center justify-between p-4">
+                                <div className="flex items-center gap-4">
+                                    <Skeleton className="h-8 w-8 rounded-full" />
+                                    <Skeleton className="h-5 w-48" />
+                                </div>
+                                <Skeleton className="h-6 w-24 rounded-full" />
+                                <Skeleton className="h-5 w-32" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -150,6 +178,7 @@ export default function AdminLeads() {
                             <tr>
                                 <th className="px-6 py-4">Lead Email</th>
                                 <th className="px-6 py-4">Source</th>
+                                <th className="px-6 py-4">Intent / Interest</th>
                                 <th className="px-6 py-4">Captured At</th>
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
@@ -158,7 +187,7 @@ export default function AdminLeads() {
                             <AnimatePresence>
                                 {leads.length === 0 ? (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
+                                        <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
                                             No leads captured yet. They will appear here once visitors submit their emails.
                                         </td>
                                     </tr>
@@ -183,6 +212,16 @@ export default function AdminLeads() {
                                                 <Globe className="w-3.5 h-3.5" />
                                                 {lead.source}
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {lead.interest ? (
+                                                <div className="flex items-start gap-2 max-w-[200px] text-xs text-muted-foreground">
+                                                    <MessageSquare className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary/70" />
+                                                    <span className="truncate" title={lead.interest}>{lead.interest}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground/50 italic">—</span>
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-muted-foreground">
                                             <div className="flex items-center gap-1.5">

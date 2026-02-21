@@ -161,10 +161,20 @@ export function Chatbot() {
     const emailMatch = input.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
     if (emailMatch) {
       try {
+        // Find the user's previous context/interest
+        const userMessagesOnly = messages.filter(m => m.role === 'user');
+        const extractedInterest = userMessagesOnly.length > 0
+          ? userMessagesOnly[userMessagesOnly.length - 1].content
+          : 'General Inquiry';
+
         fetch('/api/submit-lead', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: emailMatch[0], source: 'AI Chatbot' })
+          body: JSON.stringify({
+            email: emailMatch[0],
+            source: 'AI Chatbot',
+            interest: extractedInterest
+          })
         }).catch(() => { });
         localStorage.setItem('orbit_chatbot_email_provided', 'true');
         setHasProvidedEmail(true);

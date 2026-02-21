@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { Skeleton } from '@/components/ui/skeleton';
 import { SectionHeader, SaveButton, TextField, ErrorAlert, ItemListEditor, LangToggle, JsonPanel } from '@/components/admin/EditorComponents';
 import { Upload, Trash2, X, Plus, Layers, Settings2 } from 'lucide-react';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
@@ -522,7 +523,35 @@ export default function AdminProjects() {
         }
     };
 
-    if (loading) return <div className="p-8 text-center text-muted-foreground">Loading projects...</div>;
+    if (loading) {
+        return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+                <div className="flex items-center justify-between">
+                    <Skeleton className="h-8 w-64" />
+                    <Skeleton className="h-6 w-32 rounded-full" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Skeleton className="h-40 rounded-2xl" />
+                    <Skeleton className="h-40 rounded-2xl" />
+                </div>
+                <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="flex flex-col gap-4 p-6 bg-card border border-border rounded-xl">
+                            <div className="flex justify-between">
+                                <Skeleton className="h-6 w-48" />
+                                <Skeleton className="h-8 w-24 rounded-lg" />
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <Skeleton className="h-32 rounded-lg" />
+                                <Skeleton className="h-32 rounded-lg" />
+                                <Skeleton className="h-32 rounded-lg" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
