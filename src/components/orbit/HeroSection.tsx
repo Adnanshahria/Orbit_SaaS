@@ -118,6 +118,7 @@ export function HeroSection() {
       });
       if (res.ok) {
         setStatus('success');
+        localStorage.setItem('orbit_chatbot_email_provided', 'true');
         toast.success(lang === 'bn' ? 'ওয়েটলিস্টে যুক্ত হয়েছেন!' : 'Joined waitlist successfully!');
         setEmail('');
         setTimeout(() => setStatus('idle'), 3000);

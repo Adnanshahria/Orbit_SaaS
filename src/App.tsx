@@ -40,6 +40,23 @@ const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
 import { InitialLoader } from './components/orbit/InitialLoader';
 
 function PublicSite() {
+  // Formulate and record unique visitor session
+  useEffect(() => {
+    let sessionId = localStorage.getItem('orbit_visitor_session_id');
+    if (!sessionId) {
+      // Create a unique UUID for this visitor
+      sessionId = crypto.randomUUID();
+      localStorage.setItem('orbit_visitor_session_id', sessionId);
+    }
+
+    // Ping the api silently to log the visitor
+    fetch('/api/record-visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId })
+    }).catch(err => console.error("Visitor logging failed", err));
+  }, []);
+
   // Mobile UX: Scroll to hide address bar
   useEffect(() => {
     const hideAddressBar = () => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { SectionHeader } from '@/components/admin/EditorComponents';
-import { Download, Trash2, Mail, Loader2, Calendar, Globe } from 'lucide-react';
+import { Download, Trash2, Mail, Loader2, Calendar, Globe, Users, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Lead {
@@ -15,30 +15,41 @@ interface Lead {
 export default function AdminLeads() {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
+    const [totalVisitors, setTotalVisitors] = useState<number>(0);
 
-    const fetchLeads = async () => {
+    const fetchDashboardData = async () => {
         try {
             const token = localStorage.getItem('admin_token');
             const API_BASE = import.meta.env.VITE_API_URL || '';
-            const res = await fetch(`${API_BASE}/api/leads`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (res.ok) {
-                const data = await res.json();
+
+            const [leadsRes, visitorsRes] = await Promise.all([
+                fetch(`${API_BASE}/api/leads`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+                fetch(`${API_BASE}/api/visitors`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+            ]);
+
+            if (leadsRes.ok) {
+                const data = await leadsRes.json();
                 setLeads(data.leads || []);
             }
+            if (visitorsRes.ok) {
+                const vData = await visitorsRes.json();
+                setTotalVisitors(vData.count || 0);
+            }
+
         } catch (err) {
             console.error(err);
-            toast.error('Failed to load leads');
+            toast.error('Failed to load dashboard data');
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchLeads();
+        fetchDashboardData();
     }, []);
 
     const handleDelete = async (id: number) => {
@@ -98,8 +109,8 @@ export default function AdminLeads() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <SectionHeader
-                    title="Captured Leads"
-                    description={`You have collected ${leads.length} email${leads.length === 1 ? '' : 's'}.`}
+                    title="Traffic & Leads"
+                    description="Monitor your website visitors and email waitlist conversion."
                 />
                 <button
                     onClick={exportCSV}
@@ -108,6 +119,28 @@ export default function AdminLeads() {
                     <Download className="w-4 h-4" />
                     Export CSV
                 </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="bg-card border border-border p-6 rounded-2xl flex items-center justify-between shadow-sm">
+                    <div>
+                        <p className="text-sm text-muted-foreground font-medium mb-1 tracking-wide">Total Unique Visitors</p>
+                        <h3 className="text-4xl font-black text-foreground">{totalVisitors}</h3>
+                    </div>
+                    <div className="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
+                        <Users className="w-7 h-7 text-blue-500" />
+                    </div>
+                </div>
+
+                <div className="bg-card border border-border p-6 rounded-2xl flex items-center justify-between shadow-sm">
+                    <div>
+                        <p className="text-sm text-muted-foreground font-medium mb-1 tracking-wide">Total Emails Captured</p>
+                        <h3 className="text-4xl font-black text-foreground">{leads.length}</h3>
+                    </div>
+                    <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+                        <Target className="w-7 h-7 text-green-500" />
+                    </div>
+                </div>
             </div>
 
             <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">

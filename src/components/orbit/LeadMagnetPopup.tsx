@@ -14,18 +14,18 @@ export function LeadMagnetPopup() {
         // Only show once per session
         if (sessionStorage.getItem('leadMagnetDismissed')) return;
 
-        // 1. Time-based trigger (15 seconds)
+        // 1. Time-based trigger (7 seconds)
         const timerId = setTimeout(() => {
-            if (!sessionStorage.getItem('leadMagnetDismissed')) {
+            if (!sessionStorage.getItem('leadMagnetDismissed') && localStorage.getItem('orbit_chatbot_email_provided') !== 'true') {
                 setIsOpen(true);
             }
-        }, 15000);
+        }, 7000);
 
         // 2. Exit-intent trigger
         const handleMouseLeave = (e: MouseEvent) => {
             // If cursor moves above the top of the viewport
             if (e.clientY <= 0 || e.clientX <= 0 || (e.clientX >= window.innerWidth || e.clientY >= window.innerHeight)) {
-                if (!sessionStorage.getItem('leadMagnetDismissed')) {
+                if (!sessionStorage.getItem('leadMagnetDismissed') && localStorage.getItem('orbit_chatbot_email_provided') !== 'true') {
                     setIsOpen(true);
                 }
             }
@@ -62,12 +62,13 @@ export function LeadMagnetPopup() {
 
             if (res.ok) {
                 setStatus('success');
+                localStorage.setItem('orbit_chatbot_email_provided', 'true');
                 toast.success(
                     lang === 'bn'
                         ? 'ধন্যবাদ! আপনি ওয়েটলিস্টে যুক্ত হয়েছেন।'
                         : 'Thank you! You have joined the waitlist.'
                 );
-                setTimeout(handleClose, 3000);
+                handleClose();
             } else {
                 throw new Error('Failed to submit');
             }
