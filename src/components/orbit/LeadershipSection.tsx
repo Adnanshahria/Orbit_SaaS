@@ -38,11 +38,12 @@ export function LeadershipSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: false, margin: '-80px' });
 
-  // Sort members by order field (if present), then by original index
   const members = t.leadership.members || [];
   const sortedMembers = [...members].sort(
     (a: any, b: any) => (a.order ?? 999) - (b.order ?? 999)
   );
+
+  const tagline = t.leadership.tagline;
 
   return (
     <section id="leadership" className="py-16 sm:py-24 px-4 sm:px-6 relative">
@@ -106,6 +107,24 @@ export function LeadershipSection() {
             );
           })}
         </motion.div>
+
+        {/* Optional Tagline Card below members */}
+        {tagline && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.5, type: 'spring', stiffness: 60 }}
+            className="mt-12 sm:mt-16 max-w-4xl mx-auto"
+          >
+            <div className="glass-effect rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 text-center border border-border bg-gradient-to-r from-primary/5 via-secondary/10 to-primary/5 hover:border-primary/30 transition-colors duration-500">
+              <p className="text-lg sm:text-2xl lg:text-3xl font-display font-medium text-foreground leading-relaxed italic relative z-10">
+                <span className="text-primary/40 text-4xl leading-none absolute -top-4 -left-2 sm:-left-6">"</span>
+                {tagline}
+                <span className="text-primary/40 text-4xl leading-none absolute -bottom-4 -right-2 sm:-right-6">"</span>
+              </p>
+            </div>
+          </motion.div>
+        )}
       </div>
     </section>
   );

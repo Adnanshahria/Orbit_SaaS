@@ -203,8 +203,8 @@ export default function AdminLeadership() {
     const [loading, setLoading] = useState(true);
     const [members, setMembers] = useState<UnifiedMember[]>([]);
     const [sectionInfo, setSectionInfo] = useState({
-        en: { title: '', subtitle: '' },
-        bn: { title: '', subtitle: '' },
+        en: { title: '', subtitle: '', tagline: '' },
+        bn: { title: '', subtitle: '', tagline: '' },
     });
 
     const [saving, setSaving] = useState(false);
@@ -225,8 +225,8 @@ export default function AdminLeadership() {
         const bnL = (content.bn.leadership as any) || { members: [] };
 
         setSectionInfo({
-            en: { title: enL.title || '', subtitle: enL.subtitle || '' },
-            bn: { title: bnL.title || '', subtitle: bnL.subtitle || '' },
+            en: { title: enL.title || '', subtitle: enL.subtitle || '', tagline: enL.tagline || '' },
+            bn: { title: bnL.title || '', subtitle: bnL.subtitle || '', tagline: bnL.tagline || '' },
         });
 
         const enMembers = enL.members || [];
@@ -277,12 +277,14 @@ export default function AdminLeadership() {
             const enOk = await updateSection('leadership', 'en', {
                 title: sectionInfo.en.title,
                 subtitle: sectionInfo.en.subtitle,
+                tagline: sectionInfo.en.tagline,
                 members: enMembers,
             });
 
             const bnOk = await updateSection('leadership', 'bn', {
                 title: sectionInfo.bn.title,
                 subtitle: sectionInfo.bn.subtitle,
+                tagline: sectionInfo.bn.tagline,
                 members: bnMembers,
             });
 
@@ -355,6 +357,17 @@ export default function AdminLeadership() {
                         multiline
                         lang="en"
                     />
+                    <TextField
+                        label="Bottom Tagline (Optional)"
+                        value={sectionInfo.en.tagline}
+                        onChange={(v) =>
+                            setSectionInfo({
+                                ...sectionInfo,
+                                en: { ...sectionInfo.en, tagline: v },
+                            })
+                        }
+                        lang="en"
+                    />
                 </div>
                 <div className="space-y-4">
                     <h3 className="font-semibold text-primary">Bangla Section Info</h3>
@@ -379,6 +392,17 @@ export default function AdminLeadership() {
                             })
                         }
                         multiline
+                        lang="bn"
+                    />
+                    <TextField
+                        label="নিচের ট্যাগলাইন (Tagline)"
+                        value={sectionInfo.bn.tagline}
+                        onChange={(v) =>
+                            setSectionInfo({
+                                ...sectionInfo,
+                                bn: { ...sectionInfo.bn, tagline: v },
+                            })
+                        }
                         lang="bn"
                     />
                 </div>
@@ -412,6 +436,7 @@ export default function AdminLeadership() {
                     en: {
                         title: sectionInfo.en.title,
                         subtitle: sectionInfo.en.subtitle,
+                        tagline: sectionInfo.en.tagline,
                         members: members.map(m => ({
                             name: m.en.name,
                             role: m.en.role,
@@ -422,6 +447,7 @@ export default function AdminLeadership() {
                     bn: {
                         title: sectionInfo.bn.title,
                         subtitle: sectionInfo.bn.subtitle,
+                        tagline: sectionInfo.bn.tagline,
                         members: members.map(m => ({
                             name: m.bn.name,
                             role: m.bn.role,
@@ -436,8 +462,8 @@ export default function AdminLeadership() {
                         return;
                     }
                     const newInfo = {
-                        en: { title: parsed.en.title || '', subtitle: parsed.en.subtitle || '' },
-                        bn: { title: parsed.bn.title || '', subtitle: parsed.bn.subtitle || '' },
+                        en: { title: parsed.en.title || '', subtitle: parsed.en.subtitle || '', tagline: parsed.en.tagline || '' },
+                        bn: { title: parsed.bn.title || '', subtitle: parsed.bn.subtitle || '', tagline: parsed.bn.tagline || '' },
                     };
                     const enMembers = parsed.en.members || [];
                     const bnMembers = parsed.bn.members || [];
