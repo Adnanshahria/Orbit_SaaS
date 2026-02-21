@@ -44,7 +44,7 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4">
             <Helmet>
                 <title>Admin Login | Orbit SaaS</title>
                 <meta name="robots" content="noindex, nofollow" />

@@ -76,7 +76,7 @@ export default function ProjectsPage() {
     const sectionSubtitle = lang === 'bn' && bnData.subtitle ? bnData.subtitle : (enData.subtitle || 'Explore all the projects we\'ve built.');
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-[100dvh] bg-background text-foreground">
             <Helmet>
                 <title>All Projects | ORBIT SaaS</title>
                 <meta name="description" content="Browse all projects built by ORBIT SaaS — web apps, AI solutions, mobile apps, and more." />

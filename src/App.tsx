@@ -88,7 +88,7 @@ function PublicSite() {
       <LeadMagnetPopup />
       <InitialLoader />
       <StructuredData />
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="min-h-[100dvh] bg-background text-foreground">
         <Navbar />
         <main>
           <HeroSection />
@@ -108,7 +108,7 @@ function PublicSite() {
 
 function AdminLoading() {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="min-h-[100dvh] bg-background flex items-center justify-center">
       <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin" />
     </div>
   );

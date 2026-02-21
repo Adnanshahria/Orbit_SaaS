@@ -229,7 +229,7 @@ export default function ProjectDetail() {
 
     if (!project || idx < 0) {
         return (
-            <div className="min-h-screen bg-background text-foreground">
+            <div className="min-h-[100dvh] bg-background text-foreground">
                 <Navbar />
                 <div className="flex flex-col items-center justify-center py-40 px-4">
                     <Helmet>
@@ -264,7 +264,7 @@ export default function ProjectDetail() {
     const currentUrl = `https://orbitsaas.cloud/project/${id}`;
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-[100dvh] bg-background text-foreground">
             <Helmet>
                 <title>{seoTitle}</title>
                 <meta name="description" content={seoDesc} />

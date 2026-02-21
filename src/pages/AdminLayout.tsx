@@ -67,7 +67,7 @@ export default function AdminLayout() {
     };
 
     return (
-        <div className="min-h-screen bg-background flex">
+        <div className="min-h-[100dvh] bg-background flex">
             <Helmet>
                 <title>Admin Panel | Orbit SaaS</title>
                 <meta name="robots" content="noindex, nofollow" />
@@ -78,7 +78,7 @@ export default function AdminLayout() {
             )}
 
             {/* Sidebar */}
-            <aside className={`fixed lg:sticky top-0 left-0 z-50 h-screen w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+            <aside className={`fixed lg:sticky top-0 left-0 z-50 h-[100dvh] w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
                 <div className="px-5 py-4 border-b border-border flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <LayoutDashboard className="w-5 h-5 text-primary" />
@@ -136,7 +136,7 @@ export default function AdminLayout() {
             </aside>
 
             {/* Main content */}
-            <main className="flex-1 min-h-screen">
+            <main className="flex-1 min-h-[100dvh]">
                 {/* Top bar (mobile) */}
                 <div className="lg:hidden sticky top-0 z-30 bg-card/90 backdrop-blur-xl border-b border-border px-4 py-3 flex items-center gap-3">
                     <button onClick={() => setSidebarOpen(true)} className="text-foreground cursor-pointer">
