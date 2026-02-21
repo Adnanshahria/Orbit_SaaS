@@ -294,7 +294,7 @@ function ServiceCard({
                                                 className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
                                                 style={{ backgroundColor: `${accentColor}12`, border: `1px solid ${accentColor}20` }}
                                             >
-                                                <Sparkles className="w-6 h-6" style={{ color: accentColor }} />
+                                                <CurrentIcon className="w-6 h-6" style={{ color: accentColor }} />
                                             </div>
 
                                             {/* Skeleton content */}
