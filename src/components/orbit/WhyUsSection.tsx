@@ -43,7 +43,7 @@ export function WhyUsSection() {
   const inView = useInView(ref, { once: false, margin: '-80px' });
 
   return (
-    <section id="why-us" className="py-16 sm:py-24 px-4 sm:px-6 relative">
+    <section id="why-us" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,245,255,0.05),transparent_70%)]" />
       <div className="max-w-6xl mx-auto relative" ref={ref}>
         <div className="text-center mb-10 sm:mb-16">

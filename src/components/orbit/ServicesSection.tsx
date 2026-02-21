@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { Globe, Bot, Zap, Smartphone, ShoppingCart, Rocket, Code, Database, Shield, Cloud, Cpu, Monitor, Wifi, Mail, Camera, Music, Heart, Star, Target, Briefcase, Award, BookOpen, Users, BarChart3, Sparkles, Layers, Settings2, Eye, Palette } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 import type { LucideIcon } from 'lucide-react';
 
@@ -36,17 +36,30 @@ export function ServicesSection() {
   const inView = useInView(ref, { once: false, margin: '-60px' });
 
   // Theme from admin
-  const titleColor = (t.services as any).titleColor || '#ffffff';
-  const subtitleColor = (t.services as any).subtitleColor || '#94a3b8';
-  const cardBg = (t.services as any).cardBg || 'rgba(15, 23, 42, 0.45)';
-  const cardBorder = (t.services as any).cardBorder || 'rgba(255, 255, 255, 0.08)';
+  const titleColor = (t.services as any).titleColor || '';
+  const subtitleColor = (t.services as any).subtitleColor || '';
+  const cardBorder = (t.services as any).cardBorder || '';
   const iconColor = (t.services as any).iconColor || '#6c5ce7';
+
+  // Dark mode detection to prevent bright pastel colors from blinding users in dark mode
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    // Check initial state
+    setIsDark(document.documentElement.classList.contains('dark'));
+
+    // Listen for changes
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const subtitle = t.services.subtitle || '';
   const words = subtitle.split(' ');
 
   return (
-    <section id="services" className="py-20 sm:py-28 px-4 sm:px-6 relative overflow-hidden">
+    <section id="services" className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(108,92,231,0.08),transparent_60%)]" />
 
       <div className="max-w-6xl mx-auto relative" ref={ref}>
@@ -56,15 +69,15 @@ export function ServicesSection() {
             initial={{ opacity: 0, y: -16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 tracking-tight"
-            style={{ color: titleColor }}
+            className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 tracking-tight text-foreground"
+            style={titleColor ? { color: titleColor } : undefined}
           >
             {t.services.title}
           </motion.h2>
 
           <motion.p
-            className="text-base sm:text-lg max-w-xl mx-auto flex flex-wrap justify-center gap-x-[0.3em]"
-            style={{ color: subtitleColor }}
+            className="text-base sm:text-lg max-w-xl mx-auto flex flex-wrap justify-center gap-x-[0.3em] text-muted-foreground"
+            style={subtitleColor ? { color: subtitleColor } : undefined}
           >
             {words.map((word, i) => (
               <motion.span
@@ -86,10 +99,9 @@ export function ServicesSection() {
         {/* Cards Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {t.services.items.map((item: any, i: number) => {
-            // Dynamic icon: use stored icon name, fall back to cycling default
             const Icon = (item.icon && ICON_MAP[item.icon]) ? ICON_MAP[item.icon] : DEFAULT_ICONS[i % DEFAULT_ICONS.length];
             const accent = item.color || iconColor;
-            const bg = item.bg || cardBg;
+            const bg = item.bg || '';
             const border = item.border || cardBorder;
 
             return (
@@ -103,10 +115,11 @@ export function ServicesSection() {
                   y: -4,
                   transition: { type: 'spring', stiffness: 400, damping: 25 },
                 }}
-                className="relative rounded-2xl p-4 sm:p-7 group cursor-default border overflow-hidden transition-shadow duration-300 flex flex-col"
+                className={`relative rounded-2xl p-4 sm:p-7 group cursor-default border overflow-hidden transition-shadow duration-300 flex flex-col bg-card/80 dark:bg-card/40 hover:border-primary/30 dark:hover:border-primary/40`}
                 style={{
-                  backgroundColor: bg,
-                  borderColor: border,
+                  backgroundColor: bg && !bg.includes('gradient') && !isDark ? bg : undefined,
+                  backgroundImage: bg?.includes('gradient') || bg?.includes('url') ? bg : undefined,
+                  borderColor: border?.startsWith('border-') ? undefined : (isDark ? 'rgba(255,255,255,0.08)' : border),
                   backdropFilter: 'blur(16px)',
                   WebkitBackdropFilter: 'blur(16px)',
                 }}
@@ -125,7 +138,7 @@ export function ServicesSection() {
                   <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div
                       className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
-                      style={{ backgroundColor: `${accent}15` }}
+                      style={{ backgroundColor: bg && !bg.includes('gradient') && isDark ? bg : `${accent}15` }}
                     >
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: accent }} />
                     </div>

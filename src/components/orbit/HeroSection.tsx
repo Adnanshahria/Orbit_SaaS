@@ -136,10 +136,9 @@ export function HeroSection() {
       <motion.div style={{ y: bgY }} className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(0,245,255,0.08),transparent_60%)]" />
       <ParticleField />
 
-      {/* Content with scroll fade */}
       <motion.div
         style={{ opacity: contentOpacity, y: contentY }}
-        className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto"
+        className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto"
       >
         {/* Badge — slides down with spring */}
         {t.hero.tagline && (
@@ -160,7 +159,7 @@ export function HeroSection() {
         {/* Title — "ORBIT SaaS" scales up dramatically */}
         <motion.h1 className="text-foreground leading-[1] mb-10 sm:mb-16">
           <motion.span
-            className="block text-[3.5rem] leading-[1.1] sm:text-6xl md:text-7xl lg:text-[6.5rem] font-poppins font-black tracking-tight"
+            className="block text-[3.5rem] leading-[1.1] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-poppins font-black tracking-tight"
             initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ type: 'spring', stiffness: 80, damping: 18, delay: baseDelay + 0.4 }}
@@ -168,7 +167,7 @@ export function HeroSection() {
             ORBIT <span className="text-primary">SaaS</span>
           </motion.span>
           <motion.span
-            className="block mt-4 sm:mt-10 text-[2rem] leading-[1.2] sm:text-4xl md:text-5xl lg:text-6xl font-lobster tracking-normal px-2 sm:px-4"
+            className="block mt-4 sm:mt-10 text-[2rem] leading-[1.2] sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-lobster tracking-normal px-2 sm:px-4"
             style={{ color: titleColor }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

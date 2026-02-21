@@ -80,7 +80,7 @@ export function TechStackSection() {
   return (
     <section id="tech-stack" className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/30 to-transparent" />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative" ref={ref}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
