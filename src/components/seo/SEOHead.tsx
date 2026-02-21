@@ -10,9 +10,9 @@ export function SEOHead() {
     const seoData = content[lang] as Record<string, any> || {};
 
     // Keyword-optimized defaults
-    const defaultTitle = "Web Development, AI Chatbot, Mobile App & Automation Agency | ORBIT SaaS";
-    const defaultDesc = "ORBIT SaaS — full-service software & AI agency. We build websites, AI chatbots, agentic AI automation, mobile apps (Flutter/React Native), eCommerce platforms, PWAs & enterprise solutions. Get a free consultation today.";
-    const defaultKeywords = "web development company, full stack web development, custom website development, AI chatbot development, custom AI chatbot, chatbot integration, LLM chatbot, conversational AI, AI automation, agentic AI, AI agent development, intelligent automation, workflow automation, mobile app development, Flutter app development, React Native app development, Android app, iOS app, eCommerce website development, enterprise web application, PWA development, progressive web app, SaaS development, React development, Node.js development, full-stack development, software development agency, ORBIT SaaS, web development Bangladesh, build mobile app, AI solutions company";
+    const defaultTitle = "ORBIT SaaS | Custom SaaS, AI Agency & Web Development";
+    const defaultDesc = "ORBIT SaaS is a top-tier software and AI agency. We specialize in custom SaaS platforms, AI chatbots, agentic automation, mobile apps, and enterprise web applications. Get your custom orbit saas solutions today.";
+    const defaultKeywords = "orbit, ORBIT SaaS, orbit sas, orbit saas, orbit software, orbit web solutions, orbit SaaS solutions, saas development, saas platform, custom saas, best saas company, orbit tech, saas products, enterprise saas, web development company, full stack web development, custom website development, AI chatbot development, custom AI chatbot, chatbot integration, LLM chatbot, conversational AI, AI automation, agentic AI, AI agent development, intelligent automation, workflow automation, mobile app development, Flutter app development, React Native app development, eCommerce website development, enterprise web application, PWA development, progressive web app, React development, Node.js development, software development agency, web development Bangladesh";
 
     // Data from DB (saved via AdminSEO)
     const title = (content[lang]?.['seo_title'] as string) || defaultTitle;
@@ -35,9 +35,9 @@ export function SEOHead() {
             <meta property="og:description" content={description} />
             <meta property="og:url" content={currentUrl} />
             <meta property="og:image" content={image} />
-            <meta property="og:image:alt" content="ORBIT SaaS — Full-Service Software & AI Agency" />
+            <meta property="og:image:alt" content="ORBIT SaaS" />
             <meta property="og:type" content="website" />
-            <meta property="og:site_name" content="ORBIT SaaS – Full-Service Software & AI Agency" />
+            <meta property="og:site_name" content="ORBIT SaaS" />
             <meta property="og:locale" content={lang === 'bn' ? 'bn_BD' : 'en_US'} />
 
             {/* Twitter */}
@@ -45,7 +45,7 @@ export function SEOHead() {
             <meta name="twitter:title" content={title} />
             <meta name="twitter:description" content={description} />
             <meta name="twitter:image" content={image} />
-            <meta name="twitter:image:alt" content="ORBIT SaaS — Full-Service Software & AI Agency" />
+            <meta name="twitter:image:alt" content="ORBIT SaaS" />
 
             {/* Canonical */}
             <link rel="canonical" href={canonicalUrl} />
@@ -57,6 +57,6 @@ export function SEOHead() {
 
             {/* Additional SEO meta */}
             <meta name="language" content={lang === 'bn' ? 'Bengali' : 'English'} />
-        </Helmet>
+        </Helmet >
     );
 }
