@@ -46,22 +46,58 @@ export function WhyUsSection() {
     <section id="why-us" className="py-16 sm:py-24 px-4 sm:px-6 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,245,255,0.05),transparent_70%)]" />
       <div className="max-w-6xl mx-auto relative" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-          className="text-center mb-10 sm:mb-16"
-        >
-          <h2 className="text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-foreground mb-3">
-            {t.whyUs.title.split('ORBIT').map((part, i, arr) => (
-              <React.Fragment key={i}>
-                {part}
-                {i < arr.length - 1 && <span className="text-[#6366f1]">ORBIT</span>}
-              </React.Fragment>
-            ))}
-          </h2>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">{t.whyUs.subtitle}</p>
-        </motion.div>
+        <div className="text-center mb-10 sm:mb-16">
+          <motion.h2
+            className="text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-foreground mb-3 flex flex-wrap justify-center gap-[0.3em]"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+              },
+            }}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+          >
+            {t.whyUs.title.split(' ').map((word: string, i: number) => {
+              const isOrbit = word.includes('ORBIT');
+              return (
+                <motion.span
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      filter: 'blur(0px)',
+                      transition: { type: 'spring', stiffness: 100, damping: 12 },
+                    },
+                  }}
+                  className={`inline-block ${isOrbit ? 'text-[#6366f1] relative' : ''}`}
+                >
+                  {word}
+                  {isOrbit && (
+                    <motion.div
+                      className="absolute -inset-1 bg-[#6366f1]/20 blur-xl rounded-full -z-10"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                      transition={{ delay: 0.5, duration: 1 }}
+                    />
+                  )}
+                </motion.span>
+              );
+            })}
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
+            className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto"
+          >
+            {t.whyUs.subtitle}
+          </motion.p>
+        </div>
 
         <motion.div
           variants={containerVariants}
