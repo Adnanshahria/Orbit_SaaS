@@ -53,7 +53,7 @@ export function WhyUsSection() {
               hidden: { opacity: 0 },
               visible: {
                 opacity: 1,
-                transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+                transition: { staggerChildren: 0.1, delayChildren: 0.05 },
               },
             }}
             initial="hidden"
@@ -65,12 +65,11 @@ export function WhyUsSection() {
                 <motion.span
                   key={i}
                   variants={{
-                    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+                    hidden: { opacity: 0, y: 15 },
                     visible: {
                       opacity: 1,
                       y: 0,
-                      filter: 'blur(0px)',
-                      transition: { type: 'spring', stiffness: 100, damping: 12 },
+                      transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
                     },
                   }}
                   className={`inline-block ${isOrbit ? 'text-[#6366f1] relative' : ''}`}
@@ -79,9 +78,9 @@ export function WhyUsSection() {
                   {isOrbit && (
                     <motion.div
                       className="absolute -inset-1 bg-[#6366f1]/20 blur-xl rounded-full -z-10"
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                      transition={{ delay: 0.5, duration: 1 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                      transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
                     />
                   )}
                 </motion.span>
