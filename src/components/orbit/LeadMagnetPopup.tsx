@@ -94,7 +94,7 @@ export function LeadMagnetPopup() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="fixed left-1/2 top-1/2 z-[260] w-[92%] sm:w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card border border-border shadow-2xl overflow-hidden"
+                        className="fixed left-1/2 top-1/2 z-[260] w-[92%] sm:w-[85%] md:w-[70%] max-w-md md:max-w-lg lg:max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card border border-border shadow-2xl overflow-hidden"
                     >
                         <button
                             onClick={handleClose}
@@ -110,15 +110,15 @@ export function LeadMagnetPopup() {
                         </div>
 
                         <div className="px-5 sm:px-6 pb-6 sm:pb-8 pt-0 relative z-10 -mt-10 sm:-mt-12 text-center">
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-card border border-border shadow-lg rounded-2xl flex items-center justify-center mb-4 sm:mb-5 relative group">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-card border border-border shadow-lg rounded-2xl flex items-center justify-center mb-4 sm:mb-5 lg:mb-6 relative group">
                                 <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                                <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-primary relative z-10" />
+                                <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-primary relative z-10" />
                             </div>
 
-                            <h2 className="font-display text-xl sm:text-2xl font-bold mb-2">
+                            <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
                                 {lang === 'bn' ? 'ওয়েটলিস্টে যুক্ত হোন' : 'Join The Waitlist'}
                             </h2>
-                            <p className="text-muted-foreground text-xs sm:text-sm mb-5 sm:mb-6 leading-relaxed px-2">
+                            <p className="text-muted-foreground text-xs sm:text-sm lg:text-base mb-5 sm:mb-6 lg:mb-8 leading-relaxed px-2 md:px-10">
                                 {lang === 'bn'
                                     ? 'আমাদের এক্সক্লুসিভ আপডেটের জন্য ওয়েটলিস্টে যুক্ত হোন।'
                                     : 'Join our exclusive waitlist to get early access and modern AI insights.'

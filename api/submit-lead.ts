@@ -19,6 +19,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
+        // Ensure the table exists (prevents 500 errors if seed script wasn't run)
+        await db.execute(`
+            CREATE TABLE IF NOT EXISTS leads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT NOT NULL,
+                source TEXT,
+                name TEXT,
+                created_at TEXT DEFAULT (datetime('now'))
+            )
+        `);
+
         // Basic deduplication check
         const existing = await db.execute({
             sql: 'SELECT id FROM leads WHERE email = ?',
