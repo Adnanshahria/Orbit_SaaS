@@ -61,8 +61,8 @@ function ServiceCard({
     return (
         <div
             className={`group relative rounded-2xl border transition-all duration-300 overflow-hidden ${expanded
-                    ? 'bg-card border-primary/30 shadow-lg shadow-primary/5 ring-1 ring-primary/10'
-                    : 'bg-card/60 border-border/60 hover:border-border hover:shadow-md'
+                ? 'bg-card border-primary/30 shadow-lg shadow-primary/5 ring-1 ring-primary/10'
+                : 'bg-card/60 border-border/60 hover:border-border hover:shadow-md'
                 }`}
         >
             {/* Accent top line */}
@@ -104,7 +104,7 @@ function ServiceCard({
                 {/* Color dot preview */}
                 <div
                     className="w-3 h-3 rounded-full ring-2 ring-offset-2 ring-offset-card shrink-0 transition-all"
-                    style={{ backgroundColor: accentColor, ringColor: `${accentColor}40` }}
+                    style={{ backgroundColor: accentColor }}
                     title={`Accent: ${accentColor}`}
                 />
 
@@ -149,8 +149,8 @@ function ServiceCard({
                                 key={lang}
                                 onClick={() => setTab(lang)}
                                 className={`flex-1 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all relative ${tab === lang
-                                        ? 'text-primary bg-background/80'
-                                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary/40'
+                                    ? 'text-primary bg-background/80'
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/40'
                                     }`}
                             >
                                 {lang === 'en' ? '🇺🇸 English' : '🇧🇩 বাংলা'}
@@ -191,8 +191,8 @@ function ServiceCard({
                                     type="button"
                                     onClick={() => setShowAdvanced(!showAdvanced)}
                                     className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 ${showAdvanced
-                                            ? 'bg-primary/10 text-primary border border-primary/20'
-                                            : 'text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent'
+                                        ? 'bg-primary/10 text-primary border border-primary/20'
+                                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary border border-transparent'
                                         }`}
                                 >
                                     <Paintbrush className="w-3 h-3" />
