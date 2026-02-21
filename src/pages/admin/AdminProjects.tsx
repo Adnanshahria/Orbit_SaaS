@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { SectionHeader, SaveButton, TextField, ErrorAlert, ItemListEditor, LangToggle, JsonPanel } from '@/components/admin/EditorComponents';
-import { Upload, Trash2, X, Plus } from 'lucide-react';
+import { Upload, Trash2, X, Plus, Layers, Settings2 } from 'lucide-react';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import { useContent } from '@/contexts/ContentContext';
 import { uploadToImgBB } from '@/lib/imgbb';
@@ -200,7 +200,7 @@ const DEFAULT_PROJECT: UnifiedProject = {
 
 // --- Project Editor Component (Handles Tabs) ---
 
-function ProjectEditor({ item, update }: { item: UnifiedProject; update: (i: UnifiedProject) => void }) {
+function ProjectEditor({ item, update, categories }: { item: UnifiedProject; update: (i: UnifiedProject) => void; categories: string[] }) {
     const [tab, setTab] = useState<'en' | 'bn'>('en');
 
     // Helper to update localized content
@@ -241,11 +241,11 @@ function ProjectEditor({ item, update }: { item: UnifiedProject; update: (i: Uni
                     <div className="space-y-1.5">
                         <label className="text-sm font-medium text-foreground block">Category</label>
                         <select
-                            value={item.category || 'SaaS'}
+                            value={item.category || (categories[0] || 'SaaS')}
                             onChange={e => update({ ...item, category: e.target.value })}
                             className="w-full bg-secondary rounded-lg px-4 py-2.5 text-sm text-foreground outline-none border border-border"
                         >
-                            {['SaaS', 'eCommerce', 'Enterprise', 'Education', 'Portfolio', 'Other'].map(c => <option key={c} value={c}>{c}</option>)}
+                            {categories.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
                 </div>
@@ -366,9 +366,10 @@ export default function AdminProjects() {
     const [projects, setProjects] = useState<UnifiedProject[]>([]);
     const [sectionInfo, setSectionInfo] = useState({
         en: { title: '', subtitle: '' },
-        bn: { title: '', subtitle: '' }
+        bn: { title: '', subtitle: '' },
     });
-
+    const [categories, setCategories] = useState<string[]>(['SaaS', 'eCommerce', 'Enterprise', 'Education', 'Portfolio', 'Other']);
+    const [newCategory, setNewCategory] = useState('');
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState('');
@@ -384,6 +385,9 @@ export default function AdminProjects() {
             en: { title: enP.title || '', subtitle: enP.subtitle || '' },
             bn: { title: bnP.title || '', subtitle: bnP.subtitle || '' }
         });
+
+        const storedCategories = enP.categories || ['SaaS', 'eCommerce', 'Enterprise', 'Education', 'Portfolio', 'Other'];
+        setCategories(storedCategories);
 
         // Merge English and Bangla content
     }, [content]);
@@ -486,6 +490,7 @@ export default function AdminProjects() {
             const enSuccess = await updateSection('projects', 'en', {
                 title: sectionInfo.en.title,
                 subtitle: sectionInfo.en.subtitle,
+                categories: categories,
                 items: enItems
             });
             const bnSuccess = await updateSection('projects', 'bn', {
@@ -530,17 +535,75 @@ export default function AdminProjects() {
 
             <ErrorAlert message={error} />
 
-            {/* Section Titles */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card rounded-xl p-6 border border-border">
-                <div className="space-y-4">
-                    <h3 className="font-semibold text-primary">English Section Info</h3>
-                    <TextField label="Title" value={sectionInfo.en.title} onChange={v => setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, title: v } })} lang="en" />
-                    <TextField label="Subtitle" value={sectionInfo.en.subtitle} onChange={v => setSectionInfo({ ...sectionInfo, en: { ...sectionInfo.en, subtitle: v } })} multiline lang="en" />
-                </div>
-                <div className="space-y-4">
-                    <h3 className="font-semibold text-primary">Bangla Section Info</h3>
-                    <TextField label="শিরোনাম (Title)" value={sectionInfo.bn.title} onChange={v => setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, title: v } })} lang="bn" />
-                    <TextField label="সাবটাইটেল (Subtitle)" value={sectionInfo.bn.subtitle} onChange={v => setSectionInfo({ ...sectionInfo, bn: { ...sectionInfo.bn, subtitle: v } })} multiline lang="bn" />
+            {/* Edit Section Title/Subtitle */}
+            <div className="bg-card rounded-2xl border border-border overflow-hidden">
+                <SectionHeader title="Section Title & Options" description="Configure English and Bangla titles and edit Categories for this section." />
+                <div className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                            <h3 className="font-semibold text-foreground text-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> English Context
+                            </h3>
+                            <TextField label="Section Title" value={sectionInfo.en.title} onChange={(v) => setSectionInfo(prev => ({ ...prev, en: { ...prev.en, title: v } }))} />
+                            <TextField label="Section Subtitle" value={sectionInfo.en.subtitle} onChange={(v) => setSectionInfo(prev => ({ ...prev, en: { ...prev.en, subtitle: v } }))} />
+                        </div>
+                        <div className="space-y-4">
+                            <h3 className="font-semibold text-foreground text-sm flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Bangla Context
+                            </h3>
+                            <TextField label="Section Title (BN)" value={sectionInfo.bn.title} onChange={(v) => setSectionInfo(prev => ({ ...prev, bn: { ...prev.bn, title: v } }))} />
+                            <TextField label="Section Subtitle (BN)" value={sectionInfo.bn.subtitle} onChange={(v) => setSectionInfo(prev => ({ ...prev, bn: { ...prev.bn, subtitle: v } }))} />
+                        </div>
+                    </div>
+
+                    {/* Manage Categories Section */}
+                    <div className="mt-8 pt-6 border-t border-border">
+                        <h3 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+                            <Layers className="w-4 h-4 text-primary" /> Manage Categories
+                        </h3>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                            {categories.map(cat => (
+                                <span key={cat} className="inline-flex items-center gap-1.5 bg-secondary text-foreground text-xs font-medium px-3 py-1.5 rounded-full border border-border/50">
+                                    {cat}
+                                    <button
+                                        type="button"
+                                        onClick={() => setCategories(categories.filter(c => c !== cat))}
+                                        className="text-muted-foreground hover:text-red-500 transition-colors"
+                                    >
+                                        <Trash2 className="w-3 h-3" />
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-2 max-w-sm">
+                            <input
+                                type="text"
+                                value={newCategory}
+                                onChange={e => setNewCategory(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' && newCategory.trim() && !categories.includes(newCategory.trim())) {
+                                        setCategories([...categories, newCategory.trim()]);
+                                        setNewCategory('');
+                                    }
+                                }}
+                                placeholder="Add new category..."
+                                className="flex-1 bg-secondary rounded-lg px-4 py-2 text-sm text-foreground outline-none border border-border"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+                                        setCategories([...categories, newCategory.trim()]);
+                                        setNewCategory('');
+                                    }
+                                }}
+                                className="bg-primary/20 text-primary hover:bg-primary/30 px-3 py-2 rounded-lg transition-colors"
+                            >
+                                <Plus className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground mt-2">These categories will appear as filters on the frontend and in the project editor dropdown.</p>
+                    </div>
                 </div>
             </div>
 
@@ -557,7 +620,7 @@ export default function AdminProjects() {
                     addLabel="Add New Project"
                     getItemLabel={(item) => item.en.title || item.bn.title || ''}
                     renderItem={(item, _i, update) => (
-                        <ProjectEditor item={item} update={update} />
+                        <ProjectEditor item={item} update={update} categories={categories} />
                     )}
                 />
             </div>

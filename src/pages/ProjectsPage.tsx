@@ -36,7 +36,7 @@ function truncate(text: string, maxLen: number): string {
     return text.slice(0, maxLen).trimEnd() + '…';
 }
 
-const CATEGORIES = ['All', 'SaaS', 'eCommerce', 'Enterprise', 'Education', 'Portfolio'];
+const DEFAULT_CATEGORIES = ['SaaS', 'eCommerce', 'Enterprise', 'Education', 'Portfolio'];
 
 export default function ProjectsPage() {
     const { lang } = useLang();
@@ -64,6 +64,9 @@ export default function ProjectsPage() {
         const orderB = b.order ?? b._originalIndex;
         return orderA - orderB;
     });
+
+    const categories = enData.categories || DEFAULT_CATEGORIES;
+    const ALL_CATEGORIES = ['All', ...categories];
 
     const items = sortedItems.filter(item =>
         activeCategory === 'All' || item.category === activeCategory || (!item.category && activeCategory === 'Other')
@@ -117,7 +120,7 @@ export default function ProjectsPage() {
                             </p>
 
                             <div className="flex flex-wrap justify-center gap-2 mt-10">
-                                {CATEGORIES.map((cat) => (
+                                {ALL_CATEGORIES.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
