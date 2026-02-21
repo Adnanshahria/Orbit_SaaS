@@ -31,6 +31,7 @@ const AdminChatbot = lazy(() => import('./pages/admin/AdminChatbot'));
 const AdminLinks = lazy(() => import('./pages/admin/AdminLinks'));
 const AdminNavbar = lazy(() => import('./pages/admin/AdminNavbar'));
 const AdminSEO = lazy(() => import('./pages/admin/AdminSEO'));
+const AdminBackup = lazy(() => import('./pages/admin/AdminBackup'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
 import { InitialLoader } from './components/orbit/InitialLoader';
@@ -138,6 +139,7 @@ export default function App() {
                     <Route path="links" element={<AdminLinks />} />
                     <Route path="navbar" element={<AdminNavbar />} />
                     <Route path="seo" element={<AdminSEO />} />
+                    <Route path="backup" element={<AdminBackup />} />
 
                   </Route>
                 </Routes>
