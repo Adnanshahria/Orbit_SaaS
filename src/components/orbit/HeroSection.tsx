@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ChevronDown, Send, Loader2 } from 'lucide-react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ChevronDown, Send, Loader2, Mail, MessageCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
@@ -99,6 +99,7 @@ function ParticleField() {
 export function HeroSection() {
   const { t, lang } = useLang();
   const sectionRef = useRef<HTMLElement>(null);
+  const [isCtaOpen, setIsCtaOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
@@ -232,20 +233,57 @@ export function HeroSection() {
           transition={{ type: 'spring', stiffness: 60, damping: 16, delay: baseDelay + 1.6 }}
           className="flex flex-col sm:flex-row gap-3.5 sm:gap-6 justify-center items-center px-2 sm:px-0"
         >
-          <motion.a
-            id="hero-book-appointment"
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.04, boxShadow: `0 8px 30px ${ctaGradientStart}44` }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-            className="inline-flex items-center gap-2 px-6 sm:px-10 py-3.5 sm:py-5 rounded-[1.5rem] sm:rounded-full font-bold text-primary-foreground shadow-lg gentle-animation cursor-pointer w-full sm:w-auto justify-center text-lg sm:text-lg"
-            style={{ background: `linear-gradient(to right, ${ctaGradientStart}, ${ctaGradientEnd})` }}
-          >
-            {t.hero.cta}
-            <ArrowRight className="w-5 h-5 ml-1" />
-          </motion.a>
+          {/* Relative Container for Dropdown */}
+          <div className="relative w-full sm:w-auto">
+            <motion.button
+              id="hero-book-appointment"
+              onClick={() => setIsCtaOpen(!isCtaOpen)}
+              whileHover={{ scale: 1.04, boxShadow: `0 8px 30px ${ctaGradientStart}44` }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+              className="inline-flex items-center gap-2 px-6 sm:px-10 py-3.5 sm:py-5 rounded-[1.5rem] sm:rounded-full font-bold text-primary-foreground shadow-lg gentle-animation cursor-pointer w-full sm:w-auto justify-center text-lg sm:text-lg"
+              style={{ background: `linear-gradient(to right, ${ctaGradientStart}, ${ctaGradientEnd})` }}
+            >
+              {t.hero.cta}
+              <ChevronDown className={`w-5 h-5 ml-1 transition-transform duration-300 ${isCtaOpen ? 'rotate-180' : ''}`} />
+            </motion.button>
+
+            <AnimatePresence>
+              {isCtaOpen && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full left-0 right-0 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 mt-3 w-full sm:w-[220px] bg-card border border-border rounded-2xl shadow-xl overflow-hidden z-30 flex flex-col"
+                >
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsCtaOpen(false)}
+                    className="flex items-center justify-center sm:justify-start gap-3 px-5 py-3.5 hover:bg-secondary transition-colors text-foreground font-semibold active:bg-secondary/80"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[#25D366]/10 flex items-center justify-center shrink-0">
+                      <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                    </div>
+                    WhatsApp
+                  </a>
+                  <div className="h-px bg-border/50 w-full" />
+                  <a
+                    href="mailto:contact@orbitsaas.cloud"
+                    onClick={() => setIsCtaOpen(false)}
+                    className="flex items-center justify-center sm:justify-start gap-3 px-5 py-3.5 hover:bg-secondary transition-colors text-foreground font-semibold active:bg-secondary/80"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <Mail className="w-4 h-4 text-primary" />
+                    </div>
+                    Email Us
+                  </a>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <motion.a
             href="#services"
             whileHover={{ scale: 1.04 }}
