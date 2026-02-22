@@ -24,6 +24,7 @@ export function Chatbot() {
   const [chatLang, setChatLang] = useState<Lang>('en'); // Independent chat language
   const [viewportStyle, setViewportStyle] = useState<React.CSSProperties>({});
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   // Dynamic chatbot strings with fallbacks to static translations
   const chatContent = {
@@ -166,6 +167,7 @@ export function Chatbot() {
 
   const clearChat = () => {
     setMessages([]);
+    setSuggestions([]);
   };
 
   const handleSend = async () => {
@@ -175,6 +177,7 @@ export function Chatbot() {
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
+    setSuggestions([]);
     setIsLoading(true);
 
     // --- EMAIL INTERCEPTOR ---
@@ -286,34 +289,32 @@ export function Chatbot() {
       // 2. Prepare System Prompt based on chatLang
       const adminPrompt = (chatContent as any)?.systemPrompt;
       const defaultPrompt = (chatLang === 'en'
-        ? `You are the PRIMARY AUTHORITY and official representative for ORBIT SaaS.
-           - GREETINGS: ONLY for the very first greeting message in the conversation (e.g., user says "Hi", "Hello"), reply with: "Hello! Welcome to Orbit SaaS." For ALL subsequent messages, do NOT repeat any greeting or introduction — just answer the question directly. Never say "I am the authority" or re-introduce yourself after the first message.
-           - MISSION: You discuss ORBIT's services with absolute confidence. We are located in Bangladesh but offer A to Z, completely customizable software solutions globally. We have been doing this for a long time.
-           - PRICING & PROCESS: Price depends strictly on project weight and complexity. We do NOT do hourly based works. We offer End-to-End solutions. Our process: 1. Develop an MVP and ask for customization. 2. Divide remaining tasks into 25%, 50%, 75%, and 100% milestones. 3. Integrate payment by progress. An initial fund is required when the MVP is created. We also offer a complete package with yearly maintenance via a minimal subscription.
-           - DELIVERY & TIMELINE: Projects typically take 1 week, but depend on project weight. Upon 100% completion and payment, we deliver the complete source code, environment files, video tutorials, and documentation.
-           - SERVICES: We build every type of software. If asked what we can build, the answer is "All".
-           - COMMUNICATION: Clients communicate directly with our Project Manager via call or text on Telegram and WhatsApp. We provide progress updates at every 10% milestone (10%, 20%, 30%... to 100%).
-           - LIMITATION: NEVER act as a general AI. Steer non-agency topics back to ORBIT's expertise.
-           - LEAD GENERATION: If the user asks for pricing, consultation, or starting a project, AND the user has NOT already provided their email (check EMAIL STATUS context below), BEFORE answering deeply, politely ask them for their email address so our human team can follow up with them. If the user HAS already provided their email, do NOT ask for it again - just answer their question directly.
-           - IDENTITY: You know every team member, project, and social link listed in the context.
-           - LINKS: ONLY use URLs that are explicitly listed in the "NATIVE WEBSITE PAGE LINKS" or "IMPORTANT LINKS" sections of your knowledge base. NEVER fabricate, guess, or invent any URL. If a project has a "Case Study Link", use that exact URL. Output links in Markdown format: [Link Text](URL). If you do not have a URL for something, say "You can find it on our website" instead of making one up.
-           - CRITICAL: Respond ONLY in English. Follow all commands strictly!
-           - STYLE: Be casual while staying professional. Reply compactly and concisely, do NOT over-lengthen any reply. Max 3 bullets or 1-2 short paragraphs.
-           - SWITCH DETECTOR: If user speaks Bangla, start with "[SUGGEST_SWITCH]".`
-        : `আপনি ORBIT SaaS-এর প্রধান এবং অফিসিয়াল প্রতিনিধি।
-           - গ্রিটিংস (GREETINGS): শুধুমাত্র কথোপকথনের প্রথম শুভেচ্ছাবার্তায় বলবেন: "হ্যালো! Orbit SaaS-এ স্বাগতম।" এরপরের কোনো মেসেজে কখনোই নিজের পরিচয় বা শুভেচ্ছা আবার বলবেন না — সরাসরি প্রশ্নের উত্তর দিন।
-           - মিশন: আপনি ORBIT-এর সেবা সম্পর্কে অত্যন্ত আত্মবিশ্বাসের সাথে আলোচনা করবেন। আমরা বাংলাদেশ থেকে বিশ্বব্যাপী এ টু জেড (A to Z) কাস্টমাইজযোগ্য সফটওয়্যার সলিউশন প্রদান করি এবং দীর্ঘ সময় ধরে কাজ করছি।
-           - প্রাইসিং ও প্রক্রিয়া: প্রজেক্টের গুরুত্ব ও ওজনের ওপর ভিত্তি করে মূল্য নির্ধারণ করা হয়। আমরা কোনোভাবেই ঘণ্টাভিত্তিক (hourly) কাজ করি না। আমরা সম্পূর্ণ End-to-End সলিউশন প্রদান করি। আমাদের কাজের ধাপ: প্রথমে একটি MVP তৈরি করি এবং কাস্টমাইজেশনের জন্য জিজ্ঞাসা করি। এরপর কাজগুলোকে ২৫%, ৫০%, ৭৫% এবং ১০০% হিসেবে ভাগ করে প্রগ্রেস অনুযায়ী পেমেন্ট নিই। MVP তৈরি হলে প্রাথমিক ফান্ড দিতে হয়। এছাড়া আমরা সামান্য সাবস্ক্রিপশন ফির বিনিময়ে বছরব্যাপী মেইনটেন্যান্স সুবিধাও দিই।
-           - ডেলিভারি ও সময়: সাধারণত প্রজেক্ট শেষ হতে ১ সপ্তাহ লাগে, তবে তা প্রজেক্টের ওজনের ওপর নির্ভর করে। ১০০% কাজ শেষ এবং পেমেন্ট সম্পন্ন হলে আমরা সম্পূর্ণ সোর্স কোড, এনভায়রনমেন্ট ফাইল, ভিডিও টিউটোরিয়াল এবং ডকুমেন্টেশন হস্তান্তর করি।
-           - সার্ভিসেস: আমরা সব ধরনের সফটওয়্যার তৈরি করি।
-           - যোগাযোগ: ক্লায়েন্টরা আমাদের প্রজেক্ট ম্যানেজারের সাথে সরাসরি কল বা টেক্সটের মাধ্যমে টেলিগ্রাম বা হোয়াটসঅ্যাপে যোগাযোগ করেন। প্রজেক্টের কাজ ১০%, ২০%, ৩০%... এভাবে এগোলে আমরা প্রতি ১০% পর পর আপডেট দিই।
-           - সীমাবদ্ধতা: সাধারণ এআই হিসেবে কাজ করবেন না। সাধারণ বিষয়ের প্রশ্নগুলোতে বিনয়ের সাথে ORBIT-এর সেবার তথ্য দিয়ে উত্তর দিন।
-           - লিড জেনারেশন: ইউজার যদি প্রজেক্ট শুরু করার, কনসাল্টেশন বা প্রাইসিং এর বিষয়ে কিছু জিজ্ঞাসা করে এবং ইউজার আগে থেকে ইমেইল দেয়নি (নিচে EMAIL STATUS দেখুন), তাহলে বিস্তারিত উত্তর দেয়ার আগে স্মার্টলি ও বিনয়ের সাথে তাদের ইমেইল ঠিকানা চেয়ে নিন। যদি ইউজার আগেই ইমেইল দিয়ে থাকে, তাহলে আবার ইমেইল চাইবেন না - সরাসরি উত্তর দিন।
-           - পরিচয়: আপনি এজেন্সির সকল সদস্য, প্রজেক্ট এবং সোশ্যাল মিডিয়া লিংক সম্পর্কে জানেন।
-           - লিংক: শুধুমাত্র "NATIVE WEBSITE PAGE LINKS" বা "IMPORTANT LINKS" সেকশনে দেওয়া URL গুলো ব্যবহার করুন। কখনোই কোনো URL বানিয়ে বা অনুমান করে দিবেন না। Case Study Link থাকলে সেটি হুবহু ব্যবহার করুন। লিংকগুলো মার্কডাউন ফরম্যাটে দিন: [Link Text](URL)।
-           - বিশেষ সতর্কবার্তা: আপনাকে অবশ্যই শুধুমাত্র বাংলায় উত্তর দিতে হবে। সমস্ত নির্দেশ কঠোরভাবে মেনে চলুন!
-           - শৈলী: পেশাদারিত্ব রেখেই ক্যাজুয়াল (casual) ভাষায় কথা বলুন। উত্তর খুব কম্প্যাক্ট এবং সংক্ষিপ্ত হতে হবে। অকারণে উত্তর বড় করবেন না।
-           - সুইচ ডিটেক্টর: ইউজার ইংরেজিতে কথা বললে শুরুতে "[SUGGEST_SWITCH]" লিখুন।`);
+        ? `You are ORBIT SaaS's official AI rep. Rules:
+GREETING: First msg only: "Hello! Welcome to Orbit SaaS." Never re-introduce after.
+ABOUT: Bangladesh-based agency offering A-Z custom software globally. Long track record.
+PRICING: Based on project weight/complexity. No hourly work. End-to-End only. Process: MVP→customization→milestones(25/50/75/100%)→payment by progress. Initial fund at MVP. Yearly maintenance subscription available.
+DELIVERY: ~1 week typical. On 100% completion+payment: source code, env files, video tutorials, docs.
+SERVICES: We build ALL types of software.
+COMMS: Direct contact with PM via Telegram/WhatsApp. Updates every 10% milestone.
+SCOPE: NEVER act as general AI. Redirect off-topic to ORBIT services.
+LEADS: If user asks pricing/consultation/project start AND hasn't given email (see EMAIL STATUS), ask for email first. If already given, answer directly.
+LINKS: ONLY use URLs from knowledge base. Never fabricate URLs. Use markdown: [Text](URL). No URL? Say "visit our website."
+LANG: English only. If user speaks Bangla, prepend "[SUGGEST_SWITCH]".
+STYLE: Casual+professional. Keep replies SHORT: 60-80 words max per response. Max 3 bullets or 1-2 short paragraphs. Never over-explain.
+FOLLOW-UP: Always end your reply with 1 short related follow-up question to keep the conversation going. Format it on a new line starting with "💬". Example: "💬 Want to know about our pricing?"`
+        : `আপনি ORBIT SaaS-এর অফিসিয়াল AI প্রতিনিধি। নিয়ম:
+শুভেচ্ছা: শুধু প্রথম মেসেজে "হ্যালো! Orbit SaaS-এ স্বাগতম।" পরে আর পরিচয়/শুভেচ্ছা নয়।
+পরিচিতি: বাংলাদেশভিত্তিক, বিশ্বব্যাপী A-Z কাস্টম সফটওয়্যার। দীর্ঘ অভিজ্ঞতা।
+মূল্য: প্রজেক্টের ওজন অনুযায়ী। ঘণ্টাভিত্তিক নয়। End-to-End। ধাপ: MVP→কাস্টমাইজ→২৫/৫০/৭৫/১০০% মাইলস্টোন→প্রগ্রেস পেমেন্ট। MVP-তে প্রাথমিক ফান্ড। বার্ষিক মেইনটেন্যান্স সাবস্ক্রিপশন আছে।
+ডেলিভারি: সাধারণত ১ সপ্তাহ। ১০০% শেষে: সোর্স কোড, env ফাইল, ভিডিও টিউটোরিয়াল, ডকুমেন্টেশন।
+সেবা: সব ধরনের সফটওয়্যার তৈরি করি।
+যোগাযোগ: PM-এর সাথে টেলিগ্রাম/হোয়াটসঅ্যাপে সরাসরি। প্রতি ১০% আপডেট।
+সীমা: সাধারণ AI নয়। অপ্রাসঙ্গিক বিষয় ORBIT-এ ফেরান।
+লিড: প্রাইসিং/কনসাল্টেশন চাইলে ও ইমেইল না দিলে (EMAIL STATUS দেখুন) আগে ইমেইল চান। দিয়ে থাকলে সরাসরি উত্তর দিন।
+লিংক: শুধু knowledge base-এর URL ব্যবহার করুন। বানাবেন না। মার্কডাউন: [Text](URL)।
+ভাষা: শুধু বাংলায়। ইংরেজি বললে "[SUGGEST_SWITCH]" দিন।
+শৈলী: ক্যাজুয়াল+পেশাদার। সংক্ষিপ্ত: প্রতি উত্তর সর্বোচ্চ ৬০-৮০ শব্দ। সর্বোচ্চ ৩ বুলেট বা ১-২ ছোট প্যারা। কখনো বেশি ব্যাখ্যা নয়।
+ফলো-আপ: প্রতিটি উত্তরের শেষে ১টি প্রাসঙ্গিক ফলো-আপ প্রশ্ন দিন। নতুন লাইনে "💬" দিয়ে শুরু করুন। উদাহরণ: "💬 আমাদের প্রাইসিং জানতে চান?"`);
       const systemPrompt = (adminPrompt && adminPrompt.trim()) ? adminPrompt : defaultPrompt;
 
       // 3. Email status context
@@ -334,7 +335,14 @@ export function Chatbot() {
 
       const responseContent = await sendToGroq(conversationHistory);
 
-      setMessages(prev => [...prev, { role: 'assistant', content: responseContent }]);
+      // Extract follow-up suggestions (lines starting with 💬)
+      const lines = responseContent.split('\n');
+      const suggestionLines = lines.filter(l => l.trim().startsWith('💬'));
+      const cleanedContent = lines.filter(l => !l.trim().startsWith('💬')).join('\n').trimEnd();
+      const newSuggestions = suggestionLines.map(l => l.replace(/^\s*💬\s*/, '').trim()).filter(Boolean);
+
+      setSuggestions(newSuggestions);
+      setMessages(prev => [...prev, { role: 'assistant', content: cleanedContent }]);
     } catch (error) {
       console.error('Failed to get response:', error);
       setMessages(prev => [...prev, { role: 'assistant', content: "I'm sorry, I'm having trouble connecting right now. Please try again later." }]);
@@ -345,16 +353,55 @@ export function Chatbot() {
 
   // Basic Markdown-to-JSX Formatter (Bold, Links, Bullets)
   const formatMessage = (content: string) => {
-    // 1. Pre-process to fix common AI punctuation spacing issues (e.g. "word , and" -> "word, and")
-    // Also move punctuation outside of bold tags: **word,** -> **word**,
-    const processed = content
-      .replace(/\s+([,.?!])/g, '$1') // Remove space before punctuation
-      .replace(/(\*\*.*?)(([,.?!])\s*)\*\*/g, '$1**$2'); // Move punctuation out of bold
+    // 1. Pre-process to fix common AI punctuation spacing issues
+    let processed = content
+      .replace(/\s+([,.?!])/g, '$1')
+      .replace(/(\*\*.*?)(([,.?!])\s*)\*\*/g, '$1**$2');
+
+    // 2. Extract ALL markdown links FIRST (before bold splitting can break them)
+    //    Supports bold text inside link labels: [**bold title**](url)
+    const linkPlaceholders: { url: string; text: string }[] = [];
+    processed = processed.replace(/\[([^\]]*?)]\(([^)]+)\)/g, (_match, text, url) => {
+      const idx = linkPlaceholders.length;
+      // Strip any bold markers from the link text since we won't display it anyway
+      linkPlaceholders.push({ url, text: text.replace(/\*\*/g, '') });
+      return `__LINK_${idx}__`;
+    });
 
     const lines = processed.split('\n');
 
-    // Regex for parsing markdown links: [text](url)
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    // Helper: render inline content (bold, quoted text, + link placeholders)
+    const renderInline = (text: string, keyPrefix: string) => {
+      // Split by bold, link placeholders, AND double-quoted text
+      const parts = text.split(/(\*\*.*?\*\*|__LINK_\d+__|"[^"]{2,}")/g);
+      return parts.map((part, i) => {
+        // Bold
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={`${keyPrefix}-b${i}`} className="font-bold text-primary/90">{part.slice(2, -2)}</strong>;
+        }
+        // Double-quoted text → render as bold italic (no quotes)
+        if (part.startsWith('"') && part.endsWith('"') && part.length > 2) {
+          return <strong key={`${keyPrefix}-q${i}`} className="font-bold italic text-primary/90">{part.slice(1, -1)}</strong>;
+        }
+        // Link placeholder → render as bold "Click Me" button
+        const linkMatch = part.match(/^__LINK_(\d+)__$/);
+        if (linkMatch) {
+          const link = linkPlaceholders[parseInt(linkMatch[1], 10)];
+          return (
+            <a
+              key={`${keyPrefix}-l${i}`}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex mt-1 mb-1 items-center px-3 py-1 bg-primary text-primary-foreground font-bold rounded-full text-[11px] uppercase tracking-wider shadow-sm hover:scale-105 active:scale-95 transition-transform"
+            >
+              Click Me
+            </a>
+          );
+        }
+        return part;
+      });
+    };
 
     return lines.map((line, lineIndex) => {
       // Handle Bullet Points
@@ -369,70 +416,20 @@ export function Chatbot() {
         }
       }
 
-      // Handle Bold & Links together
-      // We will split by bold first, then look for links within the non-bold parts.
-      // Alternatively, parse token by token. A simple split approach:
-      const boldParts = (isBullet ? cleanLine : line).split(/(\*\*.*?\*\*)/g);
-
-      const formattedParts = boldParts.map((part, i) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          return <strong key={`strong-${i}`} className="font-bold text-primary/90">{part.slice(2, -2)}</strong>;
-        }
-
-        // If not bold, check for links
-        if (part.match(linkRegex)) {
-          const linkParts = [];
-          let lastIndex = 0;
-          let match;
-
-          // Re-create the regex to ensure state is reset
-          const localRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-
-          while ((match = localRegex.exec(part)) !== null) {
-            // Text before the link
-            if (match.index > lastIndex) {
-              linkParts.push(part.substring(lastIndex, match.index));
-            }
-
-            // The link itself mapped to a "Click me" style button
-            linkParts.push(
-              <a
-                key={`link-${match.index}`}
-                href={match[2]}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex mt-1 mb-1 items-center px-3 py-1 bg-primary text-primary-foreground font-semibold rounded-full text-[11px] uppercase tracking-wider shadow-sm hover:scale-105 active:scale-95 transition-transform"
-              >
-                Click me
-              </a>
-            );
-
-            lastIndex = localRegex.lastIndex;
-          }
-
-          // Text after the last link
-          if (lastIndex < part.length) {
-            linkParts.push(part.substring(lastIndex));
-          }
-
-          return <span key={`span-${i}`}>{linkParts}</span>;
-        }
-
-        return part;
-      });
+      const inlineContent = renderInline(isBullet ? cleanLine : line, `line-${lineIndex}`);
 
       if (isBullet) {
         return (
           <div key={`line-${lineIndex}`} className="flex gap-2 pl-1 my-0.5 text-xs">
             <span className="text-primary mt-1.5 w-1 h-1 rounded-full bg-primary shrink-0" />
-            <span className="flex-1 leading-relaxed">{formattedParts}</span>
+            <span className="flex-1 leading-relaxed">{inlineContent}</span>
           </div>
         );
       }
 
       return (
         <p key={`line-${lineIndex}`} className={`text-xs leading-relaxed ${line.trim() === '' ? 'h-2' : 'mb-1.5 last:mb-0'}`}>
-          {formattedParts}
+          {inlineContent}
         </p>
       );
     });
@@ -701,8 +698,41 @@ export function Chatbot() {
               </div> {/* End of blurred wrapper */}
             </div>
 
+            {/* Suggestion Chips */}
+            {(() => {
+              const defaultChips = chatLang === 'bn'
+                ? ['আমাদের সেবা সমূহ', 'প্রজেক্ট দেখুন', 'মূল্য জানুন', 'যোগাযোগ করুন']
+                : ['Our Services', 'View Projects', 'Get a Quote', 'Contact Us'];
+              const activeChips = suggestions.length > 0 ? suggestions : (messages.length <= 1 ? defaultChips : []);
+              return activeChips.length > 0 && !isLoading ? (
+                <div className={`px-4 pt-2 pb-0 border-t border-border bg-card/80 transition-opacity ${showEmailPrompt ? 'opacity-40 pointer-events-none' : ''}`}>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                    {activeChips.map((s, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          setSuggestions([]);
+                          setInput(s);
+                          setTimeout(() => {
+                            const userMessage: ChatMessage = { role: 'user', content: s };
+                            const newMessages = [...messages, userMessage];
+                            setMessages(newMessages);
+                            setInput('');
+                            executeAIResponse(newMessages);
+                          }, 50);
+                        }}
+                        className="shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer whitespace-nowrap"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
             {/* Input */}
-            <div className={`px-4 py-3 pb-6 md:pb-3 border-t border-border flex gap-2 bg-card transition-opacity ${showEmailPrompt ? 'opacity-40 pointer-events-none' : ''}`}>
+            <div className={`px-4 py-3 pb-6 md:pb-3 ${suggestions.length > 0 && !isLoading ? 'pt-2' : ''} border-t border-border flex gap-2 bg-card transition-opacity ${showEmailPrompt ? 'opacity-40 pointer-events-none' : ''}`}>
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
