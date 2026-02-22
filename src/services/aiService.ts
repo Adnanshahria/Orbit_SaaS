@@ -4,40 +4,28 @@ export interface ChatMessage {
     content: string;
 }
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-
 export const sendToGroq = async (messages: ChatMessage[]) => {
-    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
-
-    if (!apiKey) {
-        throw new Error('Groq API key is missing');
-    }
+    const API_BASE = import.meta.env.VITE_API_URL || '';
 
     try {
-        const response = await fetch(GROQ_API_URL, {
+        const response = await fetch(`${API_BASE}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
             },
-            body: JSON.stringify({
-                model: 'llama-3.1-8b-instant',
-                messages: messages,
-                temperature: 0.7,
-                max_tokens: 1024,
-            }),
+            body: JSON.stringify({ messages }),
         });
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            console.error('Groq API Error:', errorData);
+            console.error('Chat API Error:', errorData);
             throw new Error(`API request failed: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
-        return data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
+        return data.content || 'Sorry, I could not generate a response.';
     } catch (error) {
-        console.error('Error calling Groq API:', error);
+        console.error('Error calling Chat API:', error);
         throw error;
     }
 };
