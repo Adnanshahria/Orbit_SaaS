@@ -7,6 +7,8 @@ import { useLang } from '@/contexts/LanguageContext';
 import { useContent } from '@/contexts/ContentContext';
 import { sendToGroq, ChatMessage } from '@/services/aiService';
 import { translations } from '@/lib/i18n';
+import Lottie from 'lottie-react';
+import helloAnimation from '@/assets/hello-animation.json';
 
 type Lang = 'en' | 'bn'; // Define Lang type
 
@@ -435,13 +437,21 @@ export function Chatbot() {
 
       {/* Toggle button */}
       <motion.button
-        whileHover={{ scale: 1.1, rotate: 360 }}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        transition={{ rotate: { repeat: Infinity, ease: "linear", duration: 2 } }}
         onClick={() => setOpen(!open)}
-        className="fixed bottom-24 md:bottom-6 right-4 sm:right-6 z-[200] w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center neon-glow cursor-pointer shadow-2xl"
+        className="fixed bottom-24 md:bottom-6 right-4 sm:right-6 z-[200] w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center neon-glow cursor-pointer shadow-2xl overflow-hidden"
       >
-        {open ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        {open ? (
+          <X className="w-6 h-6" />
+        ) : (
+          <Lottie
+            animationData={helloAnimation}
+            loop
+            autoplay
+            style={{ width: 44, height: 44 }}
+          />
+        )}
       </motion.button>
 
       {/* Chat panel */}
