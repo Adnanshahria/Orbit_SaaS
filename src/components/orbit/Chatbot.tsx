@@ -9,6 +9,7 @@ import { sendToGroq, ChatMessage } from '@/services/aiService';
 import { translations } from '@/lib/i18n';
 import Lottie from 'lottie-react';
 import helloAnimation from '@/assets/hello-animation.json';
+import chatMessageAnimation from '@/assets/chatbot-message.json';
 
 type Lang = 'en' | 'bn'; // Define Lang type
 
@@ -570,7 +571,7 @@ export function Chatbot() {
                   <div className="space-y-4 py-2">
                     <div className="flex gap-2">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
-                        <Lottie animationData={helloAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
+                        <Lottie animationData={chatMessageAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
                       </div>
                       <div className="bg-secondary rounded-xl rounded-tl-none px-3 py-2 text-xs text-foreground max-w-[85%] shadow-sm leading-relaxed">
                         <p className="font-semibold mb-1 text-primary">
@@ -608,7 +609,7 @@ export function Chatbot() {
                       <div className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : ''}`}>
                         {isAssistant && (
                           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Lottie animationData={helloAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
+                            <Lottie animationData={chatMessageAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
                           </div>
                         )}
                         <div className={`rounded-xl px-3 py-2 text-xs max-w-[85%] shadow-sm ${msg.role === 'user'
@@ -640,7 +641,7 @@ export function Chatbot() {
                   <div className="space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <div className="flex gap-2">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
-                        <Lottie animationData={helloAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
+                        <Lottie animationData={chatMessageAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
                       </div>
                       <div className="bg-secondary rounded-xl rounded-tl-none px-4 py-3 text-sm text-foreground shadow-sm max-w-[90%] border border-primary/20 bg-gradient-to-br from-secondary to-primary/5">
                         <p className="mb-3 text-xs leading-relaxed font-medium">
@@ -678,7 +679,7 @@ export function Chatbot() {
                 {isLoading && (
                   <div className="flex gap-2">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
-                      <Lottie animationData={helloAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
+                      <Lottie animationData={chatMessageAnimation} loop autoplay style={{ width: '120%', height: '120%' }} />
                     </div>
                     <div className="bg-secondary rounded-xl rounded-tl-none px-3 py-2 text-sm text-foreground shadow-sm">
                       <Loader2 className="w-4 h-4 animate-spin" />
