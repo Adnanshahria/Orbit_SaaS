@@ -447,7 +447,10 @@ export function Chatbot() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setOpen(!open)}
-        className="fixed bottom-24 md:bottom-6 right-4 sm:right-6 z-[200] w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center neon-glow cursor-pointer shadow-2xl overflow-hidden"
+        className={`fixed bottom-24 md:bottom-6 right-4 sm:right-6 z-[200] flex items-center justify-center cursor-pointer transition-all duration-300 ${open
+          ? 'w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary text-primary-foreground neon-glow shadow-2xl'
+          : 'w-24 h-24 sm:w-32 sm:h-32 bg-transparent'
+          }`}
       >
         {open ? (
           <X className="w-6 h-6" />
@@ -456,7 +459,7 @@ export function Chatbot() {
             animationData={helloAnimation}
             loop
             autoplay
-            style={{ width: 44, height: 44 }}
+            style={{ width: '100%', height: '100%' }}
           />
         )}
       </motion.button>
