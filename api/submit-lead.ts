@@ -53,11 +53,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
 
         if (existing.rows.length > 0) {
-            // If lead exists, we can update their chat summary if a new one is provided
-            if (chat_summary) {
+            // If lead exists, update their chat summary and interest if new values are provided
+            if (chat_summary || interest) {
                 await db.execute({
-                    sql: 'UPDATE leads SET chat_summary = ? WHERE email = ?',
-                    args: [chat_summary, email]
+                    sql: 'UPDATE leads SET chat_summary = COALESCE(?, chat_summary), interest = COALESCE(?, interest) WHERE email = ?',
+                    args: [chat_summary || null, interest || null, email]
                 });
             }
             return res.status(200).json({ success: true, message: 'Lead already captured, updated via chat' });

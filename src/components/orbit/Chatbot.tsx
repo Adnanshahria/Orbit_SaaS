@@ -90,12 +90,19 @@ export function Chatbot() {
         .map(m => `${m.role === 'user' ? 'User' : 'Orbit AI'}: ${m.content}`)
         .join('\n\n');
 
+      // Extract user interest from their messages
+      const userMessages = messages.filter(m => m.role === 'user');
+      const extractedInterest = userMessages.length > 0
+        ? userMessages[userMessages.length - 1].content
+        : 'General Inquiry';
+
       const res = await fetch('/api/submit-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: leadEmail,
           source: 'Chatbot Gateway',
+          interest: extractedInterest,
           chat_summary: chatSummary
         })
       });
@@ -337,9 +344,9 @@ export function Chatbot() {
   const formatMessage = (content: string) => {
     // 1. Pre-process to fix common AI punctuation spacing issues (e.g. "word , and" -> "word, and")
     // Also move punctuation outside of bold tags: **word,** -> **word**,
-    let processed = content
-      .replace(/\s+([,\.\?\!])/g, '$1') // Remove space before punctuation
-      .replace(/(\*\*.*?)(([,\.\?\!])\s*)\*\*/g, '$1**$2'); // Move punctuation out of bold
+    const processed = content
+      .replace(/\s+([,.?!])/g, '$1') // Remove space before punctuation
+      .replace(/(\*\*.*?)(([,.?!])\s*)\*\*/g, '$1**$2'); // Move punctuation out of bold
 
     const lines = processed.split('\n');
 
@@ -348,8 +355,8 @@ export function Chatbot() {
 
     return lines.map((line, lineIndex) => {
       // Handle Bullet Points
-      const isBullet = /^\s*[\*\-]\s+/.test(line);
-      const cleanLine = line.replace(/^\s*[\*\-]\s+/, '');
+      const isBullet = /^\s*[*-]\s+/.test(line);
+      const cleanLine = line.replace(/^\s*[*-]\s+/, '');
 
       // Handle Bold & Links together
       // We will split by bold first, then look for links within the non-bold parts.
