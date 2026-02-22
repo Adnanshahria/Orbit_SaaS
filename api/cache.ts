@@ -67,6 +67,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 });
             }
 
+            // Invalidate all AI gists so chatbot regenerates fresh summaries
+            try {
+                await db.execute('DELETE FROM kb_gist');
+            } catch {
+                // kb_gist table might not exist — skip
+            }
+
             return res.status(200).json({
                 success: true,
                 message: 'Cache published successfully',

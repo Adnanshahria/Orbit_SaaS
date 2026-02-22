@@ -2,10 +2,12 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import db from './lib/db.js';
 
 const SITE_BASE_URL = 'https://orbitsaas.cloud';
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const API_KEY = process.env.VITE_GROQ_API_KEY;
 
 /**
  * Build a structured knowledge base string from raw DB content.
- * This is the single source of truth for the chatbot's knowledge.
+ * This is used as input for the AI summary generator.
  */
 function buildKnowledgeBase(content: Record<string, any>, lang: string): string {
     let kb = '';
@@ -66,6 +68,42 @@ function buildKnowledgeBase(content: Record<string, any>, lang: string): string 
     return kb;
 }
 
+/**
+ * Use Groq to generate a compact AI summary (gist) of the full knowledge base.
+ * Returns a ~150-200 word factual summary preserving all key data points.
+ */
+async function generateGist(knowledgeBase: string): Promise<string | null> {
+    if (!API_KEY) return null;
+
+    try {
+        const response = await fetch(GROQ_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`,
+            },
+            body: JSON.stringify({
+                model: 'llama-3.1-8b-instant',
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are a data compressor. Summarize the following company knowledge base into a SHORT factual reference (~150 words max). PRESERVE ALL: company name, project names with exact URLs, service names, team names, social links, and contact URLs. Use compact notation (dashes, commas). NO marketing fluff, NO opinions. Output ONLY the summary.'
+                    },
+                    { role: 'user', content: knowledgeBase }
+                ],
+                temperature: 0.2,
+                max_tokens: 300,
+            }),
+        });
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        return data.choices[0]?.message?.content?.trim() || null;
+    } catch {
+        return null;
+    }
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // CORS
@@ -107,16 +145,61 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             }
         }
 
-        // 3. Build knowledge base string
-        const knowledgeBase = buildKnowledgeBase(content, lang);
+        // 3. Try to get cached AI gist
+        let knowledgeBase = '';
+        try {
+            const gistResult = await db.execute({
+                sql: 'SELECT gist FROM kb_gist WHERE lang = ?',
+                args: [lang],
+            });
+            if (gistResult.rows.length > 0 && gistResult.rows[0].gist) {
+                knowledgeBase = gistResult.rows[0].gist as string;
+            }
+        } catch {
+            // kb_gist table might not exist — will fall through to generation
+        }
 
-        // 4. Extract Q&A pairs from chatbot config
+        // 4. If no cached gist, build KB → generate gist via AI → cache it
+        if (!knowledgeBase) {
+            const fullKB = buildKnowledgeBase(content, lang);
+
+            // Try AI summarization
+            const gist = await generateGist(fullKB);
+
+            if (gist) {
+                knowledgeBase = gist;
+
+                // Cache the gist for future requests
+                try {
+                    await db.execute({
+                        sql: `CREATE TABLE IF NOT EXISTS kb_gist (
+                            lang TEXT PRIMARY KEY,
+                            gist TEXT NOT NULL,
+                            updated_at TEXT DEFAULT (datetime('now'))
+                        )`,
+                    });
+                    await db.execute({
+                        sql: `INSERT INTO kb_gist (lang, gist, updated_at)
+                              VALUES (?, ?, datetime('now'))
+                              ON CONFLICT(lang) DO UPDATE SET gist = ?, updated_at = datetime('now')`,
+                        args: [lang, gist, gist],
+                    });
+                } catch {
+                    // Cache save failed — not critical, gist still works for this request
+                }
+            } else {
+                // AI summary failed — fall back to compact KB
+                knowledgeBase = fullKB;
+            }
+        }
+
+        // 5. Extract Q&A pairs from chatbot config
         const chatbot = content.chatbot || {};
         const qaPairs = (chatbot.qaPairs || [])
             .map((qa: { question: string; answer: string }) => `Q: ${qa.question}\nA: ${qa.answer}`)
             .join('\n\n');
 
-        // 5. Cache headers (1 min cache, allows CDN/browser caching)
+        // 6. Cache headers (1 min cache)
         res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30');
 
         return res.status(200).json({

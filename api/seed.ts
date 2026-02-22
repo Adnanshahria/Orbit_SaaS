@@ -52,6 +52,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       )
     `);
 
+    // Create kb_gist table for AI-generated knowledge base summaries
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS kb_gist (
+        lang TEXT PRIMARY KEY,
+        gist TEXT NOT NULL,
+        updated_at TEXT DEFAULT (datetime('now'))
+      )
+    `);
+
     // Seed default admin (change these!)
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@orbitsaas.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'orbit2025';

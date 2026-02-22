@@ -105,6 +105,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 // content_cache table might not exist yet — skip silently
             }
 
+            // Invalidate AI gist so chatbot gets fresh summary
+            try {
+                await db.execute({
+                    sql: 'DELETE FROM kb_gist WHERE lang = ?',
+                    args: [lang],
+                });
+            } catch {
+                // kb_gist table might not exist yet — skip silently
+            }
+
             return res.status(200).json({ success: true });
         }
 

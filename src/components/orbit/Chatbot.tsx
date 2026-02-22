@@ -322,11 +322,8 @@ FOLLOW-UP: Always end your reply with 1 short related follow-up question to keep
         ? 'EMAIL: User already gave email. Do NOT ask again.'
         : 'EMAIL: User has NOT given email. Ask when relevant.';
 
-      // 4. Trim knowledge base to reduce input tokens (~1500 chars max)
-      const trimmedKB = knowledgeBase.length > 1500 ? knowledgeBase.slice(0, 1500) + '\n...(truncated)' : knowledgeBase;
-
-      // 5. Combine everything (compact)
-      const fullSystemMessage = `${systemPrompt}\n\n${emailStatus}\n\n=== KNOWLEDGE BASE ===\n${trimmedKB}${qaContext ? `\n\n=== Q&A ===\n${qaContext}` : ''}`;
+      // 4. Combine everything (compact — server already sends AI gist)
+      const fullSystemMessage = `${systemPrompt}\n\n${emailStatus}\n\n=== KNOWLEDGE BASE ===\n${knowledgeBase}${qaContext ? `\n\n=== Q&A ===\n${qaContext}` : ''}`;
 
       // 6. Cap conversation history to last 8 messages to limit token growth
       const recentHistory = chatHistory.filter(m => m.role !== 'system').slice(-8);
