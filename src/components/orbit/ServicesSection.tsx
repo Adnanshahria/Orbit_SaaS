@@ -64,7 +64,7 @@ export function ServicesSection() {
 
       <div className="max-w-6xl mx-auto relative" ref={ref}>
         {/* Section Header */}
-        <div className="text-center mb-14 sm:mb-20">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.h2
             initial={{ opacity: 0, y: -16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -115,20 +115,16 @@ export function ServicesSection() {
                   y: -4,
                   transition: { type: 'spring', stiffness: 400, damping: 25 },
                 }}
-                className={`relative rounded-2xl p-4 sm:p-7 group cursor-default border overflow-hidden transition-shadow duration-300 flex flex-col bg-card/80 dark:bg-card/40 hover:border-primary/30 dark:hover:border-primary/40`}
+                className={`relative rounded-2xl p-4 sm:p-7 group cursor-default border-2 overflow-hidden transition-shadow duration-300 flex flex-col bg-card/60 backdrop-blur-md hover:border-primary/50`}
                 style={{
-                  backgroundColor: bg && !bg.includes('gradient') && !isDark ? bg : undefined,
-                  backgroundImage: bg?.includes('gradient') || bg?.includes('url') ? bg : undefined,
-                  borderColor: border?.startsWith('border-') ? undefined : (isDark ? 'rgba(255,255,255,0.08)' : border),
-                  backdropFilter: 'blur(16px)',
-                  WebkitBackdropFilter: 'blur(16px)',
+                  borderColor: border?.startsWith('border-') ? undefined : (border || 'rgba(108, 92, 231, 0.4)'),
                 }}
               >
                 {/* Hover glow */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(circle at 30% 0%, ${accent}12, transparent 60%)`,
+                    background: `radial-gradient(circle at 30% 0%, ${accent}18, transparent 65%)`,
                   }}
                 />
 
@@ -137,7 +133,7 @@ export function ServicesSection() {
                   {/* Icon */}
                   <div
                     className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 mb-3 sm:mb-4"
-                    style={{ backgroundColor: bg && !bg.includes('gradient') && isDark ? bg : `${accent}15` }}
+                    style={{ backgroundColor: `${accent}15` }}
                   >
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: accent }} />
                   </div>

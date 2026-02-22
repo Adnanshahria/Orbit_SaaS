@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Globe, Sun, Moon, Home, Layers, MessageSquare, Trophy, Users, Phone, FolderOpen } from 'lucide-react';
+import { Menu, X, Globe, Home, Layers, MessageSquare, Trophy, Users, Phone, FolderOpen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLang } from '@/contexts/LanguageContext';
 import orbitLogo from '@/assets/orbit-logo.png';
@@ -23,17 +23,10 @@ export function Navbar() {
   const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}`;
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
   const [activeSection, setActiveSection] = useState('#hero');
   const navigate = useNavigate();
   const location = useLocation();
   const [showNavbarCTA, setShowNavbarCTA] = useState(false);
-
-  const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-  };
 
   // Handle scroll spy — only on home page
   useEffect(() => {
@@ -199,9 +192,6 @@ export function Navbar() {
                 )}
               </AnimatePresence>
 
-              <button onClick={toggleTheme} className="glass-effect p-2 sm:p-2.5 rounded-full text-foreground hover:bg-foreground/10 gentle-animation cursor-pointer shrink-0" aria-label="Toggle theme">
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
               <button onClick={toggleLang} className="glass-effect px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full text-foreground hover:bg-foreground/10 gentle-animation flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-medium cursor-pointer shrink-0">
                 <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {lang === 'en' ? 'বাং' : 'EN'}

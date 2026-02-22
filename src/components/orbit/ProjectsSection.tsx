@@ -85,7 +85,7 @@ export function ProjectsSection() {
   const sectionSubtitle = lang === 'bn' && bnData.subtitle ? bnData.subtitle : (enData.subtitle || 'Real solutions we\'ve built for real businesses.');
 
   return (
-    <section id="projects" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
+    <section id="projects" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(108,92,231,0.05),transparent_70%)] pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
@@ -146,7 +146,7 @@ export function ProjectsSection() {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="group relative bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 flex flex-col h-full"
+                  className="group relative bg-card/60 backdrop-blur-md rounded-2xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 flex flex-col h-full"
                   onMouseEnter={() => setHoveredProject(item._originalIndex)}
                   onMouseLeave={() => setHoveredProject(null)}
                 >

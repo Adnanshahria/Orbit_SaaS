@@ -25,7 +25,6 @@ interface UnifiedService {
     bn: ServiceText;
     icon?: string; // Lucide icon name e.g. 'Globe'
     color?: string;
-    bg?: string;
     border?: string;
 }
 
@@ -45,7 +44,6 @@ function ServiceCard({
     index,
     total,
     iconColor,
-    cardBg,
     cardBorder,
 }: {
     item: UnifiedService;
@@ -56,7 +54,6 @@ function ServiceCard({
     index: number;
     total: number;
     iconColor: string;
-    cardBg: string;
     cardBorder: string;
 }) {
     const [expanded, setExpanded] = useState(false);
@@ -276,9 +273,8 @@ function ServiceCard({
                                         <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">Live Preview</span>
                                     </div>
                                     <div
-                                        className="relative rounded-xl border p-5 transition-all duration-300 overflow-hidden"
+                                        className="relative rounded-xl border-2 p-5 transition-all duration-300 overflow-hidden bg-card/60 backdrop-blur-md"
                                         style={{
-                                            backgroundColor: item.bg || cardBg,
                                             borderColor: item.border || cardBorder,
                                         }}
                                     >
@@ -319,15 +315,6 @@ function ServiceCard({
                                     {showAdvanced && (
                                         <>
                                             <div className="space-y-2">
-                                                <ColorField label="Card Background" value={item.bg || cardBg} onChange={v => update({ ...item, bg: v })} />
-                                                <button
-                                                    className="text-[10px] text-muted-foreground/50 hover:text-primary font-medium transition-colors flex items-center gap-1"
-                                                    onClick={() => update({ ...item, bg: undefined })}
-                                                >
-                                                    <span className="text-xs">↺</span> Reset to global
-                                                </button>
-                                            </div>
-                                            <div className="space-y-2">
                                                 <ColorField label="Card Border" value={item.border || cardBorder} onChange={v => update({ ...item, border: v })} />
                                                 <button
                                                     className="text-[10px] text-muted-foreground/50 hover:text-primary font-medium transition-colors flex items-center gap-1"
@@ -367,7 +354,6 @@ export default function AdminServices() {
     // Shared Global Theme
     const [titleColor, setTitleColor] = useState('');
     const [subtitleColor, setSubtitleColor] = useState('');
-    const [cardBg, setCardBg] = useState('');
     const [cardBorder, setCardBorder] = useState('');
     const [iconColor, setIconColor] = useState('');
 
@@ -388,8 +374,7 @@ export default function AdminServices() {
 
         setTitleColor(enS.titleColor || '#ffffff');
         setSubtitleColor(enS.subtitleColor || '#94a3b8');
-        setCardBg(enS.cardBg || 'rgba(15, 23, 42, 0.45)');
-        setCardBorder(enS.cardBorder || 'rgba(255, 255, 255, 0.08)');
+        setCardBorder(enS.cardBorder || 'rgba(108, 92, 231, 0.4)');
         setIconColor(enS.iconColor || '#6c5ce7');
 
         const enItems = enS.items || [];
@@ -405,7 +390,6 @@ export default function AdminServices() {
                 bn: { title: bn.title || '', desc: bn.desc || '' },
                 icon: en.icon || bn.icon || '',
                 color: en.color,
-                bg: en.bg,
                 border: en.border,
             });
         }
@@ -422,16 +406,16 @@ export default function AdminServices() {
         const toastId = toast.loading('Saving Services…');
 
         try {
-            const globalTheme = { titleColor, subtitleColor, cardBg, cardBorder, iconColor };
+            const globalTheme = { titleColor, subtitleColor, cardBorder, iconColor };
 
             const enItems = items.map(m => ({
                 title: m.en.title, desc: m.en.desc,
-                icon: m.icon, color: m.color, bg: m.bg, border: m.border
+                icon: m.icon, color: m.color, border: m.border
             }));
 
             const bnItems = items.map(m => ({
                 title: m.bn.title, desc: m.bn.desc,
-                icon: m.icon, color: m.color, bg: m.bg, border: m.border
+                icon: m.icon, color: m.color, border: m.border
             }));
 
             const enOk = await updateSection('services', 'en', {
@@ -590,7 +574,6 @@ export default function AdminServices() {
                                 index={i}
                                 total={items.length}
                                 iconColor={iconColor}
-                                cardBg={cardBg}
                                 cardBorder={cardBorder}
                             />
                         ))
@@ -636,8 +619,7 @@ export default function AdminServices() {
                             <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
                                 <span className="w-4 h-px bg-border" /> Card Defaults
                             </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <ColorField label="Background" value={cardBg} onChange={setCardBg} />
+                            <div className="grid grid-cols-1 md:grid-cols-1 gap-5">
                                 <ColorField label="Border" value={cardBorder} onChange={setCardBorder} />
                             </div>
                         </div>
@@ -650,7 +632,7 @@ export default function AdminServices() {
                 <JsonPanel
                     title="Data Blueprint"
                     description="Raw merged view of EN + BN data structures."
-                    data={{ sectionInfo, items, globalTheme: { titleColor, subtitleColor, cardBg, cardBorder, iconColor } }}
+                    data={{ sectionInfo, items, globalTheme: { titleColor, subtitleColor, cardBorder, iconColor } }}
                     onImport={() => toast.error('JSON import disabled in sync mode.')}
                 />
             </div>

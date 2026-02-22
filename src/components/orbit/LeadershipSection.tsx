@@ -78,7 +78,7 @@ export function LeadershipSection() {
                   boxShadow: '0 20px 40px rgba(108, 92, 231, 0.15)',
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
-                className="glass-effect rounded-2xl sm:rounded-[2.5rem] p-4 sm:p-6 lg:p-8 text-center group hover:border-primary/40 transition-colors duration-300"
+                className="glass-effect bg-card/40 backdrop-blur-md rounded-2xl sm:rounded-[2.5rem] p-4 sm:p-6 lg:p-8 text-center group hover:border-primary/40 transition-colors duration-300"
               >
                 {/* Circular photo or fallback icon */}
                 <motion.div
@@ -116,7 +116,7 @@ export function LeadershipSection() {
             transition={{ delay: 0.5, type: 'spring', stiffness: 60 }}
             className="mt-12 sm:mt-16 max-w-4xl mx-auto"
           >
-            <div className="glass-effect rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 text-center border border-border bg-gradient-to-r from-primary/5 via-secondary/10 to-primary/5 hover:border-primary/30 transition-colors duration-500">
+            <div className="glass-effect rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 text-center border border-border bg-card/40 backdrop-blur-md hover:border-primary/30 transition-colors duration-500">
               <p className="text-lg sm:text-2xl lg:text-3xl font-display font-medium text-foreground leading-relaxed italic relative z-10">
                 <span className="text-primary/40 text-4xl leading-none absolute -top-4 -left-2 sm:-left-6">"</span>
                 {tagline}

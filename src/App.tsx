@@ -38,6 +38,7 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
 
 import { InitialLoader } from './components/orbit/InitialLoader';
+import { GlobalBackground } from './components/orbit/GlobalBackground';
 
 function PublicSite() {
   // Formulate and record unique visitor session
@@ -89,7 +90,8 @@ function PublicSite() {
       <LeadMagnetPopup />
       <InitialLoader />
       <StructuredData />
-      <div className="min-h-[100dvh] bg-background text-foreground">
+      <GlobalBackground />
+      <div className="min-h-[100dvh] text-foreground relative z-0">
         <Navbar />
         <main>
           <HeroSection />

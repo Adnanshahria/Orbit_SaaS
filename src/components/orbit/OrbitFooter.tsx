@@ -31,7 +31,7 @@ export function OrbitFooter() {
   );
 
   return (
-    <footer className="border-t border-border py-5 sm:py-6 px-4 sm:px-6 pb-24 sm:pb-6">
+    <footer className="border-t border-border py-5 sm:py-6 px-4 sm:px-6 pb-24 sm:pb-6 relative z-10 bg-background/40 backdrop-blur-md">
       <div className="max-w-6xl mx-auto flex flex-col items-center gap-3 text-center">
         <div className="flex items-center gap-3">
           <img

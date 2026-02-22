@@ -6,95 +6,6 @@ import { toast } from 'sonner';
 
 
 
-/* ── Particle field ───────────────────────────────────────────── */
-function ParticleField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext('2d')!;
-    let animId: number;
-    let particles: { x: number; y: number; vx: number; vy: number; r: number; o: number }[] = [];
-
-    const initParticles = (width: number, height: number) => {
-      particles = [];
-      for (let i = 0; i < 50; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          r: Math.random() * 1.8 + 0.4,
-          o: Math.random() * 0.3 + 0.05,
-        });
-      }
-    };
-
-    const resize = () => {
-      const oldWidth = canvas.width;
-      const oldHeight = canvas.height;
-      const newWidth = window.innerWidth;
-      const newHeight = window.innerHeight;
-
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-
-      if (particles.length === 0) {
-        initParticles(newWidth, newHeight);
-      } else {
-        // Shift particles proportionally to avoid "clumping" on resize
-        particles.forEach(p => {
-          p.x = (p.x / oldWidth) * newWidth;
-          p.y = (p.y / oldHeight) * newHeight;
-        });
-      }
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, i) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(108, 92, 231, ${p.o})`;
-        ctx.fill();
-
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = p.x - particles[j].x;
-          const dy = p.y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 110) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(108, 92, 231, ${0.07 * (1 - dist / 110)})`;
-            ctx.lineWidth = 0.4;
-            ctx.stroke();
-          }
-        }
-      });
-      animId = requestAnimationFrame(draw);
-    };
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
-}
-
 /* ── Hero component ───────────────────────────────────────────── */
 export function HeroSection() {
   const { t, lang } = useLang();
@@ -161,14 +72,12 @@ export function HeroSection() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-24 pb-32 sm:pt-0 sm:pb-0"
+      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-32 pb-32 sm:pt-32 sm:pb-0"
     >
       {/* Parallax background layers */}
-      <motion.div style={{ y: bgY }} className="absolute inset-0 bg-gradient-to-br from-background via-secondary/40 to-background" />
+      <motion.div style={{ y: bgY }} className="absolute inset-0 bg-gradient-to-br from-transparent via-secondary/10 to-transparent" />
       <motion.div style={{ y: bgY }} className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(108,92,231,0.12),transparent_60%)]" />
       <motion.div style={{ y: bgY }} className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(0,245,255,0.08),transparent_60%)]" />
-      <ParticleField />
-
       <motion.div
         style={{ opacity: contentOpacity, y: contentY }}
         className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto"
@@ -302,9 +211,9 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 60, damping: 16, delay: baseDelay + 1.8 }}
-          className="mt-12 sm:mt-16 max-w-md mx-auto px-4 sm:px-0"
+          className="mt-12 sm:mt-16 w-full max-w-md mx-auto px-4 sm:px-0"
         >
-          <form onSubmit={handleSubscribe} className="relative flex items-center">
+          <form onSubmit={handleSubscribe} className="relative flex justify-center w-full">
             <input
               type="email"
               placeholder={lang === 'bn' ? 'আপনার ইমেইল...' : 'Enter your email...'}

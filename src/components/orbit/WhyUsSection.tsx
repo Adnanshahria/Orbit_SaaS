@@ -120,7 +120,7 @@ export function WhyUsSection() {
                   boxShadow: `0 12px 40px ${accentColor}25`,
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
-                className={`bg-card border ${borderColor} rounded-2xl p-5 sm:pt-9 sm:px-7 sm:pb-8 text-center transition-all duration-300 group`}
+                className={`bg-card/60 backdrop-blur-md border ${borderColor} rounded-2xl p-5 sm:pt-9 sm:px-7 sm:pb-8 text-center transition-all duration-300 group`}
                 style={{ backgroundImage: item.bg?.includes('gradient') || item.bg?.includes('url') ? item.bg : undefined }}
               >
                 <div
