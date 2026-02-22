@@ -318,19 +318,25 @@ FOLLOW-UP: Always end your reply with 1 short related follow-up question to keep
       const systemPrompt = (adminPrompt && adminPrompt.trim()) ? adminPrompt : defaultPrompt;
 
       // 3. Email status context
-      const emailStatusContext = hasProvidedEmail
-        ? 'EMAIL STATUS: The user HAS ALREADY provided their email address. Do NOT ask for their email again under any circumstances. Answer their questions directly.'
-        : 'EMAIL STATUS: The user has NOT provided their email address yet. You may politely ask for it when relevant (e.g., pricing, consultation, project start).';
+      const emailStatus = hasProvidedEmail
+        ? 'EMAIL: User already gave email. Do NOT ask again.'
+        : 'EMAIL: User has NOT given email. Ask when relevant.';
 
-      // 4. Combine everything
-      const fullSystemMessage = `${systemPrompt}\n\n=== ${emailStatusContext} ===\n\n=== WEBSITE CONTENT / KNOWLEDGE BASE ===\n${knowledgeBase}\n\n=== SPECIFIC Q&A TRAINING ===\n${qaContext ? qaContext : 'No specific Q&A pairs.'}`;
+      // 4. Trim knowledge base to reduce input tokens (~1500 chars max)
+      const trimmedKB = knowledgeBase.length > 1500 ? knowledgeBase.slice(0, 1500) + '\n...(truncated)' : knowledgeBase;
+
+      // 5. Combine everything (compact)
+      const fullSystemMessage = `${systemPrompt}\n\n${emailStatus}\n\n=== KNOWLEDGE BASE ===\n${trimmedKB}${qaContext ? `\n\n=== Q&A ===\n${qaContext}` : ''}`;
+
+      // 6. Cap conversation history to last 8 messages to limit token growth
+      const recentHistory = chatHistory.filter(m => m.role !== 'system').slice(-8);
 
       const conversationHistory = [
         {
           role: 'system',
           content: fullSystemMessage
         } as ChatMessage,
-        ...chatHistory.filter(m => m.role !== 'system')
+        ...recentHistory
       ];
 
       const responseContent = await sendToGroq(conversationHistory);
